@@ -470,8 +470,8 @@ function renderKPIs(){
  document.getElementById("kSub").textContent=d.sub;
  document.getElementById("kDone").textContent=liftDays;
  document.getElementById("kLeft").textContent=Math.max(0,45-chDay);
- document.getElementById("progNum").textContent=`${chDay-1} / 45`;
- document.getElementById("progFill").style.width=((chDay-1)/45*100).toFixed(1)+"%";
+ document.getElementById("progNum").textContent=`${chDay} / 45`;
+ document.getElementById("progFill").style.width=(chDay/45*100).toFixed(1)+"%";
  document.getElementById("dayBadge").textContent=`📅 DAY ${chDay} OF 45`;
 }
 
