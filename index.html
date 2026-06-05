@@ -76,8 +76,8 @@ button{cursor:pointer;background:none;border:none;font:inherit;color:inherit;}
 .dtab.active-day.type-active{background:var(--teal);border-color:var(--teal);}
 .dtab-n{font-family:var(--fd);font-size:var(--text-lg);font-weight:900;line-height:1;}
 .dtab-l{font-size:9px;text-transform:uppercase;letter-spacing:.08em;font-weight:700;opacity:.8;}
-.grid{display:grid;grid-template-columns:1fr 310px;gap:var(--sp6);}
-.sidebar{display:flex;flex-direction:column;gap:var(--sp4);}
+.grid{display:grid;grid-template-columns:1fr;gap:var(--sp6);}
+.sidebar{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:var(--sp4);margin-top:var(--sp6);align-items:start;}
 .card{background:var(--sur);border:1px solid var(--bdr);border-radius:var(--r-xl);overflow:hidden;box-shadow:var(--sh-md);}
 .card-hdr{padding:var(--sp4) var(--sp5);border-bottom:1px solid var(--div);display:flex;align-items:center;gap:var(--sp3);}
 .card-hdr-icon{display:flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:var(--r-md);background:var(--prihlt);color:var(--pri);flex-shrink:0;}
