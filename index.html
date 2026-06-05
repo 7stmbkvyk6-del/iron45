@@ -2,277 +2,617 @@
 <html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#0d0d0b">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Iron45">
-<title>Iron45</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Iron45 — 45-Day Body Dashboard</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;900&family=Inter:wght@300..700&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.js"></script>
 <style>
-:root{
-  --bg:#0d0d0b;--sur:#151513;--sur2:#1a1a18;--suroff:#202020;--surdyn:#282826;
-  --div:#2b2b28;--bdr:#363633;--tx:#e6e4de;--txm:#8b8980;--txf:#565450;
-  --pri:#f97316;--prih:#ea6c0a;--prihlt:rgba(249,115,22,.12);
-  --gold:#fbbf24;--grn:#4ade80;--blu:#60a5fa;--red:#f87171;--pur:#c084fc;
-  --fd:'Barlow Condensed','Impact',sans-serif;--fb:'Inter','Helvetica Neue',sans-serif;
-  --r-sm:.4rem;--r-md:.6rem;--r-lg:.9rem;--r-full:9999px;--tr:160ms cubic-bezier(.16,1,.3,1);
+:root {
+  --text-xs: clamp(0.72rem, 0.68rem + 0.2vw, 0.82rem);
+  --text-sm: clamp(0.85rem, 0.78rem + 0.3vw, 0.95rem);
+  --text-base: clamp(0.95rem, 0.9rem + 0.25vw, 1.05rem);
+  --text-lg: clamp(1.1rem, 0.95rem + 0.7vw, 1.4rem);
+  --text-xl: clamp(1.4rem, 1.1rem + 1.2vw, 2rem);
+  --text-2xl: clamp(1.8rem, 1rem + 2.5vw, 3rem);
+  --sp1:.25rem;--sp2:.5rem;--sp3:.75rem;--sp4:1rem;--sp5:1.25rem;--sp6:1.5rem;--sp8:2rem;--sp10:2.5rem;--sp12:3rem;
+  --r-sm:.375rem;--r-md:.5rem;--r-lg:.75rem;--r-xl:1rem;--r-full:9999px;
+  --tr:180ms cubic-bezier(0.16,1,0.3,1);
+  --fd:'Barlow Condensed','Impact',sans-serif;
+  --fb:'Inter','Helvetica Neue',sans-serif;
 }
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{-webkit-font-smoothing:antialiased}
-body{font-family:var(--fb);background:var(--bg);color:var(--tx);min-height:100dvh;line-height:1.55;font-size:15px;padding-bottom:calc(74px + env(safe-area-inset-bottom))}
-button{cursor:pointer;background:none;border:none;font:inherit;color:inherit}
-input{font:inherit}
-::-webkit-scrollbar{width:5px;height:5px}::-webkit-scrollbar-thumb{background:var(--bdr);border-radius:99px}
-.topbar{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:.6rem;padding:calc(.7rem + env(safe-area-inset-top)) 1rem .7rem;background:rgba(13,13,11,.86);backdrop-filter:blur(12px);border-bottom:1px solid var(--div)}
-.logo{font-family:var(--fd);font-weight:900;font-size:1.35rem;letter-spacing:.05em;text-transform:uppercase;color:var(--pri)}
-.logo b{color:var(--gold)}
-.daychip{margin-left:auto;font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--pri);background:var(--prihlt);border:1px solid var(--pri);border-radius:var(--r-full);padding:.25rem .7rem}
-.refresh{width:34px;height:34px;display:flex;align-items:center;justify-content:center;border-radius:var(--r-md);color:var(--txm);font-size:1.1rem}
-.refresh:active{background:var(--suroff)}
-.wrap{max-width:760px;margin:0 auto;padding:1rem 1rem 2rem}
-.view{display:none;animation:fade .25s ease}.view.active{display:block}
-@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
-.prog{margin-bottom:1.1rem}
-.prog-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:.4rem}
-.prog-lbl{font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--txm)}
-.prog-pct{font-family:var(--fd);font-weight:900;font-size:1.3rem;color:var(--pri)}
-.bar{height:8px;background:var(--suroff);border-radius:var(--r-full);overflow:hidden}
-.bar>span{display:block;height:100%;background:linear-gradient(90deg,var(--pri),var(--gold));border-radius:var(--r-full);transition:width .6s}
-.sec{font-family:var(--fd);font-weight:700;font-size:1.05rem;letter-spacing:.05em;text-transform:uppercase;margin:1.5rem 0 .7rem;display:flex;align-items:center;gap:.5rem}
-.sec small{font-family:var(--fb);font-weight:500;font-size:.7rem;letter-spacing:.04em;color:var(--txf);text-transform:none;margin-left:auto}
-.tiles{display:grid;grid-template-columns:repeat(2,1fr);gap:.6rem}
-@media(min-width:560px){.tiles{grid-template-columns:repeat(3,1fr)}}
-.tile{background:var(--sur);border:1px solid var(--bdr);border-radius:var(--r-lg);padding:.8rem .85rem}
-.tile .tlbl{font-size:.66rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--txm);display:flex;align-items:center;gap:.35rem}
-.tile .tval{font-family:var(--fd);font-weight:900;font-size:1.9rem;line-height:1.05;margin-top:.25rem}
-.tile .tsub{font-size:.72rem;color:var(--txf);margin-top:.15rem}
-.tile.accent .tval{color:var(--pri)}.tile.good .tval{color:var(--grn)}.tile.warn .tval{color:var(--gold)}
-.callout{display:flex;gap:.7rem;background:var(--sur);border:1px solid var(--bdr);border-left:3px solid var(--pri);border-radius:var(--r-md);padding:.85rem .9rem;margin:.6rem 0}
-.callout .ci{font-size:1.2rem;flex-shrink:0}
-.callout.amber{border-left-color:var(--gold)}.callout.green{border-left-color:var(--grn)}.callout.blue{border-left-color:var(--blu)}
-.callout p{font-size:.86rem}.callout b{color:var(--tx)}
-details{background:var(--sur);border:1px solid var(--bdr);border-radius:var(--r-md);margin:.5rem 0;overflow:hidden}
-details>summary{list-style:none;cursor:pointer;padding:.75rem .9rem;font-weight:600;font-size:.88rem;display:flex;align-items:center;gap:.5rem}
-details>summary::-webkit-details-marker{display:none}
-details>summary::after{content:'▸';margin-left:auto;color:var(--txm);transition:transform var(--tr)}
-details[open]>summary::after{transform:rotate(90deg)}
-.dbody{padding:0 .9rem .9rem;font-size:.84rem;color:var(--txm)}.dbody b{color:var(--tx)}
-.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:.7rem}
-.chart-card{background:var(--sur);border:1px solid var(--bdr);border-radius:var(--r-lg);padding:.8rem}
-.chart-card h4{font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--txm);margin-bottom:.5rem}
-.chart-box{height:120px;position:relative}
-.seg{display:flex;gap:.4rem;background:var(--sur2);border:1px solid var(--bdr);border-radius:var(--r-full);padding:.3rem;margin-bottom:1rem;overflow-x:auto}
-.seg button{flex:1;white-space:nowrap;padding:.5rem .7rem;border-radius:var(--r-full);font-size:.78rem;font-weight:700;color:var(--txm)}
-.seg button.on{background:var(--pri);color:#fff}
-.exg{background:var(--sur);border:1px solid var(--bdr);border-radius:var(--r-lg);padding:.85rem;margin-bottom:.7rem}
-.exg-name{font-family:var(--fd);font-weight:700;font-size:1.15rem;letter-spacing:.02em}
-.exg-scheme{font-size:.72rem;color:var(--txf)}
-.lastwk{font-size:.72rem;color:var(--gold);margin-top:.2rem;min-height:1rem}
-.setrow{display:flex;align-items:center;gap:.5rem;margin-top:.55rem}
-.setrow .sno{font-size:.7rem;font-weight:700;color:var(--txm);width:36px}
-.setrow input{width:100%;background:var(--bg);border:1px solid var(--bdr);border-radius:var(--r-sm);padding:.5rem .6rem;color:var(--tx);font-size:.9rem;text-align:center}
-.setrow input:focus{outline:none;border-color:var(--pri)}
-.setdone{width:30px;height:30px;flex-shrink:0;border:1px solid var(--bdr);border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;color:var(--txf);font-size:.8rem}
-.setdone.on{background:var(--grn);border-color:var(--grn);color:#04210f}
-.cmt{width:100%;margin-top:.5rem;background:var(--bg);border:1px solid var(--bdr);border-radius:var(--r-sm);padding:.5rem .6rem;color:var(--tx);font-size:.82rem}
-.btn{display:flex;align-items:center;justify-content:center;gap:.5rem;width:100%;padding:.8rem;border-radius:var(--r-md);font-weight:700;background:var(--pri);color:#fff;font-size:.92rem}
-.btn:active{background:var(--prih)}
-.watch-check{display:flex;align-items:center;gap:.6rem;background:var(--prihlt);border:1px solid var(--pri);border-radius:var(--r-md);padding:.7rem .8rem;margin-bottom:.9rem;font-size:.85rem;font-weight:600}
-.watch-check .wbox{width:26px;height:26px;border:2px solid var(--pri);border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.watch-check.on .wbox{background:var(--pri);color:#fff}
-.nav{position:fixed;bottom:0;left:0;right:0;z-index:50;display:flex;background:rgba(21,21,19,.94);backdrop-filter:blur(12px);border-top:1px solid var(--div);padding-bottom:env(safe-area-inset-bottom)}
-.nav button{flex:1;display:flex;flex-direction:column;align-items:center;gap:.15rem;padding:.6rem 0 .55rem;color:var(--txf);font-size:.64rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
-.nav button .ni{font-size:1.25rem;line-height:1}.nav button.on{color:var(--pri)}
-.toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%) translateY(20px);background:var(--surdyn);border:1px solid var(--bdr);color:var(--tx);padding:.7rem 1.1rem;border-radius:var(--r-full);font-size:.84rem;font-weight:600;opacity:0;pointer-events:none;transition:all .3s;z-index:99}
-.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-.muted{color:var(--txf);font-size:.78rem}
-.banner{background:var(--prihlt);border:1px solid var(--pri);border-radius:var(--r-md);padding:.55rem .8rem;font-size:.76rem;color:var(--gold);margin-bottom:1rem}
+[data-theme="dark"]{
+  --bg:#0d0d0b;--sur:#151513;--sur2:#1a1a18;--suroff:#202020;--surdyn:#282826;
+  --div:#2b2b28;--bdr:#363633;
+  --tx:#e6e4de;--txm:#888680;--txf:#565450;
+  --pri:#f97316;--prih:#ea6c0a;--prihlt:rgba(249,115,22,.11);
+  --gold:#fbbf24;--grn:#4ade80;--blu:#60a5fa;--red:#f87171;--pur:#c084fc;--teal:#2dd4bf;
+  --sh-sm:0 1px 2px rgba(0,0,0,.3);--sh-md:0 4px 16px rgba(0,0,0,.45);--sh-lg:0 12px 40px rgba(0,0,0,.55);
+}
+[data-theme="light"]{
+  --bg:#f3f2ee;--sur:#fafaf7;--sur2:#ffffff;--suroff:#eceae4;--surdyn:#e2e0da;
+  --div:#d5d3cc;--bdr:#c8c6bf;
+  --tx:#1a1916;--txm:#6a6860;--txf:#a5a39d;
+  --pri:#c2410c;--prih:#9a3009;--prihlt:rgba(194,65,12,.09);
+  --gold:#b45309;--grn:#16a34a;--blu:#2563eb;--red:#dc2626;--pur:#9333ea;--teal:#0d9488;
+  --sh-sm:0 1px 2px rgba(0,0,0,.06);--sh-md:0 4px 12px rgba(0,0,0,.09);--sh-lg:0 12px 32px rgba(0,0,0,.13);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{-webkit-font-smoothing:antialiased;scroll-behavior:smooth;}
+body{min-height:100dvh;font-family:var(--fb);font-size:var(--text-sm);color:var(--tx);background:var(--bg);line-height:1.6;}
+button{cursor:pointer;background:none;border:none;font:inherit;color:inherit;}
+::-webkit-scrollbar{width:5px;height:5px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--bdr);border-radius:99px;}
+.topbar{position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:var(--sp4);padding:var(--sp3) var(--sp6);background:var(--sur);border-bottom:1px solid var(--div);box-shadow:var(--sh-sm);}
+.logo{display:flex;align-items:center;gap:var(--sp2);font-family:var(--fd);font-size:var(--text-lg);font-weight:900;letter-spacing:.06em;color:var(--pri);text-transform:uppercase;flex-shrink:0;}
+.logo-gold{color:var(--gold);}
+.topbar-mid{flex:1;display:flex;justify-content:center;align-items:center;gap:var(--sp2);}
+.day-stepper{display:flex;align-items:center;gap:var(--sp2);}
+.day-badge{display:flex;align-items:center;gap:var(--sp2);background:var(--prihlt);border:1px solid var(--pri);border-radius:var(--r-full);padding:var(--sp1) var(--sp4);font-size:var(--text-xs);color:var(--pri);font-weight:700;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap;}
+.ib{display:flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:var(--r-md);color:var(--txm);transition:background var(--tr),color var(--tr);}
+.ib:hover{background:var(--suroff);color:var(--tx);}
+.topbar-right{display:flex;align-items:center;gap:var(--sp2);}
+.main{max-width:1280px;margin:0 auto;padding:var(--sp5) var(--sp6);width:100%;}
+.prog-wrap{margin-bottom:var(--sp5);}
+.prog-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--sp2);}
+.prog-lbl{font-size:var(--text-xs);font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--txm);}
+.prog-num{font-family:var(--fd);font-size:var(--text-xl);font-weight:900;color:var(--pri);}
+.prog-track{height:7px;background:var(--suroff);border-radius:var(--r-full);overflow:hidden;}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--pri),var(--gold));border-radius:var(--r-full);transition:width 1.2s cubic-bezier(.16,1,.3,1);}
+.prog-marks{display:flex;justify-content:space-between;margin-top:var(--sp1);}
+.prog-mark{font-size:10px;color:var(--txf);}
+.kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:var(--sp3);margin-bottom:var(--sp5);}
+.kpi{background:var(--sur);border:1px solid var(--bdr);border-radius:var(--r-lg);padding:var(--sp4);box-shadow:var(--sh-sm);transition:box-shadow var(--tr);}
+.kpi:hover{box-shadow:var(--sh-md);}
+.kpi-l{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--txm);font-weight:700;margin-bottom:2px;}
+.kpi-v{font-family:var(--fd);font-size:var(--text-xl);font-weight:900;line-height:1.05;}
+.kpi-s{font-size:10px;color:var(--txm);margin-top:2px;}
+.c-or{color:var(--pri);} .c-go{color:var(--gold);} .c-gn{color:var(--grn);} .c-bl{color:var(--blu);} .c-te{color:var(--teal);}
+.day-tabs{display:flex;gap:var(--sp2);margin-bottom:var(--sp5);overflow-x:auto;padding-bottom:var(--sp1);}
+.dtab{flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:1px;padding:var(--sp2) var(--sp4);border-radius:var(--r-md);border:1px solid var(--bdr);background:var(--sur);cursor:pointer;transition:all var(--tr);min-width:70px;}
+.dtab:hover{border-color:var(--pri);background:var(--prihlt);}
+.dtab.active{background:var(--pri);border-color:var(--pri);color:#fff;box-shadow:var(--sh-md);}
+.dtab.active-day.type-active{background:var(--teal);border-color:var(--teal);}
+.dtab-n{font-family:var(--fd);font-size:var(--text-lg);font-weight:900;line-height:1;}
+.dtab-l{font-size:9px;text-transform:uppercase;letter-spacing:.08em;font-weight:700;opacity:.8;}
+.grid{display:grid;grid-template-columns:1fr 310px;gap:var(--sp6);}
+.sidebar{display:flex;flex-direction:column;gap:var(--sp4);}
+.card{background:var(--sur);border:1px solid var(--bdr);border-radius:var(--r-xl);overflow:hidden;box-shadow:var(--sh-md);}
+.card-hdr{padding:var(--sp4) var(--sp5);border-bottom:1px solid var(--div);display:flex;align-items:center;gap:var(--sp3);}
+.card-hdr-icon{display:flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:var(--r-md);background:var(--prihlt);color:var(--pri);flex-shrink:0;}
+.card-hdr-info{flex:1;}
+.day-tag{display:inline-flex;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;padding:2px var(--sp2);border-radius:var(--r-full);background:var(--prihlt);color:var(--pri);border:1px solid rgba(249,115,22,.35);margin-bottom:3px;}
+.day-tag.active-tag{background:rgba(45,212,191,.12);color:var(--teal);border-color:rgba(45,212,191,.4);}
+.card-title{font-family:var(--fd);font-size:var(--text-xl);font-weight:900;text-transform:uppercase;letter-spacing:.03em;line-height:1.1;}
+.card-sub{font-size:var(--text-xs);color:var(--txm);margin-top:1px;}
+.ex-section{padding:var(--sp3) var(--sp5) var(--sp2);border-bottom:1px solid var(--div);}
+.ex-section-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--txm);display:flex;align-items:center;gap:var(--sp2);}
+.sec-dot{width:7px;height:7px;border-radius:50%;}
+.ex-list{padding:var(--sp3) var(--sp5) var(--sp4);}
+.ex-row{display:grid;grid-template-columns:1fr auto auto;align-items:center;gap:var(--sp3);padding:var(--sp3) 0;border-bottom:1px solid var(--div);transition:background var(--tr);}
+.ex-row:last-child{border-bottom:none;}
+.ex-row:hover{background:var(--suroff);margin:0 calc(-1*var(--sp5));padding-left:var(--sp5);padding-right:var(--sp5);border-radius:var(--r-md);border-bottom:1px solid transparent;}
+.ex-name{font-weight:600;font-size:var(--text-sm);}
+.ex-why{font-size:10px;color:var(--txm);margin-top:2px;line-height:1.4;}
+.ex-scheme{font-family:var(--fd);font-size:var(--text-lg);font-weight:700;color:var(--pri);letter-spacing:.02em;white-space:nowrap;}
+.ex-tag{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;padding:2px 7px;border-radius:var(--r-sm);white-space:nowrap;}
+.t-c{background:rgba(249,115,22,.14);color:var(--pri);}
+.t-i{background:rgba(251,191,36,.14);color:var(--gold);}
+.t-cd{background:rgba(96,165,250,.14);color:var(--blu);}
+.t-cr{background:rgba(74,222,128,.14);color:var(--grn);}
+.t-f{background:rgba(192,132,252,.14);color:var(--pur);}
+.t-ac{background:rgba(45,212,191,.14);color:var(--teal);}
+/* collapsible tips */
+.ex-info{margin-top:4px;font-size:9px;color:var(--txm);}
+.ex-info>summary{cursor:pointer;list-style:none;}
+.ex-info>summary::marker, .ex-info>summary::-webkit-details-marker{display:none;}
+.ex-info-summary{display:inline-flex;align-items:center;gap:4px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--txf);}
+.ex-info-body{margin-top:4px;padding:6px 8px;border-radius:var(--r-sm);background:var(--suroff);border:1px dashed var(--div);}
+.ex-info-row{margin-bottom:3px;}
+.ex-info-row:last-child{margin-bottom:0;}
+.ol-box{margin:0 var(--sp5) var(--sp5);padding:var(--sp4);background:linear-gradient(135deg,rgba(249,115,22,.07),rgba(251,191,36,.07));border:1px solid rgba(249,115,22,.28);border-radius:var(--r-lg);}
+.ol-title{display:flex;align-items:center;gap:var(--sp2);font-family:var(--fd);font-weight:700;font-size:var(--text-base);text-transform:uppercase;letter-spacing:.06em;color:var(--pri);margin-bottom:var(--sp2);}
+.ol-text{font-size:var(--text-xs);color:var(--txm);line-height:1.6;}
+.active-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--sp3);padding:var(--sp5);}
+.active-block{background:var(--sur2);border:1px solid var(--bdr);border-radius:var(--r-lg);padding:var(--sp4);}
+.active-block-title{font-size:var(--text-xs);font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--teal);margin-bottom:var(--sp2);}
+.active-item{font-size:var(--text-xs);color:var(--txm);padding:var(--sp1) 0;border-bottom:1px solid var(--div);display:flex;align-items:center;gap:var(--sp2);}
+.active-item:last-child{border-bottom:none;}
+.active-dot{width:5px;height:5px;border-radius:50%;background:var(--teal);flex-shrink:0;}
+.sc{background:var(--sur);border:1px solid var(--bdr);border-radius:var(--r-xl);overflow:hidden;box-shadow:var(--sh-sm);}
+.sc-hdr{display:flex;align-items:center;gap:var(--sp2);padding:var(--sp3) var(--sp4);border-bottom:1px solid var(--div);font-family:var(--fd);font-size:var(--text-base);font-weight:700;text-transform:uppercase;letter-spacing:.06em;}
+.sc-body{padding:var(--sp3) var(--sp4);}
+.phase{margin-bottom:var(--sp3);}
+.phase-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:2px;}
+.phase-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:var(--txm);}
+.phase-wk{font-size:10px;color:var(--txf);}
+.phase-bar{height:4px;border-radius:var(--r-full);margin-bottom:4px;}
+.p1{background:linear-gradient(90deg,#3b82f6,#60a5fa);} .p2{background:linear-gradient(90deg,var(--pri),#fb923c);} .p3{background:linear-gradient(90deg,var(--gold),#fde68a);}
+.phase-desc{font-size:10px;color:var(--txf);line-height:1.5;}
+.rule-list{display:flex;flex-direction:column;gap:var(--sp3);}
+.rule{display:flex;align-items:flex-start;gap:var(--sp2);font-size:var(--text-xs);color:var(--txm);}
+.rule-n{flex-shrink:0;width:18px;height:18px;border-radius:var(--r-full);background:var(--prihlt);color:var(--pri);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;font-family:var(--fd);margin-top:1px;}
+.food-sec{margin-bottom:var(--sp3);}
+.food-ttl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:var(--txm);margin-bottom:var(--sp2);}
+.chips{display:flex;flex-wrap:wrap;gap:5px;}
+.chip{font-size:10px;padding:2px 8px;border-radius:var(--r-full);background:var(--suroff);border:1px solid var(--bdr);color:var(--txm);}
+.chip.p{border-color:rgba(249,115,22,.4);color:var(--pri);background:rgba(249,115,22,.07);} .chip.ca{border-color:rgba(251,191,36,.4);color:var(--gold);background:rgba(251,191,36,.07);} .chip.f{border-color:rgba(96,165,250,.4);color:var(--blu);background:rgba(96,165,250,.07);} .chip.av{border-color:rgba(248,113,113,.4);color:var(--red);background:rgba(248,113,113,.07);}
+.vtaper{background:linear-gradient(135deg,rgba(45,212,191,.08),rgba(96,165,250,.08));border:1px solid rgba(45,212,191,.3);border-radius:var(--r-lg);padding:var(--sp4);}
+.vtaper-title{font-family:var(--fd);font-weight:700;font-size:var(--text-base);text-transform:uppercase;letter-spacing:.06em;color:var(--teal);margin-bottom:var(--sp3);display:flex;align-items:center;gap:var(--sp2);}
+.vt-steps{display:flex;flex-direction:column;gap:var(--sp2);}
+.vt-step{display:flex;align-items:flex-start;gap:var(--sp2);font-size:var(--text-xs);color:var(--txm);}
+.vt-num{flex-shrink:0;width:18px;height:18px;border-radius:var(--r-full);background:rgba(45,212,191,.15);color:var(--teal);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;font-family:var(--fd);margin-top:1px;}
+.lindy{display:inline-flex;align-items:center;gap:var(--sp1);background:var(--suroff);border:1px solid var(--div);border-radius:var(--r-full);padding:2px var(--sp3);font-size:9px;color:var(--txf);font-weight:600;text-transform:uppercase;letter-spacing:.08em;}
+@media(max-width:1000px){.grid{grid-template-columns:1fr;}.kpis{grid-template-columns:repeat(3,1fr);}}
+@media(max-width:600px){.kpis{grid-template-columns:repeat(2,1fr);}.main{padding:var(--sp4);}.topbar{padding:var(--sp3) var(--sp4);}.topbar-mid{display:none;}.active-grid{grid-template-columns:1fr;}}
 </style>
 </head>
 <body>
 <header class="topbar">
-  <span class="logo">IRON<b>45</b></span>
-  <span class="daychip" id="dayChip">Day –/45</span>
-  <button class="refresh" id="refreshBtn" title="Reload">⟳</button>
+  <div class="logo">
+    <svg width="26" height="26" viewBox="0 0 28 28" fill="none" aria-label="Iron45">
+      <rect x="2" y="11" width="6" height="6" rx="1.5" fill="currentColor" opacity=".35"/>
+      <rect x="20" y="11" width="6" height="6" rx="1.5" fill="currentColor" opacity=".35"/>
+      <rect x="7" y="9" width="4" height="10" rx="1.5" fill="currentColor" opacity=".7"/>
+      <rect x="17" y="9" width="4" height="10" rx="1.5" fill="currentColor" opacity=".7"/>
+      <rect x="10" y="12" width="8" height="4" rx="2" fill="currentColor"/>
+    </svg>
+    IRON<span class="logo-gold">45</span>
+  </div>
+  <div class="topbar-mid">
+    <div class="day-stepper">
+      <button class="ib" id="btnPrev" aria-label="Previous day">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <div class="day-badge" id="dayBadge">📅 DAY 1 OF 45</div>
+      <button class="ib" id="btnNext" aria-label="Next day">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <button class="ib" id="themeBtn" aria-label="Toggle theme">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
+  </div>
 </header>
-
-<div class="wrap">
-  <div id="banner" class="banner hidden"></div>
-
-  <section id="v-dash" class="view active">
-    <div class="prog">
-      <div class="prog-top"><span class="prog-lbl">45-Day Challenge</span><span class="prog-pct" id="progPct">–%</span></div>
-      <div class="bar"><span id="progBar" style="width:0%"></span></div>
+<main class="main">
+  <div class="prog-wrap">
+    <div class="prog-hdr">
+      <span class="prog-lbl">45-Day Challenge Progress</span>
+      <span class="prog-num" id="progNum">0 / 45</span>
     </div>
-    <div class="sec">🔭 Observe — today <small id="obsDate"></small></div>
-    <div class="tiles" id="tiles"></div>
-    <div class="sec">🧭 Orient — recovery</div>
-    <div id="recovery"></div>
-    <div class="sec">📈 Trends <small>last 10 days</small></div>
-    <div class="chart-grid">
-      <div class="chart-card"><h4>Steps</h4><div class="chart-box"><canvas id="cSteps"></canvas></div></div>
-      <div class="chart-card"><h4>Sleep (h)</h4><div class="chart-box"><canvas id="cSleep"></canvas></div></div>
-      <div class="chart-card"><h4>Resting HR</h4><div class="chart-box"><canvas id="cRhr"></canvas></div></div>
-      <div class="chart-card"><h4>HRV (ms)</h4><div class="chart-box"><canvas id="cHrv"></canvas></div></div>
+    <div class="prog-track"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
+    <div class="prog-marks">
+      <span class="prog-mark">Start</span>
+      <span class="prog-mark">Wk 2 — Strength kicks in</span>
+      <span class="prog-mark">Wk 4 — Visible change</span>
+      <span class="prog-mark">Day 45 ✓</span>
     </div>
-    <div class="sec">⚔️ Decide — today's session</div>
-    <div id="todaySession"></div>
-    <div class="sec">🧠 Coach note</div>
-    <div id="coachNote"></div>
-    <div class="sec">📊 Outcomes</div>
-    <div class="tiles" id="outcomes"></div>
-  </section>
-
-  <section id="v-log" class="view">
-    <div class="sec">📝 Log session <small id="logDate"></small></div>
-    <div class="seg" id="sessionSeg"></div>
-    <div id="watchCheck"></div>
-    <div id="exList"></div>
-    <button class="btn" id="saveBtn" style="margin-top:.5rem">💾 Save session</button>
-    <div class="sec" style="margin-top:1.6rem">🏋️ Recent logged sets</div>
-    <div id="recentLog"></div>
-  </section>
-
-  <section id="v-prog" class="view">
-    <div class="sec">📚 Program library</div>
-    <div id="programList"></div>
-  </section>
-</div>
-
-<nav class="nav">
-  <button data-v="dash" class="on"><span class="ni">📊</span>Dashboard</button>
-  <button data-v="log"><span class="ni">📝</span>Log</button>
-  <button data-v="prog"><span class="ni">📚</span>Program</button>
-</nav>
-<div class="toast" id="toast"></div>
-
-<script src="data.js"></script>
+  </div>
+  <div class="kpis">
+    <div class="kpi"><div class="kpi-l">Challenge Day</div><div class="kpi-v c-or" id="kDay">1</div><div class="kpi-s">of 45 total</div></div>
+    <div class="kpi"><div class="kpi-l">Training Week</div><div class="kpi-v c-go" id="kWeek">1</div><div class="kpi-s" id="kPhase">Foundation</div></div>
+    <div class="kpi"><div class="kpi-l">Today's Focus</div><div class="kpi-v" id="kFocus" style="font-size:var(--text-lg);">CHEST</div><div class="kpi-s" id="kSub">+ Triceps</div></div>
+    <div class="kpi"><div class="kpi-l">Workouts Done</div><div class="kpi-v c-gn" id="kDone">0</div><div class="kpi-s">this challenge</div></div>
+    <div class="kpi"><div class="kpi-l">Days Left</div><div class="kpi-v c-bl" id="kLeft">44</div><div class="kpi-s">Keep going 💪</div></div>
+  </div>
+  <div class="day-tabs" id="dayTabs" role="tablist"></div>
+  <div class="grid">
+    <div><div class="card" id="workoutCard"></div></div>
+    <aside class="sidebar">
+      <div class="vtaper">
+        <div class="vtaper-title">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 22 20 2 20"/></svg>
+          Look Sexy by Summer — V-Taper Formula
+        </div>
+        <div class="vt-steps">
+          <div class="vt-step"><div class="vt-num">1</div><span><strong style="color:var(--tx)">Wider Shoulders</strong> — Overhead press + lateral raises twice per week for side delts. This is the #1 visual change. [Neutral pronated grip on presses keeps shoulders stable.]</span></div>
+          <div class="vt-step"><div class="vt-num">2</div><span><strong style="color:var(--tx)">Big Traps</strong> — Shrugs and Farmer's Carries. Heavy, upright, shoulders pulled back. This thickens the neck-to-shoulder area fast. [web:188][web:191][web:194]</span></div>
+          <div class="vt-step"><div class="vt-num">3</div><span><strong style="color:var(--tx)">Thick Forearms</strong> — Neutral-grip hammer and Zottman curls hit brachialis and brachioradialis for that ropey forearm look. [web:185][web:195]</span></div>
+          <div class="vt-step"><div class="vt-num">4</div><span><strong style="color:var(--tx)">Full Chest</strong> — Bench + incline with a slightly wider-than-shoulder grip bias more pec and less triceps. [web:187][web:196]</span></div>
+          <div class="vt-step"><div class="vt-num">5</div><span><strong style="color:var(--tx)">Smaller Belly</strong> — HIIT rope + swings + diet. Cardio and a caloric deficit strip fat while lifting keeps muscle. [web:134]</span></div>
+        </div>
+      </div>
+      <div class="sc">
+        <div class="sc-hdr">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          45-Day Phase Plan
+        </div>
+        <div class="sc-body">
+          <div class="phase"><div class="phase-row"><span class="phase-lbl">Foundation</span><span class="phase-wk">Week 1–2</span></div><div class="phase-bar p1"></div><div class="phase-desc">Learn the big lifts with strict form. Lighter weights while you dial in grip and control.</div></div>
+          <div class="phase"><div class="phase-row"><span class="phase-lbl">Progressive Overload</span><span class="phase-wk">Week 3–4</span></div><div class="phase-bar p2"></div><div class="phase-desc">Add weight every session. Chest, arms and shoulders start showing real shape.</div></div>
+          <div class="phase"><div class="phase-row"><span class="phase-lbl">Max Intensity</span><span class="phase-wk">Week 5–6</span></div><div class="phase-bar p3"></div><div class="phase-desc">Push close to failure on key sets. Waist is smaller, upper body looks much denser.</div></div>
+        </div>
+      </div>
+      <div class="sc">
+        <div class="sc-hdr" style="color:var(--pri)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          ⚡ Increase Weight When…
+        </div>
+        <div class="sc-body">
+          <div class="rule-list">
+            <div class="rule"><div class="rule-n">1</div><span>All reps, all sets are clean with your target grip → add 5 lbs next session.</span></div>
+            <div class="rule"><div class="rule-n">2</div><span>Bench &amp; Row: minimum 5–10 lbs added per week if technique holds.</span></div>
+            <div class="rule"><div class="rule-n">3</div><span>Deadlift: +5–10 lbs every heavy session in weeks 1–4, then reassess.</span></div>
+            <div class="rule"><div class="rule-n">4</div><span>Curls &amp; Laterals: move up a dumbbell size once you hit top reps with full control.</span></div>
+            <div class="rule"><div class="rule-n">5</div><span>Farmer's Carry: either walk further or go heavier every week. Full grip, no fingertips.</span></div>
+            <div class="rule"><div class="rule-n">6</div><span>Log everything. "Sexy" is progressive overload plus consistency — not random effort.</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="sc">
+        <div class="sc-hdr">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3zm0 0v7"/></svg>
+          Old-School Nutrition
+        </div>
+        <div class="sc-body">
+          <div class="food-sec"><div class="food-ttl">🥩 Protein — 180–200g/day</div><div class="chips"><span class="chip p">Eggs</span><span class="chip p">Ground beef</span><span class="chip p">Chicken</span><span class="chip p">Tuna</span><span class="chip p">Whole milk</span><span class="chip p">Salmon</span><span class="chip p">Cottage cheese</span><span class="chip p">Greek yogurt</span><span class="chip p">Steak</span></div></div>
+          <div class="food-sec"><div class="food-ttl">🌾 Carbs — Fuel &amp; recovery</div><div class="chips"><span class="chip ca">Oats</span><span class="chip ca">White rice</span><span class="chip ca">Potatoes</span><span class="chip ca">Banana</span><span class="chip ca">Sweet potato</span><span class="chip ca">Whole bread</span><span class="chip ca">Apples</span></div></div>
+          <div class="food-sec"><div class="food-ttl">🥑 Healthy Fats</div><div class="chips"><span class="chip f">Olive oil</span><span class="chip f">Avocado</span><span class="chip f">Peanut butter</span><span class="chip f">Almonds</span><span class="chip f">Butter</span></div></div>
+          <div class="food-sec"><div class="food-ttl">🚫 Cut These Out</div><div class="chips"><span class="chip av">Soda</span><span class="chip av">Alcohol</span><span class="chip av">Juice</span><span class="chip av">Fast food</span><span class="chip av">Chips</span><span class="chip av">Candy</span></div></div>
+          <div style="margin-top:var(--sp3);padding:var(--sp3);background:var(--suroff);border-radius:var(--r-md);font-size:var(--text-xs);color:var(--txm);">
+            💡 <strong style="color:var(--tx)">Rule #1:</strong> Protein at every meal. Only water &amp; black coffee to drink. Diet drives most of the waist change — training reveals it. [web:134]
+          </div>
+        </div>
+      </div>
+      <div style="text-align:center;padding:var(--sp2) 0;"><span class="lindy">⏳ Lindy Mode · Proven 60+ Years · Zero Trends</span></div>
+    </aside>
+  </div>
+</main>
 <script>
-const D = window.IRON45 || {config:{},health:[],coach_note:""};
-const CFG = Object.assign({start_date:"2026-06-01",step_floor_training:6000,step_floor_rest:8000,active_cal_target:500,sleep_target:8,log_endpoint:""}, D.config||{});
-const HEALTH = (D.health||[]).slice().sort((a,b)=>a.date<b.date?-1:1);
-const PROGRAM = {
-  "Push":{watch:"Traditional Strength Training",start:"5:00–6:00 PM",time:"55 min",icon:"💪",title:"Push — Chest & Triceps",ex:[
-    {n:"Bench Press",s:4,scheme:"4×8–10",tip:"Pronated grip just outside shoulder width. Wider = more chest, closer = more triceps. Feel pecs, not shoulders."},
-    {n:"Incline DB Press",s:3,scheme:"3×10",tip:"Bench ~30°, drive the upper chest, squeeze at top."},
-    {n:"DB Chest Fly",s:3,scheme:"3×12",tip:"Slight elbow bend, big stretch at bottom, hug-the-tree squeeze. Light, controlled."},
-    {n:"Tricep Extension",s:3,scheme:"3×12",tip:"Elbows tight and still; only forearms move. Full lockout."},
-    {n:"Push-Ups",s:2,scheme:"2×failure",tip:"Finisher. Slow the negatives once you fatigue."},
-    {n:"Farmer Carry",s:3,scheme:"3×40 ft",tip:"Crushing neutral grip, tall posture. Forearms + traps."}]},
-  "Pull":{watch:"Traditional Strength Training",start:"5:00–6:00 PM",time:"55 min",icon:"🔗",title:"Pull — Back & Biceps",ex:[
-    {n:"Bent-Over Row",s:4,scheme:"4×8–10",tip:"Pronated, hinge ~45°, flat back. Pull to lower ribs, squeeze blades."},
-    {n:"Barbell Curl",s:4,scheme:"4×8",tip:"Supinated (palms up) = max biceps. Pin elbows, no swing."},
-    {n:"Hammer Curl",s:3,scheme:"3×10",tip:"Neutral grip → brachialis/brachioradialis = thicker arms from the side."},
-    {n:"Single-Arm Row",s:3,scheme:"3×10/side",tip:"Brace on the bench, pull elbow back and up."},
-    {n:"Incline Curl",s:3,scheme:"3×10",tip:"Arms hanging back; deep bottom stretch drives growth. Supinate hard."},
-    {n:"Shrug",s:3,scheme:"3×15",tip:"Hold the top 2s. Traps."},
-    {n:"Rear Delt Fly",s:3,scheme:"3×15",tip:"Bend 45°, fly out. Fills the back of the shoulder."}]},
-  "Cardio/Core":{watch:"HIIT",start:"6:00–7:00 PM",time:"30 min",icon:"🔥",title:"Cardio & Core",ex:[
-    {n:"Jump Rope",s:1,scheme:"20 min · 30s/30s",time:true,tip:"Balls of feet, small hops, wrists work. Hard 30s = breathing heavy."},
-    {n:"Kettlebell Swing",s:4,scheme:"4×15",tip:"Hip hinge not squat. Snap hips, arms are ropes."},
-    {n:"Plank",s:3,scheme:"3×30–45s",time:true,tip:"Brace abs, flat line head-to-heel."},
-    {n:"Russian Twist",s:3,scheme:"3×20",tip:"Rotate from the core, control the weight."},
-    {n:"Reverse Crunch",s:3,scheme:"3×15",tip:"Curl hips off the floor, no momentum."}]},
-  "Full Body":{watch:"Functional Strength Training",start:"5:00–6:30 PM",time:"60 min",icon:"🏋️",title:"Full Body — Strength + Fat Loss",ex:[
-    {n:"Deadlift",s:3,scheme:"3×5–6",tip:"Bar over mid-foot, flat back, brace hard, push the floor away. Start light."},
-    {n:"Goblet Squat",s:3,scheme:"3×12",tip:"Chest up, sit between the hips, drive through heels."},
-    {n:"Shoulder Press",s:3,scheme:"3×10",tip:"Brace, press overhead, don't flare ribs."},
-    {n:"Goblet Lunge",s:3,scheme:"3×10/leg",tip:"Long step, vertical torso, knee tracks toe."},
-    {n:"Lateral Raise",s:3,scheme:"3×15",tip:"Light, lead with elbows. Side delts = V-taper width."},
-    {n:"Zottman Curl",s:3,scheme:"3×10",tip:"Up palms-up (biceps), rotate, down palms-down (forearms)."},
-    {n:"Wrist Curl",s:3,scheme:"3×15–20",tip:"Roll to fingertips and curl. Forearm flexors."}]},
-  "Rest":{watch:"—",start:"—",time:"—",icon:"🛌",title:"Rest & Recover",ex:[]}
+const PLAN = [
+ {
+  label:"MON", tag:"PUSH DAY", name:"Chest, Triceps & Shoulders",
+  type:"lift", focus:"CHEST", sub:"+ Shoulders", color:"c-or",
+  sections:[
+   {title:"BIG LIFTS — Barbell (5×5)", dot:"var(--pri)", exs:[
+     {n:"Barbell Bench Press",why:"Primary chest mass.",s:"5×5",t:"c",info:`<div class="ex-info-row"><strong>Grip:</strong> Pronated, just outside shoulder width. Wider = more chest, closer = more triceps.</div><div class="ex-info-row"><strong>Sexy focus:</strong> Feel pecs, not elbows. Hug the bar toward mid-chest.</div>`},
+     {n:"Barbell Overhead Press",why:"Front + side delts — broadens shoulders for the V-taper.",s:"4×6",t:"c",info:`<div class="ex-info-row"><strong>Grip:</strong> Pronated, wrists stacked over elbows, straight bar path past the face.</div><div class="ex-info-row"><strong>Sexy focus:</strong> "Push head through the window" at the top to cap the delts.</div>`},
+   ]},
+   {title:"ASSISTANCE — Dumbbells", dot:"var(--gold)", exs:[
+     {n:"Incline Dumbbell Press",why:"Upper chest — that high, full shelf look.",s:"3×10",t:"c",info:`<div class="ex-info-row"><strong>Sexy focus:</strong> Aim dumbbells toward the collarbone at the top to load upper chest.</div>`},
+     {n:"Dumbbell Lateral Raise",why:"Side delts — #1 move to look wider.",s:"3×15",t:"i",info:`<div class="ex-info-row"><strong>Grip:</strong> Pour-the-jug tilt, thumbs slightly low. Stop at shoulder height — delts, not traps.</div>`},
+     {n:"Dumbbell Tricep Overhead Ext.",why:"Long head — size on the back of the arm.",s:"3×12",t:"i",info:`<div class="ex-info-row"><strong>Sexy focus:</strong> Stretch long, crush short for the horseshoe.</div>`},
+   ]},
+   {title:"FINISHER", dot:"var(--grn)", exs:[
+     {n:"Push-Ups to Failure",why:"Military finisher — burns out chest & triceps.",s:"2×max",t:"c"},
+   ]},
+  ],
+  overload:"Add 5–10 lbs to Bench and Overhead Press weekly while form holds. 6 moves — don't add more."
+ },
+ {
+  label:"TUE", tag:"PULL DAY", name:"Back, Biceps & Rear Delts",
+  type:"lift", focus:"BICEPS", sub:"+ Back & Rear Delts", color:"c-go",
+  sections:[
+   {title:"BIG LIFTS — Barbell (5×5)", dot:"var(--pri)", exs:[
+     {n:"Barbell Bent-Over Row",why:"Thickest back builder; loads biceps under heavy weight.",s:"5×5",t:"c",info:`<div class="ex-info-row"><strong>Grip:</strong> Pronated, pull to low ribs. "Elbows to back pockets" for a 3D upper back.</div>`},
+     {n:"Barbell Curl",why:"Primary bicep mass.",s:"4×8",t:"i",info:`<div class="ex-info-row"><strong>Grip:</strong> Supinated, elbows pinned — only forearms move. Front-flex builder.</div>`},
+   ]},
+   {title:"ASSISTANCE — Dumbbells", dot:"var(--gold)", exs:[
+     {n:"Dumbbell Single-Arm Row",why:"Lat width and upper-back, one arm at a time.",s:"3×10",t:"c",info:`<div class="ex-info-row"><strong>Cue:</strong> Pull toward the hip, not the chest, to load lats.</div>`},
+     {n:"Bent-Over Rear Delt Fly",why:"Rear delts — fills the back of the shoulder, fixes posture.",s:"3×15",t:"i",info:`<div class="ex-info-row"><strong>Cue:</strong> Push the dumbbells out to the sides, not up. Stops shoulders rounding forward.</div>`},
+     {n:"Dumbbell Hammer Curl",why:"Brachialis & brachioradialis — arm + forearm thickness.",s:"3×10",t:"f",info:`<div class="ex-info-row"><strong>Grip:</strong> Neutral. Straight up = balanced; cross-body = more forearm.</div>`},
+     {n:"Dumbbell Incline Curl",why:"Deep stretch = the bicep peak.",s:"3×10",t:"i",info:`<div class="ex-info-row"><strong>Cue:</strong> Arms hang behind the body, supinate hard at the top.</div>`},
+   ]},
+  ],
+  overload:"Add 5 lbs to Barbell Curl weekly. Stay strict — no swinging. 6 moves capped."
+ },
+ {
+  label:"WED", tag:"BURN DAY", name:"Cardio, Core & Forearms",
+  type:"lift", focus:"BELLY", sub:"Fat Burn + Forearms", color:"c-bl",
+  sections:[
+   {title:"CARDIO — HIIT (Boxer Style)", dot:"var(--blu)", exs:[
+     {n:"Jump Rope HIIT",why:"30s hard / 30–60s easy × 20 min. Efficient belly-fat burner.",s:"20 min",t:"cd",info:`<div class="ex-info-row"><strong>Cue:</strong> Balls of feet, wrists turn the rope. Boxer conditioning, not distance running.</div>`},
+     {n:"Kettlebell Swing",why:"Explosive hip hinge — full-body fat burner.",s:"4×15",t:"c",info:`<div class="ex-info-row"><strong>Cue:</strong> Hips snap the bell, arms are hooks. Not a squat.</div>`},
+   ]},
+   {title:"CORE — Military Standard", dot:"var(--grn)", exs:[
+     {n:"Plank",why:"Deep stabilizers. Flattens the midsection.",s:"3×45s",t:"cr"},
+     {n:"Dumbbell Russian Twist",why:"Obliques — carves the waist.",s:"3×20",t:"cr"},
+   ]},
+   {title:"FOREARMS", dot:"var(--pur)", exs:[
+     {n:"Farmer's Carry",why:"Best forearm + trap builder; fixes posture too.",s:"4×40ft",t:"f",info:`<div class="ex-info-row"><strong>Grip:</strong> Crush the handle, whole hand. Tall chest, shoulders back.</div>`},
+     {n:"Dumbbell Wrist Curl",why:"Forearm flexors — underside thickness.",s:"3×20",t:"f"},
+   ]},
+  ],
+  overload:"Add 5s to planks weekly; Farmer's Carry heavier or further. Rope time toward 25 min. 6 moves."
+ },
+ {
+  label:"THU", tag:"V-TAPER DAY", name:"Shoulders, Traps & Upper Back",
+  type:"lift", focus:"WIDTH", sub:"Lats · Rear Delts · Posture", color:"c-te",
+  sections:[
+   {title:"WIDTH & POSTURE (your weak points)", dot:"var(--teal)", exs:[
+     {n:"Dumbbell Pullover",why:"Lats + serratus — builds the WIDTH of your V-taper without a pull-up bar.",s:"3×12",t:"c",info:`<div class="ex-info-row"><strong>Cue:</strong> Lie across or along a bench, one dumbbell in both hands. Big stretch overhead, pull it back over with the lats and chest — feel it in the armpit/lat, not just triceps.</div><div class="ex-info-row"><strong>Why new:</strong> This is the no-equipment fix for lat width, the missing piece in your old plan.</div>`},
+     {n:"Bent-Over Reverse Fly (wide)",why:"Rear delts + mid-traps & rhomboids — the retraction your benching needs.",s:"3×15",t:"i",info:`<div class="ex-info-row"><strong>Cue:</strong> Hinge ~45°, light dumbbells, squeeze the shoulder blades together at the top. Slightly higher elbow path than the Tuesday rear-delt fly to bias mid-traps.</div>`},
+     {n:"Prone Y-T-W Raise",why:"Lower traps & scapular stabilizers — posture and the 3D back.",s:"3×10",t:"i",info:`<div class="ex-info-row"><strong>Cue:</strong> Face-down on the bench, light or no weight. Lift arms into a Y, then T, then W shape, squeezing the lower/mid traps. Counteracts rounded shoulders from pressing.</div>`},
+   ]},
+   {title:"CAPS & TRAPS", dot:"var(--gold)", exs:[
+     {n:"Dumbbell Lateral Raise",why:"More side-delt volume — width compounds twice a week.",s:"3×15",t:"i"},
+     {n:"Dumbbell Shrug",why:"Upper traps — the powerful neck-to-shoulder slope.",s:"3×15",t:"i",info:`<div class="ex-info-row"><strong>Cue:</strong> Straight up and slightly back, 2s hold at the top. No rolling.</div>`},
+   ]},
+  ],
+  overload:"Lighter, higher-rep day on purpose — chase the squeeze, not heavy weight. Add reps before load. 5 moves."
+ },
+ {
+  label:"FRI", tag:"STRENGTH DAY", name:"Full Body Strength",
+  type:"lift", focus:"FULL", sub:"Body Strength", color:"c-gn",
+  sections:[
+   {title:"BIG LIFTS — Barbell", dot:"var(--pri)", exs:[
+     {n:"Barbell Deadlift",why:"King of lifts — huge calorie burn, full-body strength and back thickness.",s:"3×5",t:"c",info:`<div class="ex-info-row"><strong>Grip:</strong> Pronated or mixed. Bar over mid-foot, lats tight, push the floor away. Start light.</div>`},
+     {n:"Barbell Overhead Press",why:"Second shoulder session — delts need volume for width.",s:"3×8",t:"c"},
+   ]},
+   {title:"ASSISTANCE", dot:"var(--gold)", exs:[
+     {n:"Kettlebell Goblet Squat",why:"Legs + core — keeps metabolism high.",s:"3×12",t:"c"},
+     {n:"Dumbbell Lateral Raise",why:"Constant-tension side-delt width.",s:"3×15",t:"i"},
+     {n:"Zottman Curl",why:"Biceps up, forearms down — a 2-for-1.",s:"3×10",t:"f",info:`<div class="ex-info-row"><strong>Grip:</strong> Palms up to curl, rotate to palms-down, lower slowly.</div>`},
+   ]},
+   {title:"FINISHER", dot:"var(--blu)", exs:[
+     {n:"Jump Rope Finisher",why:"Short conditioning hit at the end.",s:"5 min",t:"cd"},
+   ]},
+  ],
+  overload:"Add 5–10 lbs to Deadlift weekly while back stays flat. 6 moves."
+ },
+ {
+  label:"SAT", tag:"CONDITIONING", name:"Core & Conditioning",
+  type:"lift", focus:"BELLY", sub:"Burn the Belly", color:"c-bl",
+  sections:[
+   {title:"CONDITIONING", dot:"var(--blu)", exs:[
+     {n:"Jump Rope HIIT",why:"Second weekly fat-burn block — keeps the deficit working.",s:"15 min",t:"cd"},
+     {n:"Kettlebell Swing",why:"Explosive full-body burn.",s:"4×20",t:"c"},
+   ]},
+   {title:"CORE", dot:"var(--grn)", exs:[
+     {n:"Reverse Crunch",why:"Lower abs — the block that shows when the belly shrinks.",s:"3×15",t:"cr",info:`<div class="ex-info-row"><strong>Cue:</strong> Curl the pelvis toward the ribs, no leg swinging.</div>`},
+     {n:"Dumbbell Russian Twist",why:"Obliques — the side lines.",s:"3×20",t:"cr"},
+     {n:"Plank",why:"Stability and a tighter midsection.",s:"3×45s",t:"cr"},
+   ]},
+   {title:"BALANCE", dot:"var(--pur)", exs:[
+     {n:"Reverse Wrist Curl",why:"Forearm extensors — balances all the curling, healthier elbows.",s:"3×15",t:"f"},
+   ]},
+  ],
+  overload:"Push rope intervals harder, not longer. Add a set of core before adding weight. 6 moves."
+ },
+ {
+  label:"SUN", tag:"ACTIVE RECOVERY", name:"Mobility, Posture & Light Work",
+  type:"active", focus:"RECOVERY", sub:"Your one rest day", color:"c-te",
+  sections:[], overload:""
+ },
+];
+
+const ACTIVE_RECOVERY = {
+ morning:[
+  "5-minute neck mobility — slow controlled circles each direction.",
+  "Doorframe chest stretch — 3×30s each arm to open the front of your body.",
+  "Hip flexor lunge stretch — 3×30s each side.",
+  "Dead hang from bar if available — 3×20s (decompress spine, build grip).",
+ ],
+ main:[
+  "20–30 min brisk walk — active pace, not a stroll.",
+  "Bodyweight squats ×20 — 3 sets.",
+  "Cat-cow ×15 reps — keep spine moving.",
+  "Cobra / back extension hold — 3×20s.",
+  "Shoulder blade squeeze ×20 — 3 sets.",
+ ],
+ posture:[
+  "Chin tucks ×15 — 3 sets (fights forward head, improves neck line). [web:146]",
+  "Wall slides ×12 — improves shoulder mobility and posture. [web:149]",
+  "Light farmer's carry ×2 sets — posture + forearm activation.",
+ ]
 };
-const WEEKDAY=["Rest","Push","Pull","Cardio/Core","Rest","Full Body","Full Body"];
-const $=s=>document.querySelector(s),$$=s=>document.querySelectorAll(s);
-const toast=m=>{const t=$("#toast");t.textContent=m;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),2200)};
-const fmt=n=>n==null?"–":Math.round(n).toLocaleString();
-const todayStr=()=>new Date().toISOString().slice(0,10);
-const latest=()=>HEALTH[HEALTH.length-1]||{};
-const todaySession=()=>WEEKDAY[new Date().getDay()];
-const isRest=()=>todaySession()==="Rest";
-function dayNum(){return Math.floor((new Date(todayStr())-new Date(CFG.start_date))/864e5)+1}
 
-// ---- logs: localStorage + optional endpoint sync ----
-let LOGS=[];
-function localLogs(){try{return JSON.parse(localStorage.getItem("iron45_logs")||"[]")}catch(e){return[]}}
-function saveLocal(rows){const all=[...rows,...localLogs()];localStorage.setItem("iron45_logs",JSON.stringify(all.slice(0,500)))}
-async function loadLogs(){
-  LOGS=localLogs();
-  if(CFG.log_endpoint){try{const r=await fetch(CFG.log_endpoint+"?action=list");const j=await r.json();if(Array.isArray(j))LOGS=mergeLogs(j,LOGS);}catch(e){}}
-}
-function mergeLogs(a,b){const seen=new Set();const out=[];[...a,...b].forEach(x=>{const k=(x.logged_date||"")+"|"+(x.exercise||"")+"|"+(x.created_at||"");if(!seen.has(k)){seen.add(k);out.push(x)}});return out.sort((x,y)=>(y.created_at||"")<(x.created_at||"")?-1:1)}
-async function pushLog(rows){
-  saveLocal(rows);
-  if(CFG.log_endpoint){try{await fetch(CFG.log_endpoint,{method:"POST",headers:{"Content-Type":"text/plain"},body:JSON.stringify({action:"add",rows})});}catch(e){}}
+let cDay = 0;
+let chDay = 1;
+
+function renderTabs(){
+ const el=document.getElementById("dayTabs");
+ el.innerHTML="";
+ PLAN.forEach((d,i)=>{
+  const b=document.createElement("button");
+  const isActive=d.type==="active";
+  b.className="dtab"+(i===cDay?" active"+(isActive?" active-day":""):"");
+  b.setAttribute("role","tab");
+  b.setAttribute("aria-selected",i===cDay?"true":"false");
+  const shortTag=isActive?"Active":d.tag.split(" ")[0];
+  b.innerHTML=`<span class="dtab-n">${d.label}</span><span class="dtab-l">${shortTag}</span>`;
+  b.addEventListener("click",()=>{cDay=i;render();});
+  el.appendChild(b);
+ });
 }
 
-// ---- render ----
-function init(){
-  if(D.seed_notice)$("#banner").classList.remove("hidden"),$("#banner").textContent="Showing seed numbers for the trend; 6/3 is your real export. Ask Claude to “sync” for exact history.";
-  if(!CFG.log_endpoint){const b=$("#banner");b.classList.remove("hidden");b.innerHTML=(b.textContent?b.textContent+" · ":"")+"Logging saves on this device until the sync Sheet is connected.";}
-  bindNav(); loadLogs().then(renderAll);
+function renderWorkout(){
+ const d=PLAN[cDay];
+ const card=document.getElementById("workoutCard");
+ if(d.type==="active"){
+  const ar=ACTIVE_RECOVERY;
+  card.innerHTML=`
+   <div class="card-hdr">
+    <div class="card-hdr-icon" style="background:rgba(45,212,191,.12);color:var(--teal)">
+     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+    </div>
+    <div class="card-hdr-info">
+     <div class="day-tag active-tag">ACTIVE RECOVERY</div>
+     <div class="card-title" style="color:var(--teal)">Mobility & Movement Day</div>
+     <div class="card-sub">No heavy lifting — keep blood flowing, stay loose, grow faster.</div>
+    </div>
+   </div>
+   <div class="active-grid">
+    <div class="active-block"><div class="active-block-title">🌅 Morning Routine (10 min)</div>${ar.morning.map(i=>`<div class=\"active-item\"><span class=\"active-dot\"></span><span>${i}</span></div>`).join("")}</div>
+    <div class="active-block"><div class="active-block-title">🚶 Main Activity</div>${ar.main.map(i=>`<div class=\"active-item\"><span class=\"active-dot\"></span><span>${i}</span></div>`).join("")}</div>
+    <div class="active-block" style="grid-column:1/-1"><div class="active-block-title">🧍 Posture Work</div>${ar.posture.map(i=>`<div class=\"active-item\"><span class=\"active-dot\"></span><span>${i}</span></div>`).join("")}<div style="margin-top:var(--sp3);padding:var(--sp3);background:var(--suroff);border-radius:var(--r-md);font-size:var(--text-xs);color:var(--txm);">💡 <strong style="color:var(--tx)">Why this matters:</strong> Good posture makes you look taller and leaner without losing a pound — it changes how your muscle sits on your frame. [web:143][web:149]</div></div>
+   </div>`;
+  return;
+ }
+ let sectionHTML="";
+ d.sections.forEach(sec=>{
+  const rows=sec.exs.map(e=>{
+    const tagClass=e.t==="c"?"t-c":e.t==="i"?"t-i":e.t==="cd"?"t-cd":e.t==="cr"?"t-cr":e.t==="f"?"t-f":"t-ac";
+    const tagLabel=e.t==="c"?"compound":e.t==="i"?"isolation":e.t==="cd"?"cardio":e.t==="cr"?"core":e.t==="f"?"forearm":"active";
+    const infoHTML=e.info?`<details class="ex-info"><summary><span class="ex-info-summary">➕ Tips & Grip</span></summary><div class="ex-info-body">${e.info}</div></details>`:"";
+    return `<div class="ex-row"><div><div class="ex-name">${e.n}</div><div class="ex-why">${e.why}</div>${infoHTML}</div><div class="ex-scheme">${e.s}</div><div class="ex-tag ${tagClass}">${tagLabel}</div></div>`;
+  }).join("");
+  sectionHTML+=`<div class="ex-section"><div class="ex-section-title"><span class="sec-dot" style="background:${sec.dot}"></span>${sec.title}</div></div><div class="ex-list">${rows}</div>`;
+ });
+ const iconSVG='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6.5 6.5h11M6.5 17.5h11M2 4l4 4-4 4M22 20l-4-4 4-4"/></svg>';
+ card.innerHTML=`<div class="card-hdr"><div class="card-hdr-icon">${iconSVG}</div><div class="card-hdr-info"><div class="day-tag">${d.tag}</div><div class="card-title">${d.name}</div><div class="card-sub">${d.label}NDAY · Rest 60–90s between sets · Use the grip that hits the target muscle.</div></div></div>${sectionHTML}${d.overload?`<div class="ol-box"><div class="ol-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>⚡ This Week's Overload Target</div><div class="ol-text">${d.overload}</div></div>`:""}`;
 }
-function bindNav(){
-  $$(".nav button").forEach(b=>b.addEventListener("click",()=>{$$(".nav button").forEach(x=>x.classList.remove("on"));b.classList.add("on");$$(".view").forEach(v=>v.classList.remove("active"));$("#v-"+b.dataset.v).classList.add("active");window.scrollTo({top:0,behavior:"smooth"})}));
-  $("#refreshBtn").addEventListener("click",()=>location.reload());
-}
-function renderAll(){renderHead();renderTiles();renderRecovery();renderCharts();renderToday();renderCoach();renderOutcomes();renderLog();renderProgram()}
-function renderHead(){const d=Math.max(1,Math.min(45,dayNum()));$("#dayChip").textContent=`Day ${d}/45`;const pct=Math.round(d/45*100);$("#progPct").textContent=pct+"%";$("#progBar").style.width=pct+"%";$("#obsDate").textContent=new Date().toLocaleDateString(undefined,{weekday:'long',month:'short',day:'numeric'})}
-function tile(em,l,v,s,cls=''){return `<div class="tile ${cls}"><div class="tlbl">${em} ${l}</div><div class="tval">${v}</div><div class="tsub">${s}</div></div>`}
-function renderTiles(){const h=latest(),floor=isRest()?CFG.step_floor_rest:CFG.step_floor_training;
-  $("#tiles").innerHTML=
-   tile("👣","Steps",fmt(h.steps),`floor ${fmt(floor)}`,(h.steps||0)>=floor?'good':'')+
-   tile("🔥","Active burn",fmt(h.active_cal)+" kcal",`target ${CFG.active_cal_target}`,(h.active_cal||0)>=CFG.active_cal_target?'good':'')+
-   tile("😴","Sleep",(h.sleep_hr||'–')+" h",`deep ${h.deep_hr||'–'} · rem ${h.rem_hr||'–'}`,(h.sleep_hr||0)>=7?'good':'warn')+
-   tile("❤️","Resting HR",fmt(h.resting_hr),"trending ↓",'accent')+
-   tile("📈","HRV",fmt(h.hrv)+" ms",(h.hrv||0)>=30?'recovered':'modest',(h.hrv||0)>=30?'good':'warn')+
-   tile("⚖️","Weight",h.weight?h.weight+" lb":"–","log to track",'')}
-function renderRecovery(){const h=latest();let s=0;s+=(h.hrv||0)>=32?2:(h.hrv||0)>=24?1:0;s+=(h.resting_hr||99)<=76?2:(h.resting_hr||99)<=80?1:0;s+=(h.sleep_hr||0)>=7.5?2:(h.sleep_hr||0)>=6.5?1:0;
-  let st='Amber',cls='amber',dot='🟡';if(s>=5){st='Green';cls='green';dot='🟢'}else if(s<=2){st='Red';cls='blue';dot='🔴'}
-  const msg=st==='Green'?"Recovered. Green light to push — add a rep or a little weight today.":st==='Red'?"Under-recovered. Keep it light or rest; prioritize sleep tonight.":"Middle ground. Train, but don't chase a PR if HRV is low. Protect tonight's sleep.";
-  $("#recovery").innerHTML=`<div class="callout ${cls}"><span class="ci">${dot}</span><p><b>Recovery: ${st}.</b> ${msg} <span class="muted">(HRV ${fmt(h.hrv)}ms · RHR ${fmt(h.resting_hr)} · sleep ${h.sleep_hr||'–'}h)</span></p></div>`}
-function lineChart(id,key,color){const ctx=document.getElementById(id);if(!ctx)return;const ex=Chart.getChart(id);if(ex)ex.destroy();
-  new Chart(ctx,{type:'line',data:{labels:HEALTH.map(d=>d.date.slice(5)),datasets:[{data:HEALTH.map(d=>d[key]),borderColor:color,backgroundColor:color+'22',fill:true,tension:.35,pointRadius:0,borderWidth:2}]},options:{plugins:{legend:{display:false}},scales:{x:{display:false},y:{ticks:{color:'#8b8980',font:{size:9},maxTicksLimit:4},grid:{color:'#222'}}},maintainAspectRatio:false}})}
-function renderCharts(){lineChart('cSteps','steps','#f97316');lineChart('cSleep','sleep_hr','#60a5fa');lineChart('cRhr','resting_hr','#4ade80');lineChart('cHrv','hrv','#c084fc')}
-function renderToday(){const k=todaySession(),p=PROGRAM[k];
-  if(k==='Rest'){$("#todaySession").innerHTML=`<div class="callout"><span class="ci">🛌</span><p><b>Rest & Recover.</b> No lift today. Easy 20-min walk to clear the ${fmt(CFG.step_floor_rest)} step floor, mobility, water, earlier bedtime.</p></div>`;return}
-  $("#todaySession").innerHTML=`<div class="callout"><span class="ci">${p.icon}</span><p><b>${p.title}.</b> ⌚ ${p.watch} · 🕔 ${p.start} · ⏱️ ${p.time}.<br><span class="muted">Open the Log tab to record it set by set.</span></p></div>`}
-function renderCoach(){$("#coachNote").innerHTML=`<div class="callout blue"><span class="ci">🧠</span><p>${D.coach_note||"Your coach note appears here after the next sync."}</p></div>`}
-function renderOutcomes(){const h=latest();$("#outcomes").innerHTML=tile("⚖️","Weight",h.weight?h.weight+" lb":"–","V-taper proof",'')+tile("❤️","Resting HR",fmt(h.resting_hr),"↓ from ~85",'good')+tile("📈","HRV",fmt(h.hrv)+" ms","recovery",'')}
 
-// ---- LOG view ----
-let curSession=null;
-function renderLog(){$("#logDate").textContent=new Date().toLocaleDateString(undefined,{month:'short',day:'numeric'});
-  const keys=["Push","Pull","Cardio/Core","Full Body"];
-  $("#sessionSeg").innerHTML=keys.map(k=>`<button data-k="${k}">${k}</button>`).join("");
-  $("#sessionSeg").querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>{curSession=b.dataset.k;$("#sessionSeg").querySelectorAll("button").forEach(x=>x.classList.remove("on"));b.classList.add("on");renderExercises()}));
-  curSession=(todaySession()!=='Rest'&&PROGRAM[todaySession()].ex.length)?todaySession():"Push";
-  const def=$(`#sessionSeg [data-k="${curSession}"]`);if(def)def.classList.add("on");
-  renderExercises();renderRecent()}
-function lastWeight(ex){const m=LOGS.find(l=>l.exercise===ex&&l.weight!=null);return m?`last: ${m.weight} lb${m.reps?' × '+m.reps:''} (${(m.logged_date||'').slice(5)})`:'no prior log — set your baseline'}
-let watchStarted=false;
-function renderExercises(){const p=PROGRAM[curSession];watchStarted=false;
-  $("#watchCheck").innerHTML=`<div class="watch-check" id="wc"><span class="wbox"></span><span>✅ Started Apple Watch — <b>${p.watch}</b></span></div>`;
-  $("#wc").addEventListener("click",()=>{watchStarted=!watchStarted;$("#wc").classList.toggle("on",watchStarted);$("#wc .wbox").textContent=watchStarted?'✓':''});
-  $("#exList").innerHTML=p.ex.map((e,i)=>{
-    const sets=Array.from({length:e.s||1},(_,si)=>`<div class="setrow"><span class="sno">Set ${si+1}</span>${e.time?`<input data-ex="${i}" data-f="time" placeholder="time/dur">`:`<input data-ex="${i}" data-f="w" inputmode="decimal" placeholder="lbs"><input data-ex="${i}" data-f="r" inputmode="numeric" placeholder="reps">`}<div class="setdone" data-ex="${i}" data-set="${si}">✓</div></div>`).join("");
-    return `<div class="exg"><div class="exg-name">${e.n}</div><div class="exg-scheme">${e.scheme}</div><div class="lastwk">${lastWeight(e.n)}</div>${sets}<input class="cmt" data-ex="${i}" data-f="note" placeholder="comments (optional)"><details class="exg-tips"><summary>➕ Tips & grip</summary><div class="dbody">${e.tip}</div></details></div>`}).join("");
-  $$(".setdone").forEach(d=>d.addEventListener("click",()=>d.classList.toggle("on")))}
-function renderRecent(){if(!LOGS.length){$("#recentLog").innerHTML=`<p class="muted">No sets logged yet.</p>`;return}
-  $("#recentLog").innerHTML=LOGS.slice(0,14).map(l=>`<div class="exg" style="padding:.6rem .8rem"><div style="display:flex;justify-content:space-between"><span class="exg-name" style="font-size:.95rem">${l.exercise}</span><span class="muted">${(l.logged_date||'').slice(5)}</span></div><div class="muted">${l.weight?l.weight+' lb':''} ${l.reps?'× '+l.reps:''} ${l.time_dur||''} ${l.session?'· '+l.session:''} ${l.notes?'· '+l.notes:''}</div></div>`).join("")}
-$("#saveBtn").addEventListener("click",async()=>{const p=PROGRAM[curSession],rows=[];
-  p.ex.forEach((e,i)=>{const ws=[...$$(`input[data-ex="${i}"][data-f="w"]`)].map(x=>x.value).filter(Boolean);const rs=[...$$(`input[data-ex="${i}"][data-f="r"]`)].map(x=>x.value).filter(Boolean);const ts=[...$$(`input[data-ex="${i}"][data-f="time"]`)].map(x=>x.value).filter(Boolean);const note=($(`input[data-ex="${i}"][data-f="note"]`)||{}).value||"";const done=[...$$(`.setdone[data-ex="${i}"]`)].map((d,si)=>({set:si+1,done:d.classList.contains("on")}));
-    if(!ws.length&&!rs.length&&!ts.length&&!note&&!done.some(d=>d.done))return;
-    rows.push({logged_date:todayStr(),created_at:new Date().toISOString(),session:curSession,exercise:e.n,weight:ws.length?parseFloat(ws[0]):null,reps:rs.join(","),sets:Math.max(ws.length,rs.length)||e.s,time_dur:ts.join(", ")||null,week:Math.ceil(dayNum()/7),sets_detail:done,notes:note||(watchStarted?"":"⌚ watch not confirmed")})});
-  if(!rows.length){toast("Nothing to save");return}
-  await pushLog(rows);LOGS=mergeLogs(rows,LOGS);renderRecent();toast(`Saved ${rows.length} exercises 💪`)});
-function renderProgram(){$("#programList").innerHTML=Object.entries(PROGRAM).filter(([k])=>k!=='Rest').map(([k,p])=>`<details><summary>${p.icon} ${p.title} · ${p.time}</summary><div class="dbody"><p><b>⌚ ${p.watch}</b> · 🕔 ${p.start}</p>${p.ex.map(e=>`<p style="margin-top:.5rem"><b>${e.n}</b> — ${e.scheme}<br><span class="muted">${e.tip}</span></p>`).join("")}</div></details>`).join("")}
-init();
+function renderKPIs(){
+ const d=PLAN[cDay];
+ const week=Math.ceil(chDay/7);
+ const phases=["Foundation","Foundation","Overload","Overload","Max Intensity","Max Intensity","Max Intensity"];
+ const phase=phases[Math.min(week-1,6)];
+ const liftDays=Array.from({length:chDay-1},(_,i)=>PLAN[i%7]).filter(x=>x.type==="lift").length;
+ document.getElementById("kDay").textContent=chDay;
+ document.getElementById("kWeek").textContent=week;
+ document.getElementById("kPhase").textContent=phase;
+ document.getElementById("kFocus").textContent=d.focus;
+ document.getElementById("kFocus").className="kpi-v "+d.color;
+ document.getElementById("kSub").textContent=d.sub;
+ document.getElementById("kDone").textContent=liftDays;
+ document.getElementById("kLeft").textContent=Math.max(0,45-chDay);
+ document.getElementById("progNum").textContent=`${chDay-1} / 45`;
+ document.getElementById("progFill").style.width=((chDay-1)/45*100).toFixed(1)+"%";
+ document.getElementById("dayBadge").textContent=`📅 DAY ${chDay} OF 45`;
+}
+
+function render(){renderTabs();renderWorkout();renderKPIs();}
+
+document.getElementById("btnPrev").addEventListener("click",()=>{if(chDay>1){chDay--;cDay=(cDay+6)%7;render();}});
+document.getElementById("btnNext").addEventListener("click",()=>{if(chDay<45){chDay++;cDay=(cDay+1)%7;render();}});
+let theme="dark";
+document.getElementById("themeBtn").addEventListener("click",()=>{theme=theme==="dark"?"light":"dark";document.documentElement.setAttribute("data-theme",theme);document.getElementById("themeBtn").innerHTML=theme==="dark"?`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>`:`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>`;});
+render();
 </script>
+<!-- ===== IRON45 LIVE ENHANCEMENT (health + logging) ===== -->
+<style>
+.hc{background:var(--sur);border:1px solid var(--bdr);border-radius:var(--r-xl);box-shadow:var(--sh-md);margin-bottom:var(--sp6);overflow:hidden}
+.hc-hdr{padding:var(--sp4) var(--sp5);border-bottom:1px solid var(--div);display:flex;align-items:center;gap:var(--sp3)}
+.hc-hdr .card-title{font-size:var(--text-lg)}
+.hc-rec{margin-left:auto;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;padding:3px 10px;border-radius:var(--r-full)}
+.rec-Green{background:rgba(74,222,128,.14);color:var(--grn);border:1px solid rgba(74,222,128,.4)}
+.rec-Amber{background:rgba(251,191,36,.14);color:var(--gold);border:1px solid rgba(251,191,36,.4)}
+.rec-Red{background:rgba(248,113,113,.14);color:var(--red);border:1px solid rgba(248,113,113,.4)}
+.hc-stats{display:grid;grid-template-columns:repeat(6,1fr);gap:var(--sp3);padding:var(--sp4) var(--sp5)}
+.hc-stat .l{font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:var(--txm);font-weight:700;display:flex;align-items:center;gap:3px}
+.hc-stat .v{font-family:var(--fd);font-size:var(--text-lg);font-weight:900;line-height:1.1;margin-top:2px}
+.hc-stat .s{font-size:9px;color:var(--txf)}
+.hc-charts{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--sp3);padding:0 var(--sp5) var(--sp4)}
+.hc-chart h5{font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:var(--txm);font-weight:700;margin-bottom:3px}
+.hc-chartbox{height:54px;position:relative}
+.hc-note{margin:0 var(--sp5) var(--sp4);padding:var(--sp3) var(--sp4);background:linear-gradient(135deg,rgba(96,165,250,.07),rgba(45,212,191,.05));border:1px solid rgba(96,165,250,.25);border-radius:var(--r-lg);font-size:var(--text-xs);color:var(--txm);line-height:1.55}
+.hc-note b{color:var(--tx)}
+.watchbar{display:flex;align-items:center;gap:var(--sp2);margin:var(--sp3) var(--sp5) 0;padding:var(--sp3) var(--sp4);background:var(--prihlt);border:1px solid rgba(249,115,22,.35);border-radius:var(--r-md);font-size:var(--text-xs);font-weight:600;cursor:pointer;user-select:none}
+.watchbar .wb{width:22px;height:22px;border:2px solid var(--pri);border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#fff;font-size:.8rem}
+.watchbar.on .wb{background:var(--pri)}
+.ex-log{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:4px 0 2px;padding:6px 0}
+.ex-log input{background:var(--bg);border:1px solid var(--bdr);border-radius:var(--r-sm);padding:5px 7px;color:var(--tx);font-size:12px;width:74px}
+.ex-log input.rep{width:64px}.ex-log input.cmt{flex:1;min-width:110px;text-align:left}
+.ex-log input:focus{outline:none;border-color:var(--pri)}
+.ex-log .done{width:28px;height:28px;border:1px solid var(--bdr);border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;color:var(--txf);font-size:.8rem;cursor:pointer;flex-shrink:0}
+.ex-log .done.on{background:var(--grn);border-color:var(--grn);color:#04210f}
+.ex-log .last{font-size:10px;color:var(--gold);width:100%;margin-bottom:2px}
+.saved{font-size:10px;color:var(--grn);opacity:0;transition:opacity .3s}.saved.show{opacity:1}
+@media(max-width:600px){.hc-stats{grid-template-columns:repeat(3,1fr)}.hc-charts{grid-template-columns:repeat(2,1fr)}}
+</style>
+<script src="data.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.js"></script>
+<script>
+(function(){
+  const D = window.IRON45 || {config:{},health:[],coach_note:""};
+  const CFG = Object.assign({start_date:"2026-06-01",step_floor_training:6000,step_floor_rest:8000,active_cal_target:500,log_endpoint:""}, D.config||{});
+  const H = (D.health||[]).slice().sort((a,b)=>a.date<b.date?-1:1);
+  const latest = H[H.length-1]||{};
+  const fmt=n=>n==null?"–":Math.round(n).toLocaleString();
+  const WEEKDAY=["Rest","Push","Pull","Cardio/Core","Rest","Full Body","Full Body"]; // 0=Sun
+  function isRest(){return WEEKDAY[new Date().getDay()]==="Rest"}
+
+  // recovery score
+  function recovery(){let s=0;s+=(latest.hrv||0)>=32?2:(latest.hrv||0)>=24?1:0;s+=(latest.resting_hr||99)<=74?2:(latest.resting_hr||99)<=79?1:0;s+=(latest.sleep_hr||0)>=7.5?2:(latest.sleep_hr||0)>=6.5?1:0;return s>=5?"Green":s<=2?"Red":"Amber"}
+
+  // ---- logs (localStorage + optional endpoint) ----
+  function loadLogs(){try{return JSON.parse(localStorage.getItem("iron45_logs")||"{}")}catch(e){return{}}}
+  function saveLogs(o){localStorage.setItem("iron45_logs",JSON.stringify(o))}
+  function viewedDate(){const b=document.getElementById("dayBadge");const m=(b&&b.textContent||"").match(/DAY\s+(\d+)/);const day=m?+m[1]:1;const d=new Date(CFG.start_date);d.setDate(d.getDate()+day-1);return d.toISOString().slice(0,10)}
+  function lastRef(ex){const o=loadLogs();const today=viewedDate();let best=null;Object.keys(o).forEach(k=>{const[dt,name]=k.split("__");if(name===ex&&dt<today&&o[k].weight){if(!best||dt>best.dt)best={dt,...o[k]}}});return best?`last: ${best.weight} lb${best.reps?' × '+best.reps:''} (${best.dt.slice(5)})`:"no prior log — set your baseline"}
+  function record(ex,patch){const o=loadLogs();const key=viewedDate()+"__"+ex;o[key]=Object.assign({ts:Date.now(),session:(document.querySelector('.day-tag')||{}).textContent||""},o[key]||{},patch);saveLogs(o);if(CFG.log_endpoint){try{fetch(CFG.log_endpoint,{method:"POST",headers:{"Content-Type":"text/plain"},body:JSON.stringify({action:"add",date:viewedDate(),exercise:ex,...o[key]})})}catch(e){}}}
+
+  // ---- health card ----
+  function spark(id,key,color){const el=document.getElementById(id);if(!el)return;const c=Chart.getChart(el);if(c)c.destroy();new Chart(el,{type:'line',data:{labels:H.map(d=>d.date.slice(5)),datasets:[{data:H.map(d=>d[key]),borderColor:color,backgroundColor:color+'22',fill:true,tension:.35,pointRadius:0,borderWidth:2}]},options:{plugins:{legend:{display:false},tooltip:{enabled:false}},scales:{x:{display:false},y:{display:false}},maintainAspectRatio:false}})}
+  function buildHealthCard(){
+    if(document.getElementById("iron45Health"))return;
+    const left=document.getElementById("workoutCard");if(!left)return;
+    const floor=isRest()?CFG.step_floor_rest:CFG.step_floor_training, rec=recovery();
+    const card=document.createElement("div");card.className="hc";card.id="iron45Health";
+    card.innerHTML=`
+      <div class="hc-hdr"><div class="card-hdr-icon" style="background:rgba(96,165,250,.12);color:var(--blu)">❤️</div>
+        <div class="card-hdr-info"><div class="day-tag" style="background:rgba(96,165,250,.12);color:var(--blu);border-color:rgba(96,165,250,.35)">LIVE · APPLE HEALTH</div>
+        <div class="card-title">Today's Readout</div></div>
+        <span class="hc-rec rec-${rec}">${rec==='Green'?'🟢':rec==='Red'?'🔴':'🟡'} ${rec}</span></div>
+      <div class="hc-stats">
+        ${hs("👣 Steps",fmt(latest.steps),"floor "+fmt(floor))}
+        ${hs("🔥 Active",fmt(latest.active_cal)+" kcal","≥ "+CFG.active_cal_target)}
+        ${hs("😴 Sleep",(latest.sleep_hr||'–')+" h","deep "+(latest.deep_hr||'–'))}
+        ${hs("❤️ Rest HR",fmt(latest.resting_hr),"bpm ↓")}
+        ${hs("📈 HRV",fmt(latest.hrv)+" ms","recovery")}
+        ${hs("⚖️ Weight",latest.weight?latest.weight+" lb":"–","V-taper")}
+      </div>
+      <div class="hc-charts">
+        <div class="hc-chart"><h5>Steps</h5><div class="hc-chartbox"><canvas id="spSteps"></canvas></div></div>
+        <div class="hc-chart"><h5>Sleep</h5><div class="hc-chartbox"><canvas id="spSleep"></canvas></div></div>
+        <div class="hc-chart"><h5>Rest HR</h5><div class="hc-chartbox"><canvas id="spRhr"></canvas></div></div>
+        <div class="hc-chart"><h5>HRV</h5><div class="hc-chartbox"><canvas id="spHrv"></canvas></div></div>
+      </div>
+      <div class="hc-note">🧠 <b>Coach:</b> ${D.coach_note||"Sync to get today's note."}</div>`;
+    left.parentNode.insertBefore(card,left);
+    spark('spSteps','steps','#f97316');spark('spSleep','sleep_hr','#60a5fa');spark('spRhr','resting_hr','#4ade80');spark('spHrv','hrv','#c084fc');
+  }
+  function hs(l,v,s){return `<div class="hc-stat"><div class="l">${l}</div><div class="v">${v}</div><div class="s">${s}</div></div>`}
+
+  // ---- inject logging + watch into the workout card ----
+  let busy=false;
+  function injectWorkout(){
+    const card=document.getElementById("workoutCard");if(!card)return;
+    // watch checkbox
+    const hdr=card.querySelector(".card-hdr");
+    if(hdr && !card.querySelector(".watchbar")){
+      const tagTxt=(card.querySelector(".day-tag")||{}).textContent||"";
+      const wtype=/CARDIO/i.test(tagTxt)?"HIIT":/FULL/i.test(tagTxt)?"Functional Strength Training":/REST|RECOVERY/i.test(tagTxt)?null:"Traditional Strength Training";
+      if(wtype){const wb=document.createElement("div");wb.className="watchbar";wb.innerHTML=`<span class="wb"></span><span>✅ Started Apple Watch — <b>${wtype}</b></span>`;wb.addEventListener("click",()=>wb.classList.toggle("on"));hdr.after(wb);}
+    }
+    // per-exercise logging
+    card.querySelectorAll(".ex-row").forEach(row=>{
+      if(row.dataset.logged)return;row.dataset.logged="1";
+      const ex=(row.querySelector(".ex-name")||{}).textContent||"";
+      const scheme=(row.querySelector(".ex-scheme")||{}).textContent||"";
+      const timeBased=/min|sec|\bs\b/i.test(scheme);
+      const key=viewedDate()+"__"+ex, saved=(loadLogs()[key]||{});
+      const log=document.createElement("div");log.className="ex-log";
+      log.innerHTML=`<span class="last">${lastRef(ex)}</span>`+
+        (timeBased?`<input class="cmt" data-f="time" placeholder="time / dur (e.g. 20 min)" value="${saved.reps||''}">`
+        :`<input data-f="w" inputmode="decimal" placeholder="lbs" value="${saved.weight||''}"><input class="rep" data-f="r" inputmode="numeric" placeholder="reps" value="${saved.reps||''}">`)+
+        `<input class="cmt" data-f="note" placeholder="comment" value="${(saved.note||'').replace(/"/g,'&quot;')}"><div class="done${saved.done?' on':''}">✓</div><span class="saved">saved ✓</span>`;
+      row.after(log);
+      const flash=()=>{const s=log.querySelector(".saved");s.classList.add("show");setTimeout(()=>s.classList.remove("show"),1200)};
+      log.querySelectorAll("input").forEach(inp=>inp.addEventListener("change",()=>{
+        const w=log.querySelector('[data-f="w"]'),r=log.querySelector('[data-f="r"]'),t=log.querySelector('[data-f="time"]'),n=log.querySelector('[data-f="note"]');
+        record(ex,{weight:w?parseFloat(w.value)||null:null,reps:(r&&r.value)||(t&&t.value)||"",note:n?n.value:""});flash();
+      }));
+      log.querySelector(".done").addEventListener("click",e=>{e.target.classList.toggle("on");record(ex,{done:e.target.classList.contains("on")});flash()});
+    });
+  }
+  function injectAll(){if(busy)return;busy=true;try{buildHealthCard();injectWorkout()}finally{busy=false}}
+
+  function start(){
+    // auto-advance to today
+    const d=new Date(),s=new Date(CFG.start_date);let day=Math.floor((new Date(d.toISOString().slice(0,10))-s)/864e5)+1;day=Math.max(1,Math.min(45,day));
+    const nx=document.getElementById("btnNext");for(let i=1;i<day&&nx;i++)nx.click();
+    injectAll();
+    const card=document.getElementById("workoutCard");
+    if(card){const mo=new MutationObserver(()=>{if(busy)return;clearTimeout(window._iroT);window._iroT=setTimeout(injectAll,40)});mo.observe(card,{childList:true,subtree:true});}
+  }
+  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",start);else start();
+})();
+</script>
+
 </body>
 </html>
