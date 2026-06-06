@@ -7,7 +7,7 @@ window.IRON45 = {
     step_floor_rest: 8000,
     active_cal_target: 500,
     sleep_target: 8,
-    log_endpoint: ""                  // Apps Script URL for cross-device log sync (added later)
+    log_endpoint: "https://script.google.com/macros/s/AKfycbzcqX_9YW6URlZr0PZPPQuXhswD43PCQqQphlIQKI35E0CQ8_NQ8pznYUgi-AsJGekE/exec"                  // Apps Script URL for cross-device log sync (added later)
   },
   health: [
     {date:"2026-05-28", steps:9300,  active_cal:720, sleep_hr:7.2,  deep_hr:1.4,  rem_hr:1.7,  resting_hr:79, hrv:27, weight:251},
