@@ -517,6 +517,8 @@ render();
 .savebar{display:flex;align-items:center;gap:var(--sp3);flex-wrap:wrap;margin:var(--sp4) var(--sp5) var(--sp5);padding:var(--sp4);background:var(--prihlt);border:1px solid rgba(249,115,22,.35);border-radius:var(--r-lg)}
 .savebar button{background:var(--pri);color:#fff;font-weight:800;font-family:var(--fd);letter-spacing:.03em;text-transform:uppercase;padding:.7rem 1.3rem;border-radius:var(--r-md);font-size:var(--text-base)}
 .savebar button:active{background:var(--prih)}
+.savebar .syncbtn{background:var(--sur2);color:var(--tx);border:1px solid var(--bdr)}
+.savebar .syncbtn:active{background:var(--suroff)}
 .savebar .hint{font-size:11px;color:var(--txm);flex:1;min-width:160px}
 .iron45toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);background:#16a34a;color:#fff;padding:.75rem 1.3rem;border-radius:999px;font-weight:700;font-size:.85rem;opacity:0;pointer-events:none;transition:all .3s;z-index:999;box-shadow:0 8px 30px rgba(0,0,0,.4)}
 .iron45toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
@@ -611,17 +613,17 @@ render();
     // save bar
     if(card.querySelectorAll(".ex-row").length && !card.querySelector(".savebar")){
       const sb=document.createElement("div");sb.className="savebar";
-      sb.innerHTML=`<button>💾 Save Session</button><span class="hint">Saves on this device. Your numbers reload here next time and feed the “last:” reference so you know what to beat.</span>`;
+      sb.innerHTML=`<button class="savebtn">💾 Save Session</button><button class="syncbtn">↻ Sync devices</button><span class="hint">Saves on this device. Your numbers reload here next time and feed the “last:” reference so you know what to beat.</span>`;
       card.appendChild(sb);
-      sb.querySelector("button").addEventListener("click",()=>{let n=0;card.querySelectorAll(".ex-log").forEach(log=>{const v=record(log.dataset.ex,readRow(log));markLogged(log,v);if(hasData(v))n++});toast(n?`Saved ✓ — ${n} exercise${n>1?'s':''} logged`:"Type some numbers first")});
+      sb.querySelector(".savebtn").addEventListener("click",()=>{let n=0;card.querySelectorAll(".ex-log").forEach(log=>{const v=record(log.dataset.ex,readRow(log));markLogged(log,v);if(hasData(v))n++});toast(n?`Saved ✓ — ${n} exercise${n>1?'s':''} logged`:"Type some numbers first")});sb.querySelector(".syncbtn").addEventListener("click",async()=>{toast("Syncing…");var n=await syncDown();refillLogs();toast(n<0?"Sync failed — redeploy the Apps Script as a NEW version":("Synced ✓ — "+n+" entries pulled"));});
     }
   }
-  function injectAll(){if(busy)return;busy=true;try{buildHealthCard();injectWorkout()}finally{busy=false}}
+  function refillLogs(){var card=document.getElementById('workoutCard');if(!card)return;card.querySelectorAll('.ex-log').forEach(function(log){var ex=log.dataset.ex;var v=loadLogs()[viewedDate()+'__'+ex]||{};var w=log.querySelector('[data-f="w"]'),r=log.querySelector('[data-f="r"]'),t=log.querySelector('[data-f="time"]'),n=log.querySelector('[data-f="note"]');if(w&&!w.value&&v.weight!=null)w.value=v.weight;if(r&&!r.value&&v.reps)r.value=v.reps;if(t&&!t.value&&v.reps)t.value=v.reps;if(n&&!n.value&&v.note)n.value=v.note;var d=log.querySelector('.done');if(d)d.classList.toggle('on',!!v.done);markLogged(log,v);var L=log.querySelector('.last');if(L)L.textContent=lastRef(ex);});} function injectAll(){if(busy)return;busy=true;try{buildHealthCard();injectWorkout()}finally{busy=false}}
 
-  function syncDown(){return new Promise(function(res){ if(!CFG.log_endpoint)return res(); var cb='iron45cb_'+Date.now(); var s=document.createElement('script'); var done=false; function cleanup(){ if(done)return; done=true; try{delete window[cb];}catch(e){window[cb]=undefined;} if(s.parentNode)s.parentNode.removeChild(s); } var t=setTimeout(function(){cleanup();res();},6000); window[cb]=function(arr){ try{ if(Array.isArray(arr)){ var o=loadLogs(); arr.forEach(function(row){ if(!row||!row.date||!row.exercise)return; var k=row.date+'__'+row.exercise; var cur=o[k]; if(!cur||(row.ts||0)>=(cur.ts||0)) o[k]={ts:row.ts||Date.now(), weight:(row.weight===''||row.weight==null)?null:parseFloat(row.weight), reps:String(row.reps||''), note:String(row.note||''), done:!!row.done}; }); saveLogs(o);} }catch(e){} clearTimeout(t); cleanup(); res(); }; s.onerror=function(){cleanup();res();}; s.src=CFG.log_endpoint+(CFG.log_endpoint.indexOf('?')>-1?'&':'?')+'action=list&callback='+cb; document.head.appendChild(s); });} async function start(){ await syncDown();
+  function syncDown(){return new Promise(function(res){ if(!CFG.log_endpoint)return res(0); var cb='iron45cb_'+Date.now(); var s=document.createElement('script'); var done=false; function cleanup(){ if(done)return; done=true; try{delete window[cb];}catch(e){window[cb]=undefined;} if(s.parentNode)s.parentNode.removeChild(s); } var t=setTimeout(function(){cleanup();res(-1);},7000); window[cb]=function(arr){ var n=0; try{ if(Array.isArray(arr)){ var o=loadLogs(); arr.forEach(function(row){ if(!row||!row.date||!row.exercise)return; var k=row.date+'__'+row.exercise; var cur=o[k]; if(!cur||(row.ts||0)>=(cur.ts||0)){ o[k]={ts:row.ts||Date.now(), weight:(row.weight===''||row.weight==null)?null:parseFloat(row.weight), reps:String(row.reps||''), note:String(row.note||''), done:!!row.done}; } n++; }); saveLogs(o);} }catch(e){} clearTimeout(t); cleanup(); res(n); }; s.onerror=function(){cleanup();res(-1);}; s.src=CFG.log_endpoint+(CFG.log_endpoint.indexOf('?')>-1?'&':'?')+'action=list&callback='+cb; document.head.appendChild(s); });} async function start(){ await syncDown();
     const d=new Date(),s=new Date(CFG.start_date);let day=Math.floor((new Date(d.toISOString().slice(0,10))-s)/864e5)+1;day=Math.max(1,Math.min(45,day));
     const nx=document.getElementById("btnNext");for(let i=1;i<day&&nx;i++)nx.click();
-    injectAll();
+    injectAll(); refillLogs();
     const card=document.getElementById("workoutCard");
     if(card){const mo=new MutationObserver(()=>{if(busy)return;clearTimeout(window._iroT);window._iroT=setTimeout(injectAll,40)});mo.observe(card,{childList:true,subtree:true});}
   }
