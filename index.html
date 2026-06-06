@@ -545,7 +545,7 @@ render();
   // ---- logs ----
   function loadLogs(){try{return JSON.parse(localStorage.getItem("iron45_logs")||"{}")}catch(e){return{}}}
   function saveLogs(o){localStorage.setItem("iron45_logs",JSON.stringify(o))}
-  function viewedDate(){const b=document.getElementById("dayBadge");const m=(b&&b.textContent||"").match(/DAY\s+(\d+)/);const day=m?+m[1]:1;const d=new Date(CFG.start_date);d.setDate(d.getDate()+day-1);return d.toISOString().slice(0,10)}
+  function viewedDate(){var tabs=[].slice.call(document.querySelectorAll('.dtab'));var idx=tabs.findIndex(function(b){return b.classList.contains('active')});if(idx<0)idx=(new Date().getDay()+6)%7;var today=new Date();var todayCD=(today.getDay()+6)%7;var d=new Date(today);d.setDate(today.getDate()+(idx-todayCD));return d.toISOString().slice(0,10)}
   function lastRef(ex){const o=loadLogs();const today=viewedDate();let best=null;Object.keys(o).forEach(k=>{const i=k.indexOf("__");const dt=k.slice(0,i),name=k.slice(i+2);if(name===ex&&dt<today&&o[k].weight){if(!best||dt>best.dt)best={dt,...o[k]}}});return best?`last: ${best.weight} lb${best.reps?' × '+best.reps:''} (${best.dt.slice(5)})`:"no prior log — set your baseline"}
   function record(ex,patch){const o=loadLogs();const key=viewedDate()+"__"+ex;o[key]=Object.assign({ts:Date.now()},o[key]||{},patch);saveLogs(o);if(CFG.log_endpoint){try{fetch(CFG.log_endpoint,{method:"POST",headers:{"Content-Type":"text/plain"},body:JSON.stringify({action:"add",date:viewedDate(),exercise:ex,...o[key]})})}catch(e){}}return o[key]}
   function hasData(v){return v&&(v.weight||v.reps||v.note||v.done)}
