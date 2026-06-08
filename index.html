@@ -631,5 +631,61 @@ render();
 })();
 </script>
 
+
+<style>
+/* ===== MOBILE-ONLY refinements (<=600px); desktop untouched ===== */
+@media(max-width:600px){
+  .main{padding:var(--sp4) var(--sp3) var(--sp8);}
+  /* progress: drop crowded middle labels */
+  .prog-marks .prog-mark:nth-child(2),.prog-marks .prog-mark:nth-child(3){display:none;}
+  /* KPIs: compact 2-col */
+  .kpis{grid-template-columns:1fr 1fr;gap:var(--sp2);margin-bottom:var(--sp4);}
+  .kpi{padding:var(--sp3);}
+  .kpi-l{font-size:9px;letter-spacing:.06em;}
+  .kpi-v{font-size:1.5rem;}
+  .kpi-s{font-size:9px;}
+  /* day tabs: roomier tap targets */
+  .day-tabs{margin-bottom:var(--sp4);gap:var(--sp2);}
+  .dtab{min-width:62px;padding:var(--sp2) var(--sp3);}
+  /* health readout card */
+  .hc{margin-bottom:var(--sp4);}
+  .hc-hdr{padding:var(--sp3) var(--sp4);flex-wrap:wrap;gap:var(--sp2);}
+  .hc-hdr .card-title{font-size:var(--text-base);}
+  .hc-rec{margin-left:auto;font-size:9px;padding:2px 8px;white-space:nowrap;}
+  .hc-stats{grid-template-columns:repeat(3,1fr);gap:var(--sp2);padding:var(--sp3) var(--sp4);}
+  .hc-stat .l{font-size:8px;gap:2px;}
+  .hc-stat .v{font-size:var(--text-base);}
+  .hc-stat .s{font-size:8px;}
+  .hc-charts{grid-template-columns:1fr 1fr;gap:var(--sp2);padding:0 var(--sp4) var(--sp4);}
+  .hc-chart h5{font-size:8px;}
+  .hc-chartbox{height:62px;}
+  .hc-note{margin:0 var(--sp4) var(--sp4);padding:var(--sp3);font-size:var(--text-xs);line-height:1.5;}
+  /* workout card */
+  .card-hdr{padding:var(--sp4);gap:var(--sp3);}
+  .card-title{font-size:1.3rem;}
+  .ex-section{padding:var(--sp3) var(--sp4) var(--sp2);}
+  .ex-list{padding:var(--sp2) var(--sp4) var(--sp4);}
+  .ex-row{padding:var(--sp3) 0;}
+  .ex-name{font-size:var(--text-base);}
+  .ol-box{margin:0 var(--sp4) var(--sp4);padding:var(--sp3);}
+  /* logging: 16px inputs stop iOS zoom; bigger tap targets; full-width comment */
+  .ex-log{gap:8px;padding:8px 0;}
+  .ex-log input{font-size:16px;padding:10px;width:88px;}
+  .ex-log input.rep{width:74px;}
+  .ex-log input.cmt{min-width:100%;flex-basis:100%;}
+  .ex-log .done{width:40px;height:40px;font-size:1rem;}
+  .ex-log .last{font-size:11px;}
+  .ex-log .logged{font-size:11px;}
+  /* save bar: stacked, full-width primary action */
+  .savebar{margin:var(--sp4) var(--sp4) var(--sp6);padding:var(--sp4);flex-direction:column;align-items:stretch;gap:var(--sp3);}
+  .savebar button{width:100%;padding:.95rem;font-size:var(--text-lg);}
+  .savebar .hint{text-align:center;min-width:0;}
+  /* watch bar + log hint roomier */
+  .watchbar{margin:var(--sp3) var(--sp4) 0;}
+  .loghint{margin:var(--sp2) var(--sp4) 0;}
+  /* reference cards: single column */
+  .sidebar{grid-template-columns:1fr;margin-top:var(--sp4);gap:var(--sp3);}
+}
+</style>
 </body>
 </html>
