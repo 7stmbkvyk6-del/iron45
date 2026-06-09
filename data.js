@@ -1,6 +1,6 @@
 // Iron45 dynamic data — auto-refreshed daily (coach_notes preserved per-day).
 window.IRON45 = {
-  updated: "2026-06-08",
+  updated: "2026-06-09",
   config: {
     start_date: "2026-06-01",
     step_floor_training: 6000,
@@ -20,13 +20,14 @@ window.IRON45 = {
     {"date": "2026-06-05", "steps": 4209, "active_cal": 1093, "sleep_hr": 8.78, "deep_hr": 1.0, "rem_hr": 2.24, "resting_hr": 70, "hrv": 34, "weight": null},
     {"date": "2026-06-06", "steps": 8214, "active_cal": 706, "sleep_hr": 7.24, "deep_hr": 0.9, "rem_hr": 1.58, "resting_hr": 73, "hrv": 28, "weight": null},
     {"date": "2026-06-07", "steps": 5919, "active_cal": 1032, "sleep_hr": 7.97, "deep_hr": 0.88, "rem_hr": 2.22, "resting_hr": 69, "hrv": 37, "weight": null},
-    {"date": "2026-06-08", "steps": 1262, "active_cal": 118, "sleep_hr": null, "deep_hr": null, "rem_hr": null, "resting_hr": 74, "hrv": 38, "weight": null}
+    {"date": "2026-06-08", "steps": 3878, "active_cal": 800, "sleep_hr": 1.28, "deep_hr": 0.0, "rem_hr": 0.0, "resting_hr": 73, "hrv": 30, "weight": null}
   ],
   coach_notes: {
   "2026-06-04": "Resting HR dropped to 71 and HRV jumped to 34 \u2014 real recovery gains. Sleep was short (6.3h, low REM); bank an earlier night. Thursday is your V-Taper day: pullovers for lat width + reverse flies / Y-T-W for rear delts and posture.",
   "2026-06-05": "Big Full Body Friday \u2014 two strength blocks (1h07 + 37 min, max HR 178). Those goblet squats are why your legs are toast, and that soreness is exactly the muscle we want to build. Sleep was excellent: 7.85h with 2.2h REM.",
   "2026-06-06": "Conditioning became a 21-min hike \u2014 fine call with your legs wrecked from Friday's squats. Steps still ~8.2k and sleep held at 7.2h. Resting HR up to 73 is just the post-training bump.",
   "2026-06-07": "Make-up day: today you're doing Saturday's Conditioning. Your legs are still sore from Friday's squats, so keep the jump-rope intervals SHORT and the kettlebell swings light \u2014 lean into the core work (plank, twists, reverse crunch). Back to normal tomorrow: Monday = Push (upper body), perfect while the legs finish recovering.",
-  "2026-06-08": "HRV climbed to 38 ms this morning, your best mark of the week, and resting heart rate is holding in the low 70s after dipping to 69 on Sunday, so recovery is clearly trending your way. Sleep is cooperating too: 7.97h Sunday night landed right in your 7-9h target, so protect that 1-2am bedtime since it's the lever that moves everything else. It's Monday, which means Push day, so bring the intensity to chest, shoulders, and triceps."
+  "2026-06-08": "HRV climbed to 38 ms this morning, your best mark of the week, and resting heart rate is holding in the low 70s after dipping to 69 on Sunday, so recovery is clearly trending your way. Sleep is cooperating too: 7.97h Sunday night landed right in your 7-9h target, so protect that 1-2am bedtime since it's the lever that moves everything else. It's Monday, which means Push day, so bring the intensity to chest, shoulders, and triceps.",
+  "2026-06-09": "Sunday was your best recovery day of the week, with resting heart rate dipping to 69 and HRV at 37, but Monday nudged both the wrong way (HR back up to 73, HRV down to 30) and only 1.3h of sleep got logged, so last night clearly didn't record a full session. Get the watch on tonight and aim for the 7-9h window by pulling bedtime back from that 1-2am drift, since sleep is the lever that resets HR and HRV together. Today is Pull day: rows, pull-ups, and curls, so warm up the lats and let a controlled session do the work while recovery catches back up."
 }
 };
