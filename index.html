@@ -267,110 +267,241 @@ const PLAN = [
   label:"MON", tag:"PUSH DAY", name:"Chest, Triceps & Shoulders",
   type:"lift", focus:"CHEST", sub:"+ Shoulders", color:"c-or",
   sections:[
-   {title:"BIG LIFTS — Barbell (5×5)", dot:"var(--pri)", exs:[
-     {n:"Barbell Bench Press",why:"Primary chest mass.",s:"5×5",t:"c",info:`<div class="ex-info-row"><strong>Grip:</strong> Pronated, just outside shoulder width. Wider = more chest, closer = more triceps.</div><div class="ex-info-row"><strong>Sexy focus:</strong> Feel pecs, not elbows. Hug the bar toward mid-chest.</div>`},
-     {n:"Barbell Overhead Press",why:"Front + side delts — broadens shoulders for the V-taper.",s:"4×6",t:"c",info:`<div class="ex-info-row"><strong>Grip:</strong> Pronated, wrists stacked over elbows, straight bar path past the face.</div><div class="ex-info-row"><strong>Sexy focus:</strong> "Push head through the window" at the top to cap the delts.</div>`},
+   {title:"🔩 BARBELL — one loaded bar (flow on the bench)", dot:"var(--pri)", exs:[
+     {n:"Barbell Bench Press",why:"Primary chest mass.",s:"5×5",t:"c",info:`
+       <div class="ex-info-row"><strong>Arch (easy trick):</strong> lie on the bench, raise your shoulders, push them back, then lower them down — that sets a slight arch and locks your shoulder blades.</div>
+       <div class="ex-info-row"><strong>Elbows:</strong> ~45° from your sides, not flared straight out like a plane.</div>
+       <div class="ex-info-row"><strong>Wrists:</strong> no bend — stack the bar directly over a straight wrist.</div>
+       <div class="ex-info-row"><strong>Path & focus:</strong> lower to the lower chest, press in a slight arc back over the shoulders. Feel pecs doing the work, not shoulders.</div>`},
+     {n:"Barbell Skull-Crusher",why:"Long-head triceps — arm size.",s:"3×12 · 3s down",t:"c",info:`
+       <div class="ex-info-row"><strong>Setup:</strong> stay lying on the bench after pressing; bar above your forehead, upper arms pointed at the ceiling and FIXED.</div>
+       <div class="ex-info-row"><strong>Move:</strong> only the forearms move — lower the bar to your forehead/crown, then extend.</div>
+       <div class="ex-info-row"><strong>Avoid:</strong> elbows drifting back or flaring wide (that turns it into a press).</div>
+       <div class="ex-info-row"><strong>Tempo:</strong> 3s lower + 1s pause, controlled up. 45 lb is plenty here.</div>`},
+     {n:"Barbell Pullover",why:"Chest + lats + serratus — full chest & early V-taper.",s:"3×12 · 3s stretch",t:"c",info:`
+       <div class="ex-info-row"><strong>Setup:</strong> lie along the bench, bar held over your chest with straight arms and a soft, locked elbow bend.</div>
+       <div class="ex-info-row"><strong>Move:</strong> lower the bar back behind your head for a big chest/lat stretch, then pull it back over.</div>
+       <div class="ex-info-row"><strong>Avoid:</strong> bending the elbows (makes it a triceps move). Keep arms long.</div>
+       <div class="ex-info-row"><strong>Safety:</strong> only go as far back as your shoulders comfortably allow.</div>`},
+     {n:"Barbell Overhead Press",why:"Front + side delts — shoulder width.",s:"4×6",t:"c",info:`
+       <div class="ex-info-row"><strong>Setup:</strong> bar on your front shoulders, hands just outside shoulder width, wrists straight and stacked under the bar.</div>
+       <div class="ex-info-row"><strong>Brace:</strong> squeeze glutes and abs so you don't lean back.</div>
+       <div class="ex-info-row"><strong>Path:</strong> press straight up; nudge your head back, then push it "through the window" at the top.</div>
+       <div class="ex-info-row"><strong>Finish:</strong> biceps by your ears, bar stacked over mid-foot.</div>`},
    ]},
-   {title:"ASSISTANCE — Dumbbells", dot:"var(--gold)", exs:[
-     {n:"Incline Dumbbell Press",why:"Upper chest — that high, full shelf look.",s:"3×10",t:"c",info:`<div class="ex-info-row"><strong>Sexy focus:</strong> Aim dumbbells toward the collarbone at the top to load upper chest.</div>`},
-     {n:"Dumbbell Lateral Raise",why:"Side delts — #1 move to look wider.",s:"3×15",t:"i",info:`<div class="ex-info-row"><strong>Grip:</strong> Pour-the-jug tilt, thumbs slightly low. Stop at shoulder height — delts, not traps.</div>`},
-     {n:"Dumbbell Tricep Overhead Ext.",why:"Long head — size on the back of the arm.",s:"3×12",t:"i",info:`<div class="ex-info-row"><strong>Sexy focus:</strong> Stretch long, crush short for the horseshoe.</div>`},
+   {title:"🏋️ DUMBBELL", dot:"var(--gold)", exs:[
+     {n:"Incline Dumbbell Press",why:"Upper chest — the high, full shelf.",s:"3×10",t:"c",info:`
+       <div class="ex-info-row"><strong>Setup:</strong> bench at ~30°, dumbbells at chest, neutral-to-slight-pronated grip.</div>
+       <div class="ex-info-row"><strong>Path:</strong> press up and slightly together, aiming the bells toward your collarbone.</div>
+       <div class="ex-info-row"><strong>Avoid:</strong> elbows flaring straight out to the sides.</div>
+       <div class="ex-info-row"><strong>Cue:</strong> squeeze the upper chest at the top.</div>`},
+     {n:"Dumbbell Lateral Raise",why:"Side delts — #1 move to look wider.",s:"3×15",t:"i",info:`
+       <div class="ex-info-row"><strong>Setup:</strong> slight forward lean, soft elbows, light weight.</div>
+       <div class="ex-info-row"><strong>Move:</strong> lead with the elbows and raise to shoulder height only — "pour the jug" so pinkies sit a touch high.</div>
+       <div class="ex-info-row"><strong>Avoid:</strong> shrugging or swinging — keep shoulders down, control the lower.</div>`},
+     {n:"Dumbbell Tricep Overhead Ext.",why:"Long-head triceps.",s:"3×12",t:"i",info:`
+       <div class="ex-info-row"><strong>Setup:</strong> one DB in both hands overhead, elbows pointing up and tucked in.</div>
+       <div class="ex-info-row"><strong>Move:</strong> lower behind the head with control, then extend fully.</div>
+       <div class="ex-info-row"><strong>Avoid:</strong> elbows flaring wide. Cue: stretch long, squeeze short.</div>`},
    ]},
-   {title:"FINISHER", dot:"var(--grn)", exs:[
-     {n:"Push-Ups to Failure",why:"Military finisher — burns out chest & triceps.",s:"2×max",t:"c"},
+   {title:"🤸 BODYWEIGHT — finisher", dot:"var(--grn)", exs:[
+     {n:"Push-Ups to Failure",why:"Burns out chest & triceps.",s:"2×max",t:"c",info:`
+       <div class="ex-info-row"><strong>Setup:</strong> hands under or just outside the shoulders, body in a straight plank.</div>
+       <div class="ex-info-row"><strong>Move:</strong> chest to the floor, elbows ~45°, full range every rep.</div>
+       <div class="ex-info-row"><strong>Avoid:</strong> sagging hips or half-reps — squeeze glutes and abs.</div>`},
    ]},
   ],
-  overload:"Add 5–10 lbs to Bench and Overhead Press weekly while form holds. 6 moves — don't add more."
+  overload:"45 lb bar? Progress with tempo, pauses and reps — not weight. Add a rep or slow the lower before adding load."
  },
  {
   label:"TUE", tag:"PULL DAY", name:"Back, Biceps & Rear Delts",
   type:"lift", focus:"BICEPS", sub:"+ Back & Rear Delts", color:"c-go",
   sections:[
-   {title:"BIG LIFTS — Barbell (5×5)", dot:"var(--pri)", exs:[
-     {n:"Barbell Bent-Over Row",why:"Thickest back builder; loads biceps under heavy weight.",s:"5×5",t:"c",info:`<div class="ex-info-row"><strong>Grip:</strong> Pronated, pull to low ribs. "Elbows to back pockets" for a 3D upper back.</div>`},
-     {n:"Barbell Curl",why:"Primary bicep mass.",s:"4×8",t:"i",info:`<div class="ex-info-row"><strong>Grip:</strong> Supinated, elbows pinned — only forearms move. Front-flex builder.</div>`},
+   {title:"🔩 BARBELL — one loaded bar (bent-over block)", dot:"var(--pri)", exs:[
+     {n:"Barbell Bent-Over Row",why:"Back thickness; loads biceps too.",s:"5×5",t:"c",info:`
+       <div class="ex-info-row"><strong>Setup:</strong> hinge to ~45°, flat back, pronated grip just outside the legs.</div>
+       <div class="ex-info-row"><strong>Move:</strong> pull the bar to your lower ribs — "elbows to your back pockets."</div>
+       <div class="ex-info-row"><strong>Avoid:</strong> rounding the back or yanking with the lower back. Brace your abs.</div>
+       <div class="ex-info-row"><strong>Squeeze:</strong> pinch the shoulder blades at the top for the 3D upper back.</div>`},
+     {n:"Barbell Romanian Deadlift",why:"Hamstrings, glutes & back — the hinge.",s:"3×12 · 4s down",t:"c",info:`
+       <div class="ex-info-row"><strong>Setup:</strong> same bar/grip as the row, stand tall, soft knees.</div>
+       <div class="ex-info-row"><strong>Move:</strong> push your hips BACK (not down), sliding the bar down your thighs until you feel a hamstring stretch, then drive hips forward.</div>
+       <div class="ex-info-row"><strong>Avoid:</strong> rounding the lower back or squatting it down — it's a hip hinge.</div>
+       <div class="ex-info-row"><strong>Light bar tip:</strong> the slow 4s lower is what makes 45 lb work — chase the stretch.</div>`},
+     {n:"Barbell Curl",why:"Primary bicep mass.",s:"4×8",t:"i",info:`
+       <div class="ex-info-row"><strong>Grip:</strong> supinated (palms up), shoulder width.</div>
+       <div class="ex-info-row"><strong>Move:</strong> pin your elbows to your sides — only the forearms move, no shoulder swing.</div>
+       <div class="ex-info-row"><strong>Avoid:</strong> leaning back to heave it up; lower under control.</div>`},
+     {n:"Barbell Reverse Curl",why:"Brachioradialis/forearm thickness.",s:"3×12 · 2s down",t:"f",info:`
+       <div class="ex-info-row"><strong>Setup:</strong> flip to a pronated (palms-down) grip on the same bar after curling.</div>
+       <div class="ex-info-row"><strong>Move:</strong> curl up keeping the wrists straight and firm; lower slowly.</div>
+       <div class="ex-info-row"><strong>Why:</strong> builds the ropey top of the forearm — a key V-taper detail. Stay light and strict.</div>`},
+     {n:"Barbell Shrug",why:"Traps — neck-to-shoulder thickness.",s:"3×15 · 2s hold",t:"i",info:`
+       <div class="ex-info-row"><strong>Setup:</strong> bar in front, arms straight, stand tall.</div>
+       <div class="ex-info-row"><strong>Move:</strong> shrug straight up (and slightly back), hold 2s at the top, lower fully.</div>
+       <div class="ex-info-row"><strong>Avoid:</strong> rolling the shoulders — straight up and down only.</div>`},
    ]},
-   {title:"ASSISTANCE — Dumbbells", dot:"var(--gold)", exs:[
-     {n:"Dumbbell Single-Arm Row",why:"Lat width and upper-back, one arm at a time.",s:"3×10",t:"c",info:`<div class="ex-info-row"><strong>Cue:</strong> Pull toward the hip, not the chest, to load lats.</div>`},
-     {n:"Bent-Over Rear Delt Fly",why:"Rear delts — fills the back of the shoulder, fixes posture.",s:"3×15",t:"i",info:`<div class="ex-info-row"><strong>Cue:</strong> Push the dumbbells out to the sides, not up. Stops shoulders rounding forward.</div>`},
-     {n:"Dumbbell Hammer Curl",why:"Brachialis & brachioradialis — arm + forearm thickness.",s:"3×10",t:"f",info:`<div class="ex-info-row"><strong>Grip:</strong> Neutral. Straight up = balanced; cross-body = more forearm.</div>`},
-     {n:"Dumbbell Incline Curl",why:"Deep stretch = the bicep peak.",s:"3×10",t:"i",info:`<div class="ex-info-row"><strong>Cue:</strong> Arms hang behind the body, supinate hard at the top.</div>`},
+   {title:"🏋️ DUMBBELL", dot:"var(--gold)", exs:[
+     {n:"Dumbbell Single-Arm Row",why:"Lat width, one side at a time.",s:"3×10",t:"c",info:`
+       <div class="ex-info-row"><strong>Setup:</strong> one hand and knee on the bench, flat back.</div>
+       <div class="ex-info-row"><strong>Move:</strong> pull the DB toward your HIP (not your chest) to load the lat.</div>
+       <div class="ex-info-row"><strong>Cue:</strong> squeeze a pencil between your shoulder blades at the top.</div>`},
+     {n:"Bent-Over Rear Delt Fly",why:"Rear delts — posture & 3D shoulders.",s:"3×15",t:"i",info:`
+       <div class="ex-info-row"><strong>Setup:</strong> hinge to ~45°, light dumbbells, soft elbows.</div>
+       <div class="ex-info-row"><strong>Move:</strong> think "push the weights out to the sides," not up. Squeeze the rear delts.</div>
+       <div class="ex-info-row"><strong>Why:</strong> stops the shoulders rounding forward — proud, broad posture even at rest.</div>`},
+     {n:"Dumbbell Hammer Curl",why:"Arm + forearm thickness.",s:"3×10",t:"f",info:`
+       <div class="ex-info-row"><strong>Grip:</strong> neutral (palms facing in) the whole rep.</div>
+       <div class="ex-info-row"><strong>Why:</strong> loads the brachialis/brachioradialis for thicker arms from the side.</div>
+       <div class="ex-info-row"><strong>Avoid:</strong> swinging — strict and controlled.</div>`},
+     {n:"Dumbbell Incline Curl",why:"Deep stretch = the bicep peak.",s:"3×10",t:"i",info:`
+       <div class="ex-info-row"><strong>Setup:</strong> sit back on an incline bench, arms hanging behind the body.</div>
+       <div class="ex-info-row"><strong>Move:</strong> the deep bottom stretch is the growth driver; supinate hard at the top.</div>`},
    ]},
   ],
-  overload:"Add 5 lbs to Barbell Curl weekly. Stay strict — no swinging. 6 moves capped."
+  overload:"Add reps or slow the lower on the barbell moves. RDL: chase range and a longer stretch before adding load."
  },
  {
   label:"WED", tag:"BURN DAY", name:"Cardio, Core & Forearms",
   type:"lift", focus:"BELLY", sub:"Fat Burn + Forearms", color:"c-bl",
   sections:[
-   {title:"CARDIO — HIIT (Boxer Style)", dot:"var(--blu)", exs:[
-     {n:"Jump Rope HIIT",why:"30s hard / 30–60s easy × 20 min. Efficient belly-fat burner.",s:"20 min",t:"cd",info:`<div class="ex-info-row"><strong>Cue:</strong> Balls of feet, wrists turn the rope. Boxer conditioning, not distance running.</div>`},
-     {n:"Kettlebell Swing",why:"Explosive hip hinge — full-body fat burner.",s:"4×15",t:"c",info:`<div class="ex-info-row"><strong>Cue:</strong> Hips snap the bell, arms are hooks. Not a squat.</div>`},
+   {title:"🔔 KETTLEBELL — one bell", dot:"var(--teal)", exs:[
+     {n:"Kettlebell Swing",why:"Explosive full-body fat burner.",s:"4×15",t:"c",info:`
+       <div class="ex-info-row"><strong>Setup:</strong> hip-width stance, bell a step in front, hinge and hike it back between your legs.</div>
+       <div class="ex-info-row"><strong>Move:</strong> snap the HIPS to float the bell to chest height — arms are just hooks.</div>
+       <div class="ex-info-row"><strong>Avoid:</strong> squatting it or lifting with the arms/shoulders. It's a hinge, not a lift.</div>
+       <div class="ex-info-row"><strong>Top:</strong> squeeze glutes hard and stand tall — don't lean back.</div>`},
+     {n:"Kettlebell Goblet Squat",why:"Legs + big calorie burn for the belly.",s:"3×15 · 2s pause",t:"c",info:`
+       <div class="ex-info-row"><strong>Setup:</strong> hold the bell at your chest, elbows down, feet a touch wider than shoulders.</div>
+       <div class="ex-info-row"><strong>Move:</strong> sit straight down between your hips, chest up, knees tracking over your toes; pause 2s at the bottom.</div>
+       <div class="ex-info-row"><strong>Avoid:</strong> heels lifting or knees caving in — drive through the heels.</div>`},
    ]},
-   {title:"CORE — Military Standard", dot:"var(--grn)", exs:[
-     {n:"Plank",why:"Deep stabilizers. Flattens the midsection.",s:"3×45s",t:"cr"},
-     {n:"Dumbbell Russian Twist",why:"Obliques — carves the waist.",s:"3×20",t:"cr"},
+   {title:"🧱 CORE", dot:"var(--grn)", exs:[
+     {n:"Plank",why:"Deep stabilizers — flatter midsection.",s:"3×45s",t:"cr",info:`
+       <div class="ex-info-row"><strong>Setup:</strong> elbows under shoulders, body one straight line.</div>
+       <div class="ex-info-row"><strong>Cue:</strong> tuck the ribs, squeeze glutes and brace abs as if about to be poked.</div>
+       <div class="ex-info-row"><strong>Avoid:</strong> sagging hips or piking up. Quality time over the clock.</div>`},
+     {n:"Dumbbell Russian Twist",why:"Obliques — carves the waist.",s:"3×20",t:"cr",info:`
+       <div class="ex-info-row"><strong>Setup:</strong> sit, lean back ~45°, heels down (or up for harder), hold one DB.</div>
+       <div class="ex-info-row"><strong>Move:</strong> rotate your SHOULDERS side to side, not just the hands. Control it.</div>`},
    ]},
-   {title:"FOREARMS", dot:"var(--pur)", exs:[
-     {n:"Farmer's Carry",why:"Best forearm + trap builder; fixes posture too.",s:"4×40ft",t:"f",info:`<div class="ex-info-row"><strong>Grip:</strong> Crush the handle, whole hand. Tall chest, shoulders back.</div>`},
-     {n:"Dumbbell Wrist Curl",why:"Forearm flexors — underside thickness.",s:"3×20",t:"f"},
+   {title:"🦾 FOREARMS", dot:"var(--pur)", exs:[
+     {n:"Farmer's Carry",why:"Best forearm + trap builder; fixes posture.",s:"4×40ft",t:"f",info:`
+       <div class="ex-info-row"><strong>Grip:</strong> crush the handle with the whole hand (no fingertips).</div>
+       <div class="ex-info-row"><strong>Posture:</strong> tall chest, shoulders pulled back and down, walk smooth.</div>
+       <div class="ex-info-row"><strong>Why:</strong> thick forearms + better posture from one move.</div>`},
+     {n:"Dumbbell Wrist Curl",why:"Forearm flexors — underside thickness.",s:"3×20",t:"f",info:`
+       <div class="ex-info-row"><strong>Setup:</strong> forearms on your thighs or a bench, palms up, wrists just off the edge.</div>
+       <div class="ex-info-row"><strong>Move:</strong> let the weight roll to the fingertips, then curl up. Small range, full squeeze.</div>`},
+   ]},
+   {title:"⏱️ FINISHER", dot:"var(--blu)", exs:[
+     {n:"Jump Rope HIIT",why:"30s hard / 30–60s easy × 20 min.",s:"20 min",t:"cd",info:`
+       <div class="ex-info-row"><strong>Form:</strong> stay on the balls of your feet, small hops, wrists turn the rope.</div>
+       <div class="ex-info-row"><strong>Effort:</strong> the hard 30s should leave you breathing heavy; ease the rest. Boxer conditioning, not distance.</div>`},
    ]},
   ],
-  overload:"Add 5s to planks weekly; Farmer's Carry heavier or further. Rope time toward 25 min. 6 moves."
+  overload:"Push rope intervals harder, add a swing rep, or pause longer in the goblet squat. Carry heavier or farther weekly."
  },
  {
   label:"THU", tag:"V-TAPER DAY", name:"Shoulders, Traps & Upper Back",
   type:"lift", focus:"WIDTH", sub:"Lats · Rear Delts · Posture", color:"c-te",
   sections:[
-   {title:"WIDTH & POSTURE (your weak points)", dot:"var(--teal)", exs:[
-     {n:"Dumbbell Pullover",why:"Lats + serratus — builds the WIDTH of your V-taper without a pull-up bar.",s:"3×12",t:"c",info:`<div class="ex-info-row"><strong>Cue:</strong> Lie across or along a bench, one dumbbell in both hands. Big stretch overhead, pull it back over with the lats and chest — feel it in the armpit/lat, not just triceps.</div><div class="ex-info-row"><strong>Why new:</strong> This is the no-equipment fix for lat width, the missing piece in your old plan.</div>`},
-     {n:"Bent-Over Reverse Fly (wide)",why:"Rear delts + mid-traps & rhomboids — the retraction your benching needs.",s:"3×15",t:"i",info:`<div class="ex-info-row"><strong>Cue:</strong> Hinge ~45°, light dumbbells, squeeze the shoulder blades together at the top. Slightly higher elbow path than the Tuesday rear-delt fly to bias mid-traps.</div>`},
-     {n:"Prone Y-T-W Raise",why:"Lower traps & scapular stabilizers — posture and the 3D back.",s:"3×10",t:"i",info:`<div class="ex-info-row"><strong>Cue:</strong> Face-down on the bench, light or no weight. Lift arms into a Y, then T, then W shape, squeezing the lower/mid traps. Counteracts rounded shoulders from pressing.</div>`},
+   {title:"🔩 BARBELL — one loaded bar", dot:"var(--pri)", exs:[
+     {n:"Barbell Overhead Press",why:"More delt volume = shoulder width.",s:"3×10 · 3s down",t:"c",info:`
+       <div class="ex-info-row"><strong>Setup:</strong> bar on front shoulders, wrists stacked, brace glutes/abs.</div>
+       <div class="ex-info-row"><strong>Move:</strong> press straight up, head "through the window" at the top; slow 3s lower.</div>
+       <div class="ex-info-row"><strong>Avoid:</strong> leaning back — squeeze the glutes to stay vertical.</div>`},
+     {n:"Barbell Wide-Grip Bent-Over Row",why:"Upper back + rear delts — posture.",s:"3×12 · 1s squeeze",t:"c",info:`
+       <div class="ex-info-row"><strong>Setup:</strong> wider-than-shoulder grip, hinge to ~45°, flat back.</div>
+       <div class="ex-info-row"><strong>Move:</strong> pull to the upper belly/lower chest with elbows flaring out a bit — this biases rear delts and mid-traps.</div>
+       <div class="ex-info-row"><strong>Squeeze:</strong> 1s pinch of the shoulder blades at the top.</div>`},
    ]},
-   {title:"CAPS & TRAPS", dot:"var(--gold)", exs:[
-     {n:"Dumbbell Lateral Raise",why:"More side-delt volume — width compounds twice a week.",s:"3×15",t:"i"},
-     {n:"Dumbbell Shrug",why:"Upper traps — the powerful neck-to-shoulder slope.",s:"3×15",t:"i",info:`<div class="ex-info-row"><strong>Cue:</strong> Straight up and slightly back, 2s hold at the top. No rolling.</div>`},
+   {title:"🏋️ DUMBBELL — width & posture", dot:"var(--gold)", exs:[
+     {n:"Dumbbell Pullover",why:"Lats + serratus — V-taper width without a bar.",s:"3×12",t:"c",info:`
+       <div class="ex-info-row"><strong>Setup:</strong> lie across or along the bench, one DB in both hands over the chest, arms long.</div>
+       <div class="ex-info-row"><strong>Move:</strong> lower it back over your head for a big stretch, then pull it back — feel it in the armpit/lat, not just the triceps.</div>`},
+     {n:"Bent-Over Reverse Fly (wide)",why:"Rear delts + mid-traps (retraction).",s:"3×15",t:"i",info:`
+       <div class="ex-info-row"><strong>Setup:</strong> hinge ~45°, light DBs, slightly higher elbow path than the Tuesday fly.</div>
+       <div class="ex-info-row"><strong>Move:</strong> squeeze the shoulder blades together at the top; control the lower.</div>`},
+     {n:"Prone Y-T-W Raise",why:"Lower traps & stabilizers — posture.",s:"3×10",t:"i",info:`
+       <div class="ex-info-row"><strong>Setup:</strong> face-down on the bench, little or no weight.</div>
+       <div class="ex-info-row"><strong>Move:</strong> lift the arms into a Y, then a T, then a W shape, squeezing the mid/lower traps each time.</div>
+       <div class="ex-info-row"><strong>Why:</strong> directly counteracts the rounded shoulders from all your pressing.</div>`},
+     {n:"Dumbbell Lateral Raise",why:"More side-delt width.",s:"3×15",t:"i",info:`
+       <div class="ex-info-row"><strong>Cue:</strong> lead with the elbows, stop at shoulder height, "pour the jug." Light and strict.</div>`},
+     {n:"Dumbbell Shrug",why:"Upper traps.",s:"3×15 · 2s hold",t:"i",info:`
+       <div class="ex-info-row"><strong>Move:</strong> straight up and slightly back, 2s hold at the top, no rolling.</div>`},
    ]},
   ],
-  overload:"Lighter, higher-rep day on purpose — chase the squeeze, not heavy weight. Add reps before load. 5 moves."
+  overload:"Lighter, higher-rep day on purpose — chase the squeeze and add reps before any load."
  },
  {
   label:"FRI", tag:"STRENGTH DAY", name:"Full Body Strength",
   type:"lift", focus:"FULL", sub:"Body Strength", color:"c-gn",
   sections:[
-   {title:"BIG LIFTS — Barbell", dot:"var(--pri)", exs:[
-     {n:"Barbell Deadlift",why:"King of lifts — huge calorie burn, full-body strength and back thickness.",s:"3×5",t:"c",info:`<div class="ex-info-row"><strong>Grip:</strong> Pronated or mixed. Bar over mid-foot, lats tight, push the floor away. Start light.</div>`},
-     {n:"Barbell Overhead Press",why:"Second shoulder session — delts need volume for width.",s:"3×8",t:"c"},
+   {title:"🔩 BARBELL — one loaded bar", dot:"var(--pri)", exs:[
+     {n:"Barbell Deadlift",why:"Total-body strength + back thickness.",s:"3×5",t:"c",info:`
+       <div class="ex-info-row"><strong>Setup:</strong> bar over mid-foot, hinge and grip just outside the legs, flat back, chest tall, lats tight.</div>
+       <div class="ex-info-row"><strong>Move:</strong> push the floor away and stand up, bar dragging up your legs; lock out with glutes.</div>
+       <div class="ex-info-row"><strong>Avoid:</strong> rounding the back or jerking it off the floor. Brace hard first.</div>`},
+     {n:"Barbell Front Squat",why:"Quads + core — genuinely tough light.",s:"3×12 · 3s down",t:"c",info:`
+       <div class="ex-info-row"><strong>Setup:</strong> bar on the FRONT of your shoulders, elbows up high, fingers loosely under the bar.</div>
+       <div class="ex-info-row"><strong>Move:</strong> sit straight down keeping the elbows and chest UP; 3s lower, drive through the heels.</div>
+       <div class="ex-info-row"><strong>Avoid:</strong> elbows dropping (the bar rolls forward) — keep them pointed ahead.</div>`},
+     {n:"Barbell Overhead Press",why:"Second weekly shoulder hit — width.",s:"3×8",t:"c",info:`
+       <div class="ex-info-row"><strong>Move:</strong> same as Monday — wrists stacked, brace glutes/abs, press through the window. No big lean.</div>`},
+     {n:"Barbell Hip Thrust",why:"Glutes & posterior chain.",s:"3×15 · 2s squeeze",t:"c",info:`
+       <div class="ex-info-row"><strong>Setup:</strong> upper back on the bench edge, bar across the hips (pad it), feet flat and close.</div>
+       <div class="ex-info-row"><strong>Move:</strong> drive through the heels and squeeze the glutes to full lockout, ribs down, 2s hold at the top.</div>
+       <div class="ex-info-row"><strong>Avoid:</strong> arching the lower back to fake height — the glutes do the work.</div>`},
    ]},
-   {title:"ASSISTANCE", dot:"var(--gold)", exs:[
-     {n:"Kettlebell Goblet Squat",why:"Legs + core — keeps metabolism high.",s:"3×12",t:"c"},
-     {n:"Dumbbell Lateral Raise",why:"Constant-tension side-delt width.",s:"3×15",t:"i"},
-     {n:"Zottman Hammer Curl",why:"Harder variant — biceps + brachialis up, forearms down. Kept at the END so it does not pre-fatigue your big lifts.",s:"3×10",t:"f",info:`<div class="ex-info-row"><strong>Grip:</strong> Palms up to curl, rotate to palms-down, lower slowly.</div>`},
+   {title:"🔔 KETTLEBELL / 🏋️ DUMBBELL", dot:"var(--teal)", exs:[
+     {n:"Kettlebell Goblet Squat",why:"Legs + metabolism.",s:"3×12",t:"c",info:`
+       <div class="ex-info-row"><strong>Move:</strong> bell at the chest, sit between the hips, chest up, drive through the heels.</div>`},
+     {n:"Dumbbell Lateral Raise",why:"Side-delt width.",s:"3×15",t:"i",info:`
+       <div class="ex-info-row"><strong>Cue:</strong> lead with elbows, shoulder height, strict.</div>`},
+     {n:"Zottman Hammer Curl",why:"Biceps + forearms — kept last so it won't pre-fatigue the big lifts.",s:"3×10",t:"f",info:`
+       <div class="ex-info-row"><strong>Move:</strong> curl up with a neutral/hammer grip, rotate to palms-down at the top, lower slowly.</div>
+       <div class="ex-info-row"><strong>Why:</strong> hits biceps on the way up, forearms on the way down — a 2-for-1.</div>`},
    ]},
-   {title:"FINISHER", dot:"var(--blu)", exs:[
-     {n:"Jump Rope Finisher",why:"Short conditioning hit at the end.",s:"5 min",t:"cd"},
+   {title:"⏱️ FINISHER", dot:"var(--blu)", exs:[
+     {n:"Jump Rope Finisher",why:"Short conditioning hit.",s:"5 min",t:"cd",info:`
+       <div class="ex-info-row"><strong>Form:</strong> balls of the feet, small hops, wrists turn the rope.</div>`},
    ]},
   ],
-  overload:"Add 5–10 lbs to Deadlift weekly while back stays flat. 6 moves."
+  overload:"Deadlift can climb a little weekly while the back stays flat. Everything else: tempo, pauses and reps first."
  },
  {
   label:"SAT", tag:"CONDITIONING", name:"Core & Conditioning",
   type:"lift", focus:"BELLY", sub:"Burn the Belly", color:"c-bl",
   sections:[
-   {title:"CONDITIONING", dot:"var(--blu)", exs:[
-     {n:"Jump Rope HIIT",why:"Second weekly fat-burn block — keeps the deficit working.",s:"15 min",t:"cd"},
-     {n:"Kettlebell Swing",why:"Explosive full-body burn.",s:"4×20",t:"c"},
+   {title:"🔔 KETTLEBELL — one bell", dot:"var(--teal)", exs:[
+     {n:"Kettlebell Swing",why:"Explosive full-body burn.",s:"4×20",t:"c",info:`
+       <div class="ex-info-row"><strong>Move:</strong> hinge and hike back, snap the hips to float the bell, arms are hooks. Squeeze glutes at the top.</div>
+       <div class="ex-info-row"><strong>Avoid:</strong> squatting or arm-lifting — it's all hips.</div>`},
+     {n:"Kettlebell Halo",why:"Shoulder mobility + braced core, leg-light.",s:"3×8/direction",t:"cr",info:`
+       <div class="ex-info-row"><strong>Setup:</strong> hold the bell upside-down by the horns at chest height.</div>
+       <div class="ex-info-row"><strong>Move:</strong> circle it slowly around your head, close to it, keeping the core tight and ribs down; switch directions.</div>
+       <div class="ex-info-row"><strong>Why:</strong> low-impact on sore legs while still training the core and shoulders.</div>`},
    ]},
-   {title:"CORE", dot:"var(--grn)", exs:[
-     {n:"Reverse Crunch",why:"Lower abs — the block that shows when the belly shrinks.",s:"3×15",t:"cr",info:`<div class="ex-info-row"><strong>Cue:</strong> Curl the pelvis toward the ribs, no leg swinging.</div>`},
-     {n:"Dumbbell Russian Twist",why:"Obliques — the side lines.",s:"3×20",t:"cr"},
-     {n:"Plank",why:"Stability and a tighter midsection.",s:"3×45s",t:"cr"},
+   {title:"🧱 CORE", dot:"var(--grn)", exs:[
+     {n:"Reverse Crunch",why:"Lower abs — shows when the belly shrinks.",s:"3×15",t:"cr",info:`
+       <div class="ex-info-row"><strong>Move:</strong> curl your PELVIS toward your ribs, lifting the hips off the floor — no swinging the legs.</div>
+       <div class="ex-info-row"><strong>Cue:</strong> slow and controlled, exhale as you curl.</div>`},
+     {n:"Dumbbell Russian Twist",why:"Obliques — the side lines.",s:"3×20",t:"cr",info:`
+       <div class="ex-info-row"><strong>Move:</strong> lean back ~45°, rotate the shoulders side to side, control the weight.</div>`},
+     {n:"Plank",why:"Stability + tighter midsection.",s:"3×45s",t:"cr",info:`
+       <div class="ex-info-row"><strong>Cue:</strong> straight line head-to-heel, tuck ribs, squeeze glutes, brace abs.</div>`},
    ]},
-   {title:"BALANCE", dot:"var(--pur)", exs:[
-     {n:"Reverse Wrist Curl",why:"Forearm extensors — balances all the curling, healthier elbows.",s:"3×15",t:"f"},
+   {title:"🦾 BALANCE + ⏱️ CONDITIONING", dot:"var(--pur)", exs:[
+     {n:"Reverse Wrist Curl",why:"Forearm extensors — balances all the curling.",s:"3×15",t:"f",info:`
+       <div class="ex-info-row"><strong>Setup:</strong> forearms on thighs/bench, palms DOWN, wrists off the edge.</div>
+       <div class="ex-info-row"><strong>Move:</strong> small range, lift the back of the hand up; lighter than regular wrist curls.</div>`},
+     {n:"Jump Rope HIIT",why:"Second weekly fat-burn block.",s:"15 min",t:"cd",info:`
+       <div class="ex-info-row"><strong>Form:</strong> balls of the feet, small hops, hard/easy intervals.</div>`},
    ]},
   ],
-  overload:"Push rope intervals harder, not longer. Add a set of core before adding weight. 6 moves."
+  overload:"Push rope intervals harder (not longer) and add a core set before adding any load."
  },
  {
   label:"SUN", tag:"ACTIVE RECOVERY", name:"Mobility, Posture & Light Work",
