@@ -7,6 +7,9 @@ window.IRON45 = {
     step_floor_rest: 8000,
     active_cal_target: 500,
     sleep_target: 8,
+    end_date: "2026-08-08",
+    cal_target: 2250, protein_target: 210, carb_target: 195, fat_target: 70,
+    cardio_min_target: 40, cardio_hr_target: 130,
     log_endpoint: "https://script.google.com/macros/s/AKfycbzcqX_9YW6URlZr0PZPPQuXhswD43PCQqQphlIQKI35E0CQ8_NQ8pznYUgi-AsJGekE/exec"
   },
   schedule_overrides: { "2026-06-07": 5 },
