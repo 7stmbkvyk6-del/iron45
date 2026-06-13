@@ -949,6 +949,7 @@ render();
 })();
 
 </script>
+
 <style id="nx2-style">
 .wk-strip{margin:0 0 var(--sp3);}
 .wk-head{display:flex;justify-content:space-between;align-items:center;font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--txm);font-weight:700;margin-bottom:5px;}
@@ -986,6 +987,9 @@ render();
 #aiInput{flex:1;resize:none;max-height:80px;padding:.5rem;border:1px solid var(--bdr);border-radius:var(--r-md);background:var(--sur2);color:var(--tx);font-size:16px;font-family:inherit;}
 #aiSend{background:var(--pri);color:#fff;border:none;border-radius:var(--r-md);padding:.5rem .8rem;font-size:16px;cursor:pointer;}
 @media(max-width:600px){#aiPanel{height:66vh;}}
+.wk-compensated{background:rgba(96,165,250,.16);border-color:rgba(96,165,250,.4);}.wk-compensated .wk-m{color:#60a5fa;}
+.wk-refresh{background:var(--sur2);border:1px solid var(--bdr);color:var(--tx);font-weight:700;font-size:10px;padding:3px 8px;border-radius:var(--r-full);cursor:pointer;}
+.wk-leg{display:block;margin-top:4px;color:var(--txf);font-weight:600;}
 </style>
 
 <script id="nx2-mod">
@@ -1004,6 +1008,8 @@ render();
     var idx=(d.getDay()+6)%7; var day=PLAN[idx]; if(!day)return null; return day;
   }
   function dayCompletion(d){
+    var key=ymd(d); var ws=(window.IRON45&&window.IRON45.workout_status)||{};
+    if(ws[key]){var sv=ws[key];return {state:sv.state,pct:(sv.pct==null?null:sv.pct),note:sv.note,server:true};}
     var day=planForDate(d); if(!day)return {state:'na'};
     if(day.type&&day.type!=='lift') return {state:'rest',label:day.label};
     var exs=[]; (day.sections||[]).forEach(function(s){(s.exs||[]).forEach(function(e){if(e.n)exs.push(e.n);});});
@@ -1014,23 +1020,34 @@ render();
     var state= pct===0?'incomplete': (pct<80?'partial':'complete');
     return {state:state,pct:pct,label:day.label,done:done,total:exs.length};
   }
+  function refreshAll(btn){
+    renderStrip();
+    var ep=((window.IRON45||{}).config||{}).log_endpoint;
+    if(!ep){ if(btn){btn.textContent='\u26a0 automation not set up yet';} return; }
+    if(btn){btn.textContent='Updating\u2026';btn.disabled=true;}
+    fetch(ep,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({action:'refresh'})})
+      .then(function(){ if(btn)btn.textContent='Coach updating \u2014 page reloads in ~90s'; setTimeout(function(){location.reload();},90000); })
+      .catch(function(){ if(btn)btn.textContent='Triggered \u2713 (shows after next sync)'; });
+  }
   function renderStrip(){
     var host=document.getElementById('wkStrip'); if(!host)return; host.innerHTML='';
-    var head=ce('div','wk-head'); head.innerHTML='<span>Last 7 days</span><span class="wk-key"><i class="d-c"></i>done <i class="d-p"></i>partial <i class="d-i"></i>skipped</span>';
+    var head=ce('div','wk-head');
+    head.innerHTML='<span>Last 7 days</span><button class="wk-refresh" id="wkRefresh">\u21bb Update coach &amp; status</button>';
     host.appendChild(head);
     var row=ce('div','wk-row');
     for(var i=6;i>=0;i--){
       var d=new Date(); d.setDate(d.getDate()-i);
       var c=dayCompletion(d); var cell=ce('div','wk-cell wk-'+c.state);
       var wl=['M','T','W','T','F','S','S'][(d.getDay()+6)%7];
-      var mid = c.state==='rest'?'·' : c.state==='complete'?'✓' : c.state==='incomplete'?'–' : (c.pct+'%');
+      var mid = c.state==='rest'?'\u00b7' : c.state==='complete'?'\u2713' : c.state==='compensated'?'\u2248' : c.state==='incomplete'?'\u2013' : (c.pct!=null?c.pct+'%':'\u2013');
       cell.innerHTML='<span class="wk-d">'+wl+'</span><span class="wk-m">'+mid+'</span>';
-      cell.title=ymd(d)+(c.total?(' — '+c.done+'/'+c.total+' moves logged'):'');
+      cell.title=ymd(d)+(c.note?(' \u2014 '+c.note):(c.total?(' \u2014 '+c.done+'/'+c.total+' moves logged'):''));
       row.appendChild(cell);
     }
     host.appendChild(row);
-    var note=ce('div','wk-note'); note.innerHTML='⚙️ <b>Light-load mode</b> — bar 40 / KB 20 / DB 20 lb. Loads are capped, so chase <b>reps, tempo &amp; pauses</b>; take every working set to ~1–2 reps from failure. Beating the top of the rep range easily? Add a 3s lower or a pause before adding reps.';
+    var note=ce('div','wk-note'); note.innerHTML='\u2699\ufe0f <b>Light-load mode</b> \u2014 bar 40 / KB 20 / DB 20 lb. Chase <b>reps, tempo &amp; pauses</b> to ~1\u20132 reps from failure. <span class="wk-leg">\u2713 done \u00b7 % partial \u00b7 \u2248 cross-trained \u00b7 \u2013 skipped</span>';
     host.appendChild(note);
+    var rb=document.getElementById('wkRefresh'); if(rb)rb.onclick=function(){refreshAll(rb);};
   }
 
   /* ---------- Floating AI coach chat ---------- */
