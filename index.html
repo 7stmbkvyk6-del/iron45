@@ -878,73 +878,102 @@ render();
 .nx-chartbox{height:160px;position:relative;}
 .nx-wmeta{font-size:12px;color:var(--txm);margin-top:var(--sp2);font-weight:600;}
 @media(max-width:600px){.nx-chartbox{height:140px;}}
+.nx-sub{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--txm);font-weight:700;margin:var(--sp3) 0 4px;display:flex;justify-content:space-between;align-items:center;}
+.nx-undo{font-weight:600;text-transform:none;letter-spacing:0;color:var(--txf);}
+.nx-items{display:flex;flex-direction:column;gap:4px;}
+.nx-item{display:flex;align-items:center;gap:8px;background:var(--sur2);border-radius:var(--r-md);padding:5px 8px;font-size:12px;}
+.nx-iname{flex:1;font-weight:600;color:var(--tx);}
+.nx-imac{color:var(--txm);font-size:11px;}
+.nx-x{background:rgba(239,68,68,.14);color:#ef4444;border:none;border-radius:6px;width:22px;height:22px;font-size:14px;cursor:pointer;line-height:1;}
+.nx-empty{font-size:11px;color:var(--txf);padding:4px 0;}
+.nx-saved{margin-top:var(--sp3);border-top:1px solid var(--div);padding-top:var(--sp2);}
+.nx-saved-h{font-size:12px;font-weight:700;color:var(--tx);cursor:pointer;padding:4px 0;}
+.nx-saved-b{margin-top:6px;display:flex;flex-direction:column;gap:6px;}
+.nx-sfood{display:flex;align-items:center;gap:6px;background:var(--sur2);border-radius:var(--r-md);padding:5px 8px;}
+.nx-sf-main{flex:1;display:flex;flex-direction:column;font-size:12px;}
+.nx-sf-main b{color:var(--tx);}.nx-sf-main span{font-size:10px;color:var(--txm);}
+.nx-qty{width:46px;padding:.3rem;border:1px solid var(--bdr);border-radius:6px;background:var(--sur);color:var(--tx);font-size:13px;}
+.nx-sadd{background:var(--pri);color:#fff;border:none;border-radius:6px;padding:.3rem .6rem;font-weight:700;font-size:12px;cursor:pointer;}
+.nx-sdel{background:none;border:none;cursor:pointer;font-size:13px;opacity:.6;}
+.nx-newfood{margin-top:4px;}
+.ai-thumb{display:inline-block;margin:0 4px 4px 0;}
+.ai-thumb img{max-width:90px;border-radius:8px;display:inline-block;}
+
 </style>
 
 <script id="nx-mod">
 (function(){
   function $(s,r){return (r||document).querySelector(s);}
   function ce(t,c){var e=document.createElement(t);if(c)e.className=c;return e;}
+  function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
   function todayYMD(){var d=new Date();return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2);}
   function lsGet(k){try{return JSON.parse(localStorage.getItem(k)||'{}');}catch(e){return{};}}
+  function lsArr(k){try{return JSON.parse(localStorage.getItem(k)||'[]');}catch(e){return[];}}
   function lsSet(k,o){try{localStorage.setItem(k,JSON.stringify(o));}catch(e){}}
   function num(v){v=parseFloat(v);return isFinite(v)?v:0;}
   function cfg(){return (window.IRON45&&window.IRON45.config)||{};}
-  var T={cal:2250,p:210,c:195,f:70,cmin:40,chr:130};
-  (function(){var c=cfg();if(c.cal_target)T.cal=c.cal_target;if(c.protein_target)T.p=c.protein_target;if(c.carb_target)T.c=c.carb_target;if(c.fat_target)T.f=c.fat_target;if(c.cardio_min_target)T.cmin=c.cardio_min_target;if(c.cardio_hr_target)T.chr=c.cardio_hr_target;})();
+  var T={cal:2250,p:210,c:195,f:70};
+  (function(){var c=cfg();if(c.cal_target)T.cal=c.cal_target;if(c.protein_target)T.p=c.protein_target;if(c.carb_target)T.c=c.carb_target;if(c.fat_target)T.f=c.fat_target;})();
   function dater(id,forDate){return '<div class="nx-dater">Day: <input type="date" id="'+id+'" value="'+forDate+'" max="'+todayYMD()+'">'+(forDate!==todayYMD()?' <span class="nx-back">back-fill</span>':'')+'</div>';}
-  function bar(label,val,target,unit,color){var pct=target>0?Math.min(100,Math.round(val/target*100)):0;return '<div class="nx-macro"><div class="nx-ml"><span>'+label+'</span><span>'+Math.round(val)+' / '+target+unit+'</span></div><div class="nx-track"><div class="nx-fill" style="width:'+pct+'%;background:'+color+'"></div></div></div>';}
+  function bar(label,val,target,unit,color){var pct=target>0?Math.min(100,Math.round(val/target*100)):0;var over=val>target;return '<div class="nx-macro"><div class="nx-ml"><span>'+label+'</span><span'+(over?' style="color:#ef4444"':'')+'>'+Math.round(val)+' / '+target+unit+'</span></div><div class="nx-track"><div class="nx-fill" style="width:'+pct+'%;background:'+(over?'#ef4444':color)+'"></div></div></div>';}
+
+  // ---- nutrition data (entry-based, with migration) ----
+  function getDay(date){var all=lsGet('iron45_nutrition');var d=all[date];if(!d)return {entries:[]};
+    if(Array.isArray(d.entries))return d;
+    // migrate old {cal,p,c,f}
+    var e=[];if(d.cal||d.p||d.c||d.f)e.push({id:'m'+date,name:'Logged',qty:1,cal:num(d.cal),p:num(d.p),c:num(d.c),f:num(d.f)});
+    return {entries:e};}
+  function saveDay(date,obj){var all=lsGet('iron45_nutrition');all[date]=obj;lsSet('iron45_nutrition',all);if(window.iron45Push)window.iron45Push('iron45_nutrition');}
+  function total(obj){var t={cal:0,p:0,c:0,f:0};(obj.entries||[]).forEach(function(e){t.cal+=num(e.cal);t.p+=num(e.p);t.c+=num(e.c);t.f+=num(e.f);});return t;}
+  function savedFoods(){return lsArr('iron45_saved');}
+  function setSaved(a){lsSet('iron45_saved',a);if(window.iron45Push)window.iron45Push('iron45_saved');}
+  function uid(){return 'x'+Date.now().toString(36)+Math.floor(Math.random()*1e4).toString(36);}
 
   function renderNutrition(host,forDate){
     forDate=forDate||todayYMD();host.innerHTML='';
-    var t=lsGet('iron45_nutrition')[forDate]||{cal:0,p:0,c:0,f:0};
+    var obj=getDay(forDate);var t=total(obj);var saved=savedFoods();
+    var openSaved=localStorage.getItem('iron45_savedopen')==='1';
     var card=ce('div','nx-card');
+    var entriesHtml=(obj.entries||[]).map(function(e){return '<div class="nx-item" data-id="'+e.id+'"><span class="nx-iname">'+esc(e.name||'Item')+(e.qty&&e.qty!=1?(' ×'+e.qty):'')+'</span><span class="nx-imac">'+Math.round(e.cal)+'kcal · '+Math.round(e.p)+'P</span><button class="nx-x" data-id="'+e.id+'" title="Remove">×</button></div>';}).join('')||'<div class="nx-empty">No items logged for this day.</div>';
+    var savedHtml=saved.map(function(s){return '<div class="nx-sfood" data-id="'+s.id+'"><div class="nx-sf-main"><b>'+esc(s.name)+'</b><span>'+Math.round(s.cal)+'kcal · '+Math.round(s.p)+'P/'+Math.round(s.c)+'C/'+Math.round(s.f)+'F</span></div><input class="nx-qty" type="number" min="0" step="0.5" value="1" data-id="'+s.id+'"><button class="nx-sadd" data-id="'+s.id+'">Add</button><button class="nx-sdel" data-id="'+s.id+'" title="Delete saved food">🗑</button></div>';}).join('')||'<div class="nx-empty">No saved foods yet. Add one below to reuse it daily.</div>';
     card.innerHTML='<div class="nx-hdr"><span class="nx-icon">&#127869;</span><span class="nx-title">Nutrition</span><span class="nx-rec">'+Math.round(t.cal)+' / '+T.cal+' kcal</span></div><div class="nx-body">'+
-      dater('nxNdate',forDate)+bar('Calories',t.cal,T.cal,'','#f97316')+bar('Protein',t.p,T.p,'g','#22c55e')+bar('Carbs',t.c,T.c,'g','#60a5fa')+bar('Fat',t.f,T.f,'g','#eab308')+
-      '<div class="nx-add"><input id="nxCal" inputmode="numeric" placeholder="kcal"><input id="nxP" inputmode="numeric" placeholder="P"><input id="nxC" inputmode="numeric" placeholder="C"><input id="nxF" inputmode="numeric" placeholder="F"><button id="nxAdd">+ Add</button></div>'+
-      '<div class="nx-add" style="margin-top:6px"><button id="nxReset" class="nx-ghost">Reset this day</button></div>'+
-      '<div class="nx-hint">Pick any day (incl. yesterday) and add a meal\'s numbers; they accumulate for that day. Food-photo Shortcut will auto-fill later.</div></div>';
+      dater('nxNdate',forDate)+
+      bar('Calories',t.cal,T.cal,'','#f97316')+bar('Protein',t.p,T.p,'g','#22c55e')+bar('Carbs',t.c,T.c,'g','#60a5fa')+bar('Fat',t.f,T.f,'g','#eab308')+
+      '<div class="nx-sub">Today\'s items <span class="nx-undo">tap × to remove</span></div><div class="nx-items">'+entriesHtml+'</div>'+
+      '<div class="nx-add"><input id="nxName" placeholder="name (optional)" style="flex:2"><input id="nxCal" inputmode="numeric" placeholder="kcal"><input id="nxP" inputmode="numeric" placeholder="P"><input id="nxC" inputmode="numeric" placeholder="C"><input id="nxF" inputmode="numeric" placeholder="F"><button id="nxAdd">+ Add</button><button id="nxAddSave" class="nx-ghost" title="Add & save to Saved foods">+ Save</button></div>'+
+      '<div class="nx-saved"><div class="nx-saved-h" id="nxSavedToggle">'+(openSaved?'▾':'▸')+' Saved foods ('+saved.length+')</div>'+
+        '<div class="nx-saved-b" id="nxSavedBody" style="display:'+(openSaved?'block':'none')+'">'+savedHtml+
+        '<div class="nx-add nx-newfood"><input id="nxSName" placeholder="food name" style="flex:2"><input id="nxSCal" inputmode="numeric" placeholder="kcal"><input id="nxSP" inputmode="numeric" placeholder="P"><input id="nxSC" inputmode="numeric" placeholder="C"><input id="nxSF" inputmode="numeric" placeholder="F"><button id="nxSaveNew">Save food</button></div></div></div>'+
+      '<div class="nx-hint">Log items individually so any mistake is one tap to undo. Save foods you eat often, then add them by quantity.</div></div>';
     host.appendChild(card);
+    // date change
     $('#nxNdate',card).addEventListener('change',function(){renderNutrition(host,this.value||todayYMD());});
-    $('#nxAdd',card).addEventListener('click',function(){var all=lsGet('iron45_nutrition');var t2=all[forDate]||{cal:0,p:0,c:0,f:0};t2.cal+=num($('#nxCal',card).value);t2.p+=num($('#nxP',card).value);t2.c+=num($('#nxC',card).value);t2.f+=num($('#nxF',card).value);all[forDate]=t2;lsSet('iron45_nutrition',all);renderNutrition(host,forDate);});
-    $('#nxReset',card).addEventListener('click',function(){var all=lsGet('iron45_nutrition');delete all[forDate];lsSet('iron45_nutrition',all);renderNutrition(host,forDate);});
+    // quick add
+    function quickEntry(){return {id:uid(),name:($('#nxName',card).value||'').trim()||'Item',qty:1,cal:num($('#nxCal',card).value),p:num($('#nxP',card).value),c:num($('#nxC',card).value),f:num($('#nxF',card).value)};}
+    $('#nxAdd',card).addEventListener('click',function(){var e=quickEntry();if(!e.cal&&!e.p&&!e.c&&!e.f)return;obj.entries.push(e);saveDay(forDate,obj);renderNutrition(host,forDate);});
+    $('#nxAddSave',card).addEventListener('click',function(){var e=quickEntry();if(!e.cal&&!e.p&&!e.c&&!e.f)return;obj.entries.push(e);saveDay(forDate,obj);var sf=savedFoods();sf.push({id:uid(),name:e.name,cal:e.cal,p:e.p,c:e.c,f:e.f});setSaved(sf);localStorage.setItem('iron45_savedopen','1');renderNutrition(host,forDate);});
+    // remove entry
+    card.querySelectorAll('.nx-x').forEach(function(b){b.addEventListener('click',function(){var id=b.getAttribute('data-id');obj.entries=obj.entries.filter(function(e){return e.id!==id;});saveDay(forDate,obj);renderNutrition(host,forDate);});});
+    // saved toggle
+    $('#nxSavedToggle',card).addEventListener('click',function(){var open=localStorage.getItem('iron45_savedopen')==='1';localStorage.setItem('iron45_savedopen',open?'0':'1');renderNutrition(host,forDate);});
+    // saved add (with qty)
+    card.querySelectorAll('.nx-sadd').forEach(function(b){b.addEventListener('click',function(){var id=b.getAttribute('data-id');var s=savedFoods().filter(function(x){return x.id===id;})[0];if(!s)return;var q=num((card.querySelector('.nx-qty[data-id="'+id+'"]')||{}).value)||1;obj.entries.push({id:uid(),name:s.name,qty:q,cal:s.cal*q,p:s.p*q,c:s.c*q,f:s.f*q});saveDay(forDate,obj);renderNutrition(host,forDate);});});
+    // saved delete
+    card.querySelectorAll('.nx-sdel').forEach(function(b){b.addEventListener('click',function(){var id=b.getAttribute('data-id');setSaved(savedFoods().filter(function(x){return x.id!==id;}));renderNutrition(host,forDate);});});
+    // new saved food
+    $('#nxSaveNew',card).addEventListener('click',function(){var n=($('#nxSName',card).value||'').trim();var cal=num($('#nxSCal',card).value);if(!n||(!cal&&!num($('#nxSP',card).value)))return;var sf=savedFoods();sf.push({id:uid(),name:n,cal:cal,p:num($('#nxSP',card).value),c:num($('#nxSC',card).value),f:num($('#nxSF',card).value)});setSaved(sf);renderNutrition(host,forDate);});
   }
 
-  function renderCardio(host,forDate){
-    forDate=forDate||todayYMD();host.innerHTML='';
-    var done=lsGet('iron45_cardio')[forDate];
-    var dd=(window.IRON45&&window.IRON45.cardio&&window.IRON45.cardio[forDate])||null;
-    var statusTxt=dd?(Math.round(dd.minutes)+' min @ avg '+Math.round(dd.avg_hr)+' bpm (from watch)'):(done?'Marked done manually':'Not logged yet');
-    var ok=dd?(dd.minutes>=T.cmin&&dd.avg_hr>=T.chr):!!done;
-    var card=ce('div','nx-card');
-    card.innerHTML='<div class="nx-hdr"><span class="nx-icon">&#128293;</span><span class="nx-title">Cardio</span><span class="nx-rec" style="background:'+(ok?'rgba(34,197,94,.15)':'rgba(148,163,184,.15)')+';color:'+(ok?'#22c55e':'#94a3b8')+'">'+(ok?'✓ Done':'Pending')+'</span></div><div class="nx-body">'+
-      dater('nxCdate',forDate)+'<div class="nx-cardio">Target: <b>'+T.cmin+' min</b> with heart rate <b>&ge;'+T.chr+' bpm</b>, separate session.</div><div class="nx-cardio2">'+statusTxt+'</div>'+
-      '<button id="nxCardio" class="nx-toggle">'+(done?'✓ Done — tap to undo':'Mark cardio done')+'</button>'+
-      '<div class="nx-hint">Auto-verified from your Apple Watch workout once the automation is live; manual toggle until then.</div></div>';
-    host.appendChild(card);
-    $('#nxCdate',card).addEventListener('change',function(){renderCardio(host,this.value||todayYMD());});
-    $('#nxCardio',card).addEventListener('click',function(){var m=lsGet('iron45_cardio');if(m[forDate])delete m[forDate];else m[forDate]={done:true,ts:Date.now()};lsSet('iron45_cardio',m);renderCardio(host,forDate);});
-  }
-
+  // ---- weight ----
   function weightSeries(){var H=(window.IRON45&&window.IRON45.health)||[];var map={};H.forEach(function(d){if(d.weight!=null)map[d.date]=d.weight;});var w=lsGet('iron45_weights');Object.keys(w).forEach(function(k){map[k]=w[k];});return Object.keys(map).sort().map(function(k){return{date:k,w:map[k]};});}
   function drawWeight(ser){var el=document.getElementById('nxWchart');if(!el||typeof Chart==='undefined')return;var c=Chart.getChart(el);if(c)c.destroy();new Chart(el,{type:'line',data:{labels:ser.map(function(d){return d.date.slice(5);}),datasets:[{data:ser.map(function(d){return d.w;}),borderColor:'#f97316',backgroundColor:'rgba(249,115,22,.12)',fill:true,tension:.3,pointRadius:3,borderWidth:2}]},options:{plugins:{legend:{display:false}},scales:{x:{display:true,ticks:{maxTicksLimit:6,font:{size:9}}},y:{display:true,ticks:{font:{size:9}}}},maintainAspectRatio:false}});}
-
-  function renderWeight(host,forDate){
-    forDate=forDate||todayYMD();host.innerHTML='';
-    var ser=weightSeries();var latest=ser.length?ser[ser.length-1].w:null;var first=ser.length?ser[0].w:null;var delta=(latest!=null&&first!=null)?(latest-first):null;
-    var existing=lsGet('iron45_weights')[forDate];
-    var card=ce('div','nx-card');
-    card.innerHTML='<div class="nx-hdr"><span class="nx-icon">&#9878;</span><span class="nx-title">Weight &amp; Long-Term Trend</span><span class="nx-rec">'+(latest!=null?latest+' lb':'no entries')+'</span></div><div class="nx-body">'+
-      '<div class="nx-chartbox"><canvas id="nxWchart"></canvas></div>'+
-      '<div class="nx-wmeta">'+(delta!=null?((delta<=0?'▼ ':'▲ ')+Math.abs(Math.round(delta*10)/10)+' lb since first entry'):'Log a few weigh-ins to see your trend line.')+'</div>'+
-      dater('nxWdate',forDate)+
-      '<div class="nx-add"><input id="nxW" inputmode="decimal" placeholder="weight (lb)'+(existing!=null?', now '+existing:'')+'"><button id="nxWlog">Save weight</button></div>'+
-      '<div class="nx-hint">Optional &mdash; pick any day and log that morning\'s weight. Same time of day is best. The line is the signal, not daily noise.</div></div>';
+  function renderWeight(host,forDate){forDate=forDate||todayYMD();host.innerHTML='';var ser=weightSeries();var latest=ser.length?ser[ser.length-1].w:null;var first=ser.length?ser[0].w:null;var delta=(latest!=null&&first!=null)?(latest-first):null;var card=ce('div','nx-card');
+    card.innerHTML='<div class="nx-hdr"><span class="nx-icon">&#9878;</span><span class="nx-title">Weight &amp; Long-Term Trend</span><span class="nx-rec">'+(latest!=null?latest+' lb':'no entries')+'</span></div><div class="nx-body"><div class="nx-chartbox"><canvas id="nxWchart"></canvas></div><div class="nx-wmeta">'+(delta!=null?((delta<=0?'▼ ':'▲ ')+Math.abs(Math.round(delta*10)/10)+' lb since first entry'):'Log a few weigh-ins to see your trend line.')+'</div>'+dater('nxWdate',forDate)+'<div class="nx-add"><input id="nxW" inputmode="decimal" placeholder="weight (lb)"><button id="nxWlog">Save weight</button></div><div class="nx-hint">Optional &mdash; pick any day and log that morning\'s weight. The line is the signal, not daily noise.</div></div>';
     host.appendChild(card);drawWeight(ser);
     $('#nxWdate',card).addEventListener('change',function(){renderWeight(host,this.value||todayYMD());});
-    $('#nxWlog',card).addEventListener('click',function(){var v=num($('#nxW',card).value);if(v<=0)return;var w=lsGet('iron45_weights');w[forDate]=v;lsSet('iron45_weights',w);var ep=cfg().log_endpoint;if(ep){try{fetch(ep,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({action:'weight',date:forDate,weight:v})});}catch(e){}}renderWeight(host,forDate);});
-  }
+    $('#nxWlog',card).addEventListener('click',function(){var v=num($('#nxW',card).value);if(v<=0)return;var w=lsGet('iron45_weights');w[forDate]=v;lsSet('iron45_weights',w);if(window.iron45Push)window.iron45Push('iron45_weights');renderWeight(host,forDate);});}
 
-  function mount(){var main=document.querySelector('.main');if(!main||document.getElementById('nxWrap'))return;var wrap=ce('div','nx-wrap');wrap.id='nxWrap';var n=ce('div');n.id='nxNut';var c=ce('div');c.id='nxCar';var w=ce('div');w.id='nxWt';wrap.appendChild(n);wrap.appendChild(c);wrap.appendChild(w);main.appendChild(wrap);renderNutrition(n);renderCardio(c);renderWeight(w);window.nxRefresh={nut:function(){renderNutrition(n);},wt:function(){renderWeight(w);}};}
+  function mount(){var main=document.querySelector('.main');if(!main||document.getElementById('nxWrap'))return;var wrap=ce('div','nx-wrap');wrap.id='nxWrap';var n=ce('div');n.id='nxNut';var w=ce('div');w.id='nxWt';wrap.appendChild(n);wrap.appendChild(w);main.appendChild(wrap);renderNutrition(n);renderWeight(w);window.nxRefresh={nut:function(){renderNutrition(n);},wt:function(){renderWeight(w);}};}
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){setTimeout(mount,300);});else setTimeout(mount,300);
 })();
 
@@ -996,148 +1025,110 @@ render();
 (function(){
   function $(s,r){return (r||document).querySelector(s);}
   function ce(t,c){var e=document.createElement(t);if(c)e.className=c;return e;}
+  function esc(s){return String(s==null?'':s).replace(/[&<>]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;'}[c];});}
   function ymd(d){return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2);}
   function today(){return ymd(new Date());}
   function lsGet(k){try{return JSON.parse(localStorage.getItem(k)||'{}');}catch(e){return{};}}
   function lsSet(k,o){try{localStorage.setItem(k,JSON.stringify(o));}catch(e){}}
-  function hasData(v){return !!v&&((v.weight!=null&&v.weight!=='')||(v.reps&&String(v.reps).trim())||v.done);}
+  function num(v){v=parseFloat(v);return isFinite(v)?v:0;}
+  function cfg(){return (window.IRON45&&window.IRON45.config)||{};}
+  function endpoint(){return cfg().log_endpoint||'';}
 
-  /* ---------- 7-day workout accountability strip ---------- */
-  function planForDate(d){
-    if(typeof PLAN==='undefined')return null;
-    var idx=(d.getDay()+6)%7; var day=PLAN[idx]; if(!day)return null; return day;
-  }
-  function dayCompletion(d){
+  /* ---------- cross-device sync (KV via Apps Script) ---------- */
+  var SYNC_KEYS=['iron45_nutrition','iron45_saved','iron45_cardio','iron45_weights'];
+  var pushTimers={};
+  window.iron45Push=function(key){ var ep=endpoint(); if(!ep)return; clearTimeout(pushTimers[key]); pushTimers[key]=setTimeout(function(){
+      var raw=localStorage.getItem(key); var val; try{val=JSON.parse(raw||(key==='iron45_saved'?'[]':'{}'));}catch(e){val=raw;}
+      try{ fetch(ep,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({action:'kv_set',key:key,value:val})}); }catch(e){}
+    },600); };
+  function jsonp(url,cb){ var s=document.createElement('script'); var name='ir_'+Date.now()+Math.floor(Math.random()*1e4); window[name]=function(d){try{cb(d);}catch(e){} try{delete window[name];}catch(_){} if(s.parentNode)s.parentNode.removeChild(s);}; s.src=url+(url.indexOf('?')>-1?'&':'?')+'callback='+name; s.onerror=function(){if(s.parentNode)s.parentNode.removeChild(s);}; document.head.appendChild(s); }
+  function syncDownAll(){ var ep=endpoint(); if(!ep)return; jsonp(ep+'?action=kv',function(d){ if(!d||typeof d!=='object')return; var changed=false; SYNC_KEYS.forEach(function(k){ if(d[k]!=null){ localStorage.setItem(k,JSON.stringify(d[k])); changed=true; } }); if(changed){ if(window.nxRefresh){window.nxRefresh.nut&&window.nxRefresh.nut();window.nxRefresh.wt&&window.nxRefresh.wt();} renderStrips(); } }); }
+
+  /* ---------- shared strip cell ---------- */
+  function hasData(v){return !!v&&((v.weight!=null&&v.weight!=='')||(v.reps&&String(v.reps).trim())||v.done);}
+  function planForDate(d){ if(typeof PLAN==='undefined')return null; var day=PLAN[(d.getDay()+6)%7]; return day||null; }
+  function workoutCompletion(d){
     var key=ymd(d); var ws=(window.IRON45&&window.IRON45.workout_status)||{};
-    if(ws[key]){var sv=ws[key];return {state:sv.state,pct:(sv.pct==null?null:sv.pct),note:sv.note,server:true};}
+    if(ws[key])return {state:ws[key].state,pct:(ws[key].pct==null?null:ws[key].pct),note:ws[key].note};
     var day=planForDate(d); if(!day)return {state:'na'};
-    if(day.type&&day.type!=='lift') return {state:'rest',label:day.label};
-    var exs=[]; (day.sections||[]).forEach(function(s){(s.exs||[]).forEach(function(e){if(e.n)exs.push(e.n);});});
-    if(!exs.length)return {state:'rest',label:day.label};
-    var logs=lsGet('iron45_logs'); var key=ymd(d); var done=0;
-    exs.forEach(function(n){ if(hasData(logs[key+'__'+n])) done++; });
+    if(day.type&&day.type!=='lift')return {state:'rest',note:'Rest day'};
+    var exs=[];(day.sections||[]).forEach(function(s){(s.exs||[]).forEach(function(e){if(e.n)exs.push(e.n);});});
+    if(!exs.length)return {state:'rest'};
+    var logs=lsGet('iron45_logs');var done=0;exs.forEach(function(n){if(hasData(logs[key+'__'+n]))done++;});
     var pct=Math.round(done/exs.length*100);
-    var state= pct===0?'incomplete': (pct<80?'partial':'complete');
-    return {state:state,pct:pct,label:day.label,done:done,total:exs.length};
+    return {state:pct===0?'incomplete':(pct<80?'partial':'complete'),pct:pct,note:'Lift '+done+'/'+exs.length+' logged'};
   }
-  function refreshAll(btn){
-    renderStrip();
-    var ep=((window.IRON45||{}).config||{}).log_endpoint;
-    if(!ep){ if(btn){btn.textContent='\u26a0 automation not set up yet';} return; }
-    if(btn){btn.textContent='Updating\u2026';btn.disabled=true;}
-    fetch(ep,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({action:'refresh'})})
-      .then(function(){ if(btn)btn.textContent='Coach updating \u2014 page reloads in ~90s'; setTimeout(function(){location.reload();},90000); })
-      .catch(function(){ if(btn)btn.textContent='Triggered \u2713 (shows after next sync)'; });
+  function cardioCompletion(d){
+    var key=ymd(d); var loc=(lsGet('iron45_cardio')[key]||{});
+    if(loc.done)return {state:'complete',note:'Marked done',manual:true};
+    var cs=(window.IRON45&&window.IRON45.cardio_status)||{};
+    if(cs[key])return cs[key];
+    return {state:'incomplete',note:'Not logged'};
   }
-  function renderStrip(){
-    var host=document.getElementById('wkStrip'); if(!host)return; host.innerHTML='';
-    var head=ce('div','wk-head');
-    head.innerHTML='<span>Last 7 days</span><button class="wk-refresh" id="wkRefresh">\u21bb Update coach &amp; status</button>';
+  function mid(c){return c.state==='rest'?'·':c.state==='complete'?'✓':c.state==='compensated'?'≈':c.state==='incomplete'?'–':(c.pct!=null?c.pct+'%':'–');}
+  function buildStrip(host,title,compFn,onCellClick,legend){
+    host.innerHTML='';
+    var head=ce('div','wk-head'); head.innerHTML='<span>'+title+'</span>'+(title.indexOf('Workout')>=0?'<button class="wk-refresh" id="wkRefresh">↻ Update coach &amp; status</button>':'');
     host.appendChild(head);
     var row=ce('div','wk-row');
-    for(var i=6;i>=0;i--){
-      var d=new Date(); d.setDate(d.getDate()-i);
-      var c=dayCompletion(d); var cell=ce('div','wk-cell wk-'+c.state);
+    for(var i=6;i>=0;i--){ (function(off){
+      var d=new Date(); d.setDate(d.getDate()-off);
+      var c=compFn(d); var cell=ce('div','wk-cell wk-'+c.state); if(onCellClick)cell.style.cursor='pointer';
       var wl=['M','T','W','T','F','S','S'][(d.getDay()+6)%7];
-      var mid = c.state==='rest'?'\u00b7' : c.state==='complete'?'\u2713' : c.state==='compensated'?'\u2248' : c.state==='incomplete'?'\u2013' : (c.pct!=null?c.pct+'%':'\u2013');
-      cell.innerHTML='<span class="wk-d">'+wl+'</span><span class="wk-m">'+mid+'</span>';
-      cell.title=ymd(d)+(c.note?(' \u2014 '+c.note):(c.total?(' \u2014 '+c.done+'/'+c.total+' moves logged'):''));
+      cell.innerHTML='<span class="wk-d">'+wl+'</span><span class="wk-m">'+mid(c)+'</span>';
+      cell.title=ymd(d)+(c.note?(' — '+c.note):'');
+      if(onCellClick)cell.addEventListener('click',function(){onCellClick(ymd(d));});
       row.appendChild(cell);
-    }
+    })(i); }
     host.appendChild(row);
-    var note=ce('div','wk-note'); note.innerHTML='\u2699\ufe0f <b>Light-load mode</b> \u2014 bar 40 / KB 20 / DB 20 lb. Chase <b>reps, tempo &amp; pauses</b> to ~1\u20132 reps from failure. <span class="wk-leg">\u2713 done \u00b7 % partial \u00b7 \u2248 cross-trained \u00b7 \u2013 skipped</span>';
-    host.appendChild(note);
+    if(legend){var note=ce('div','wk-note');note.innerHTML=legend;host.appendChild(note);}
     var rb=document.getElementById('wkRefresh'); if(rb)rb.onclick=function(){refreshAll(rb);};
   }
+  function renderStrips(){
+    var w=document.getElementById('wkStrip'); if(w)buildStrip(w,'Workout · last 7 days',workoutCompletion,null,'⚙️ <b>Light-load mode</b> — bar 40 / KB 20 / DB 20 lb. Chase <b>reps, tempo &amp; pauses</b> to ~1–2 reps from failure. <span class="wk-leg">✓ done · % partial · ≈ cross-trained · – skipped</span>');
+    var cEl=document.getElementById('wkStripCardio');
+    if(!cEl && w){ cEl=ce('div','wk-strip'); cEl.id='wkStripCardio'; cEl.style.marginTop='10px'; w.parentNode.insertBefore(cEl,w.nextSibling); }
+    if(cEl)buildStrip(cEl,'Cardio · last 7 days (40min ≥130bpm)',cardioCompletion,function(date){ var m=lsGet('iron45_cardio'); if(m[date]&&m[date].done)delete m[date]; else m[date]={done:true,ts:Date.now()}; lsSet('iron45_cardio',m); window.iron45Push('iron45_cardio'); renderStrips(); },'Tap a day to mark cardio done. <span class="wk-leg">✓ done · % partial · – missed · auto-detected from your Watch</span>');
+  }
+  window.nxRenderStrips=renderStrips;
+  function refreshAll(btn){ renderStrips(); var ep=endpoint(); if(!ep){if(btn)btn.textContent='⚠ automation not set up';return;} if(btn){btn.textContent='Updating…';btn.disabled=true;} fetch(ep,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({action:'refresh'})}).then(function(){if(btn)btn.textContent='Coach updating — reloads in ~90s';setTimeout(function(){location.reload();},90000);}).catch(function(){if(btn)btn.textContent='Triggered ✓';}); }
 
-  /* ---------- Floating AI coach chat ---------- */
-  var msgs=[]; var pendingImg=null;
-  function ctx(){
-    var D=window.IRON45||{};var c=D.config||{};var H=(D.health||[]).slice(-5);
-    var nut=lsGet('iron45_nutrition')[today()]||{cal:0,p:0,c:0,f:0};
-    var lines=H.map(function(d){return d.date+': steps '+ (d.steps||'-') +', active '+(d.active_cal||'-')+'kcal, sleep '+(d.sleep_hr||'-')+'h, RHR '+(d.resting_hr||'-')+', HRV '+(d.hrv||'-');});
-    return 'CONTEXT — Neel, 21M, 6\'0", ~250lb, fat-loss + muscle (recomp), no pork/beef. '+
-      'Daily target '+(c.cal_target||2250)+' kcal / '+(c.protein_target||210)+'P / '+(c.carb_target||195)+'C / '+(c.fat_target||70)+'F. Maintenance ~3250. '+
-      'Cardio 40min >=130bpm daily; lifts 6d/wk; Sunday off. Light equipment: barbell max 40lb, kettlebell 20lb, dumbbells 20lb each. '+
-      'Today logged so far: '+Math.round(nut.cal)+'kcal/'+Math.round(nut.p)+'P/'+Math.round(nut.c)+'C/'+Math.round(nut.f)+'F. '+
-      'Recent days:\n'+lines.join('\n');
-  }
-  var SYS='You are Iron45, Neel\'s concise, data-driven fitness & nutrition coach. Use the context. Be brief and practical. '+
-    'If the user shares a food photo or asks you to estimate/log a meal, estimate calories, protein, carbs and fat, then END your reply with EXACTLY one line: '+
-    'MACROS: {"cal":INT,"p":INT,"c":INT,"f":INT}. Do not output that line for non-food messages.';
-
-  function gkey(){return localStorage.getItem('iron45_gkey')||'';}
-  function addMsg(role,text){msgs.push({role:role,text:text});paint();}
-  function paint(){
-    var body=document.getElementById('aiBody');if(!body)return;body.innerHTML='';
-    msgs.forEach(function(m){
-      var b=ce('div','ai-msg ai-'+m.role); b.innerHTML=m.html||escapeHtml(m.text).replace(/\n/g,'<br>');
-      body.appendChild(b);
-      if(m.macros){var btn=ce('button','ai-log');btn.textContent='✅ Approve & log to today';btn.onclick=function(){logMacros(m.macros);btn.textContent='Logged ✓';btn.disabled=true;};body.appendChild(btn);}
-    });
-    body.scrollTop=body.scrollHeight;
-  }
-  function escapeHtml(s){return String(s).replace(/[&<>]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;'}[c];});}
-  function logMacros(m){
-    var all=lsGet('iron45_nutrition');var t=all[today()]||{cal:0,p:0,c:0,f:0};
-    t.cal+=+m.cal||0;t.p+=+m.p||0;t.c+=+m.c||0;t.f+=+m.f||0;all[today()]=t;lsSet('iron45_nutrition',all);
-    if(window.nxRefresh&&window.nxRefresh.nut)window.nxRefresh.nut();
-  }
-  function parseMacros(text){
-    var m=text.match(/MACROS:\s*(\{[^}]*\})/i); if(!m)return null;
-    try{var o=JSON.parse(m[1]);return {cal:Math.round(o.cal||o.calories||0),p:Math.round(o.p||o.protein||0),c:Math.round(o.c||o.carbs||0),f:Math.round(o.f||o.fat||0)};}catch(e){return null;}
-  }
-  async function send(){
-    var inp=document.getElementById('aiInput');var text=(inp.value||'').trim();
-    if(!text&&!pendingImg)return;
-    var key=gkey();
-    if(!key){addMsg('bot','Paste your Gemini key (the AQ.… one) in the field above first — it stays on this device.');return;}
-    var parts=[]; if(pendingImg)parts.push({inline_data:{mime_type:pendingImg.mime,data:pendingImg.data}});
-    parts.push({text:text||'What are the macros in this meal?'});
-    var shownImg=pendingImg?('<div class="ai-thumb"><img src="data:'+pendingImg.mime+';base64,'+pendingImg.data+'"></div>'):'';
-    msgs.push({role:'user',html:shownImg+escapeHtml(text||'(photo) estimate macros')});paint();
-    inp.value='';var img=pendingImg;pendingImg=null;var chip=document.getElementById('aiChip');if(chip)chip.style.display='none';
+  /* ---------- AI coach chat (server proxy, multi-image) ---------- */
+  var msgs=[], pendingImgs=[];
+  function ctx(){var D=window.IRON45||{};var c=D.config||{};var H=(D.health||[]).slice(-5);var nut=(function(){try{var o=(JSON.parse(localStorage.getItem('iron45_nutrition')||'{}'))[today()]||{};var e=o.entries||[];var t={cal:0,p:0};e.forEach(function(x){t.cal+=num(x.cal);t.p+=num(x.p);});return t;}catch(e){return {cal:0,p:0};}})();
+    var lines=H.map(function(d){return d.date+': steps '+(d.steps||'-')+', active '+(d.active_cal||'-')+'kcal, sleep '+(d.sleep_hr||'-')+'h, RHR '+(d.resting_hr||'-')+', HRV '+(d.hrv||'-');});
+    return 'CONTEXT — Neel, 21M, 6\'0", ~250lb, fat-loss + muscle, no pork/beef. Target '+(c.cal_target||2250)+'kcal/'+(c.protein_target||210)+'P/'+(c.carb_target||195)+'C/'+(c.fat_target||70)+'F. Maintenance ~3250. Cardio 40min>=130bpm + lifts (2 sessions/day). Light equipment: bar 40lb, KB 20lb, DB 20lb. Today so far: '+Math.round(nut.cal)+'kcal/'+Math.round(nut.p)+'P. Recent:\n'+lines.join('\n');}
+  var SYS='You are Iron45, Neel\'s concise fitness & nutrition coach. Answer fully and specifically using the context. If a food photo or meal is described, estimate the WHOLE meal and ALWAYS finish with exactly one line, all four integers required, no blanks: MACROS: {"cal":INT,"p":INT,"c":INT,"f":INT}. If multiple photos, sum them. Never omit a number.';
+  function parseMacros(t){var m=t.match(/MACROS:\s*(\{[^}]*\})/i);if(!m)return null;try{var o=JSON.parse(m[1]);var r={cal:Math.round(num(o.cal||o.calories)),p:Math.round(num(o.p||o.protein)),c:Math.round(num(o.c||o.carbs)),f:Math.round(num(o.f||o.fat))};return r;}catch(e){return null;}}
+  function logMacros(m,name){var all=lsGet('iron45_nutrition');var d=all[today()]; if(!d||!Array.isArray(d.entries))d={entries:[]}; d.entries.push({id:'a'+Date.now(),name:name||'AI meal',qty:1,cal:m.cal,p:m.p,c:m.c,f:m.f}); all[today()]=d; lsSet('iron45_nutrition',all); window.iron45Push('iron45_nutrition'); if(window.nxRefresh&&window.nxRefresh.nut)window.nxRefresh.nut();}
+  function paint(){var body=document.getElementById('aiBody');if(!body)return;body.innerHTML='';msgs.forEach(function(m){var b=ce('div','ai-msg ai-'+m.role);b.innerHTML=m.html||esc(m.text).replace(/\n/g,'<br>');body.appendChild(b);if(m.macros){var btn=ce('button','ai-log');btn.textContent='✅ Approve & log '+m.macros.cal+'kcal / '+m.macros.p+'P';btn.onclick=function(){logMacros(m.macros,'AI meal');btn.textContent='Logged ✓';btn.disabled=true;};body.appendChild(btn);}});body.scrollTop=body.scrollHeight;}
+  function addBot(t){msgs.push({role:'bot',text:t});paint();}
+  function send(){
+    var inp=document.getElementById('aiInput');var text=(inp.value||'').trim();if(!text&&!pendingImgs.length)return;
+    var ep=endpoint(); if(!ep){addBot('Automation endpoint not set — finish the Apps Script deploy so the chat can run.');return;}
+    var thumbs=pendingImgs.map(function(p){return '<div class="ai-thumb"><img src="data:'+p.mime+';base64,'+p.data+'"></div>';}).join('');
+    msgs.push({role:'user',html:thumbs+esc(text||'(photos) estimate macros')});paint();
+    var imgs=pendingImgs.slice(); inp.value='';pendingImgs=[];var chip=document.getElementById('aiChip');if(chip){chip.style.display='none';chip.textContent='';}
     msgs.push({role:'bot',text:'…'});paint();
-    var hist=msgs.filter(function(m){return m.role==='user'||m.role==='bot';}).slice(-8).map(function(m){return {role:m.role==='user'?'user':'model',parts:[{text:m.text||' '}]};});
-    var contents=[{role:'user',parts:[{text:ctx()}]},{role:'model',parts:[{text:'Understood. Ready.'}]}];
-    contents.push({role:'user',parts:parts});
-    try{
-      var res=await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent',{
-        method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':key},
-        body:JSON.stringify({system_instruction:{parts:[{text:SYS}]},contents:contents,generationConfig:{temperature:0.4}})});
-      var data=await res.json();
-      msgs.pop();
-      if(!res.ok){addMsg('bot','API error: '+((data.error&&data.error.message)||res.status)+'. If it mentions the key, regenerate one in AI Studio; if it mentions CORS/permission, we\'ll route it through the Apps Script proxy.');return;}
-      var reply=((((data.candidates||[])[0]||{}).content||{}).parts||[]).map(function(p){return p.text||'';}).join('').trim()||'(no reply)';
-      var mac=parseMacros(reply);
-      var clean=reply.replace(/MACROS:\s*\{[^}]*\}/i,'').trim();
-      var mm={role:'bot',html:escapeHtml(clean).replace(/\n/g,'<br>')};if(mac)mm.macros=mac;msgs.push(mm);paint();
-    }catch(e){msgs.pop();addMsg('bot','Couldn\'t reach Gemini from the browser ('+e.message+'). This is usually CORS — we\'ll route calls through your Apps Script proxy once it\'s deployed.');}
+    fetch(ep,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({action:'chat',system:SYS,text:ctx()+'\n\nUSER: '+(text||'Estimate the macros in these photos.'),images:imgs})})
+      .then(function(r){return r.json();}).then(function(d){ msgs.pop(); if(!d||d.ok===false){addBot('Error: '+((d&&d.error)||'no response')+'.');return;} var reply=(d.text||'').trim()||'(no reply)'; var mac=parseMacros(reply); var clean=reply.replace(/MACROS:\s*\{[^}]*\}/i,'').trim(); var mm={role:'bot',html:esc(clean).replace(/\n/g,'<br>')}; if(mac)mm.macros=mac; msgs.push(mm); paint(); })
+      .catch(function(e){ msgs.pop(); addBot('Network error: '+e.message); });
   }
   function buildChat(){
     if(document.getElementById('aiWrap'))return;
     var wrap=ce('div');wrap.id='aiWrap';
-    wrap.innerHTML=
-      '<button id="aiFab" title="Ask your coach">💬</button>'+
-      '<div id="aiPanel"><div id="aiHdr"><b>🧠 Iron45 Coach</b><button id="aiClose">✕</button></div>'+
-      '<div id="aiKeyRow" style="display:none"><input id="aiKey" placeholder="Paste Gemini key (AQ.… or AIza…)"><button id="aiKeySave">Save</button></div>'+
-      '<div id="aiBody"></div>'+
-      '<div id="aiChip" style="display:none">📎 photo attached</div>'+
-      '<div id="aiBar"><label id="aiPhoto">📷<input type="file" accept="image/*" id="aiFile" hidden></label>'+
-      '<textarea id="aiInput" rows="1" placeholder="Ask about your health or snap a meal…"></textarea>'+
-      '<button id="aiSend">➤</button></div></div>';
+    wrap.innerHTML='<button id="aiFab" title="Ask your coach">💬</button><div id="aiPanel"><div id="aiHdr"><b>🧠 Iron45 Coach</b><button id="aiClose">✕</button></div><div id="aiBody"></div><div id="aiChip" style="display:none"></div><div id="aiBar"><label id="aiPhoto">📷<input type="file" accept="image/*" id="aiFile" hidden multiple></label><textarea id="aiInput" rows="1" placeholder="Ask anything, or attach meal photos…"></textarea><button id="aiSend">➤</button></div></div>';
     document.body.appendChild(wrap);
     var panel=document.getElementById('aiPanel');
-    document.getElementById('aiFab').onclick=function(){panel.classList.toggle('open');if(!gkey())document.getElementById('aiKeyRow').style.display='flex';if(!msgs.length)addMsg('bot','Hey Neel — ask me anything about your training, recovery, or nutrition. Or snap a meal with 📷 and I\'ll estimate the macros and offer to log them.');};
+    document.getElementById('aiFab').onclick=function(){panel.classList.toggle('open');if(!msgs.length)addBot('Hey Neel — ask me anything about training, recovery or nutrition, or attach one or more meal photos and I\'ll total the macros and offer to log them.');};
     document.getElementById('aiClose').onclick=function(){panel.classList.remove('open');};
-    document.getElementById('aiKeySave').onclick=function(){var v=(document.getElementById('aiKey').value||'').trim();if(v){localStorage.setItem('iron45_gkey',v);document.getElementById('aiKeyRow').style.display='none';addMsg('bot','Key saved on this device. Go ahead.');}};
     document.getElementById('aiSend').onclick=send;
     document.getElementById('aiInput').addEventListener('keydown',function(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send();}});
-    document.getElementById('aiFile').addEventListener('change',function(e){var file=e.target.files[0];if(!file)return;var r=new FileReader();r.onload=function(){var s=r.result;var b64=s.split(',')[1];pendingImg={mime:file.type||'image/jpeg',data:b64};var chip=document.getElementById('aiChip');chip.style.display='block';};r.readAsDataURL(file);});
+    document.getElementById('aiFile').addEventListener('change',function(e){var files=[].slice.call(e.target.files||[]);files.forEach(function(file){var r=new FileReader();r.onload=function(){pendingImgs.push({mime:file.type||'image/jpeg',data:r.result.split(',')[1]});var chip=document.getElementById('aiChip');chip.style.display='block';chip.textContent='📎 '+pendingImgs.length+' photo'+(pendingImgs.length>1?'s':'')+' attached (tap send)';};r.readAsDataURL(file);});e.target.value='';});
   }
 
-  function mount(){renderStrip();buildChat();}
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){setTimeout(mount,400);});else setTimeout(mount,400);
+  function mount(){ if(document.getElementById('wkStrip'))renderStrips(); buildChat(); syncDownAll(); }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){setTimeout(mount,500);});else setTimeout(mount,500);
 })();
 
 </script>
