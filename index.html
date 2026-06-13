@@ -851,6 +851,7 @@ render();
   .sidebar{grid-template-columns:minmax(0,1fr);margin-top:var(--sp4);gap:var(--sp3);}
 }
 </style>
+
 <style id="nx-style">
 .nx-wrap{display:grid;gap:var(--sp5);margin-top:var(--sp6);}
 .nx-card{background:var(--sur);border:1px solid var(--bdr);border-radius:var(--r-xl);box-shadow:var(--sh-md);overflow:hidden;}
@@ -859,6 +860,9 @@ render();
 .nx-title{font-weight:800;font-family:var(--fd);font-size:var(--text-lg);}
 .nx-rec{margin-left:auto;font-size:11px;font-weight:700;background:var(--prihlt);color:var(--pri);padding:3px 10px;border-radius:var(--r-full);white-space:nowrap;}
 .nx-body{padding:var(--sp4) var(--sp5);}
+.nx-dater{font-size:12px;color:var(--txm);font-weight:600;margin-bottom:var(--sp3);display:flex;align-items:center;gap:8px;}
+.nx-dater input{padding:.35rem .5rem;border:1px solid var(--bdr);border-radius:var(--r-md);background:var(--sur2);color:var(--tx);font-size:14px;}
+.nx-back{font-size:10px;background:rgba(96,165,250,.15);color:#60a5fa;padding:2px 7px;border-radius:var(--r-full);font-weight:700;}
 .nx-macro{margin-bottom:var(--sp3);}
 .nx-ml{display:flex;justify-content:space-between;font-size:12px;color:var(--txm);font-weight:600;margin-bottom:3px;}
 .nx-track{height:9px;background:var(--sur2);border-radius:var(--r-full);overflow:hidden;}
@@ -866,6 +870,7 @@ render();
 .nx-add{display:flex;gap:6px;margin-top:var(--sp3);flex-wrap:wrap;}
 .nx-add input{flex:1;min-width:58px;padding:.5rem;border:1px solid var(--bdr);border-radius:var(--r-md);background:var(--sur2);color:var(--tx);font-size:16px;}
 .nx-add button{background:var(--pri);color:#fff;font-weight:700;padding:.5rem 1rem;border-radius:var(--r-md);white-space:nowrap;}
+.nx-ghost{background:var(--sur2)!important;color:var(--txm)!important;border:1px solid var(--bdr);font-weight:600!important;}
 .nx-hint{font-size:11px;color:var(--txf);margin-top:var(--sp3);line-height:1.5;}
 .nx-cardio,.nx-cardio2{font-size:var(--text-sm);color:var(--txm);margin-bottom:var(--sp2);}
 .nx-cardio2{font-weight:700;color:var(--tx);}
@@ -878,7 +883,7 @@ render();
 <script id="nx-mod">
 (function(){
   function $(s,r){return (r||document).querySelector(s);}
-  function ce(t,c,h){var e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e;}
+  function ce(t,c){var e=document.createElement(t);if(c)e.className=c;return e;}
   function todayYMD(){var d=new Date();return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2);}
   function lsGet(k){try{return JSON.parse(localStorage.getItem(k)||'{}');}catch(e){return{};}}
   function lsSet(k,o){try{localStorage.setItem(k,JSON.stringify(o));}catch(e){}}
@@ -886,89 +891,61 @@ render();
   function cfg(){return (window.IRON45&&window.IRON45.config)||{};}
   var T={cal:2250,p:210,c:195,f:70,cmin:40,chr:130};
   (function(){var c=cfg();if(c.cal_target)T.cal=c.cal_target;if(c.protein_target)T.p=c.protein_target;if(c.carb_target)T.c=c.carb_target;if(c.fat_target)T.f=c.fat_target;if(c.cardio_min_target)T.cmin=c.cardio_min_target;if(c.cardio_hr_target)T.chr=c.cardio_hr_target;})();
+  function dater(id,forDate){return '<div class="nx-dater">Day: <input type="date" id="'+id+'" value="'+forDate+'" max="'+todayYMD()+'">'+(forDate!==todayYMD()?' <span class="nx-back">back-fill</span>':'')+'</div>';}
+  function bar(label,val,target,unit,color){var pct=target>0?Math.min(100,Math.round(val/target*100)):0;return '<div class="nx-macro"><div class="nx-ml"><span>'+label+'</span><span>'+Math.round(val)+' / '+target+unit+'</span></div><div class="nx-track"><div class="nx-fill" style="width:'+pct+'%;background:'+color+'"></div></div></div>';}
 
-  function bar(label,val,target,unit,color){
-    var pct=target>0?Math.min(100,Math.round(val/target*100)):0;
-    return '<div class="nx-macro"><div class="nx-ml"><span>'+label+'</span><span>'+Math.round(val)+' / '+target+unit+'</span></div>'+
-      '<div class="nx-track"><div class="nx-fill" style="width:'+pct+'%;background:'+color+'"></div></div></div>';
-  }
-
-  function renderNutrition(host){
-    var ymd=todayYMD();var t=lsGet('iron45_nutrition')[ymd]||{cal:0,p:0,c:0,f:0};
+  function renderNutrition(host,forDate){
+    forDate=forDate||todayYMD();host.innerHTML='';
+    var t=lsGet('iron45_nutrition')[forDate]||{cal:0,p:0,c:0,f:0};
     var card=ce('div','nx-card');
-    card.innerHTML='<div class="nx-hdr"><span class="nx-icon">&#127869;</span><span class="nx-title">Nutrition &mdash; Today</span>'+
-      '<span class="nx-rec">'+Math.round(t.cal)+' / '+T.cal+' kcal</span></div><div class="nx-body">'+
-      bar('Calories',t.cal,T.cal,'','#f97316')+bar('Protein',t.p,T.p,'g','#22c55e')+
-      bar('Carbs',t.c,T.c,'g','#60a5fa')+bar('Fat',t.f,T.f,'g','#eab308')+
+    card.innerHTML='<div class="nx-hdr"><span class="nx-icon">&#127869;</span><span class="nx-title">Nutrition</span><span class="nx-rec">'+Math.round(t.cal)+' / '+T.cal+' kcal</span></div><div class="nx-body">'+
+      dater('nxNdate',forDate)+bar('Calories',t.cal,T.cal,'','#f97316')+bar('Protein',t.p,T.p,'g','#22c55e')+bar('Carbs',t.c,T.c,'g','#60a5fa')+bar('Fat',t.f,T.f,'g','#eab308')+
       '<div class="nx-add"><input id="nxCal" inputmode="numeric" placeholder="kcal"><input id="nxP" inputmode="numeric" placeholder="P"><input id="nxC" inputmode="numeric" placeholder="C"><input id="nxF" inputmode="numeric" placeholder="F"><button id="nxAdd">+ Add</button></div>'+
-      '<div class="nx-hint">Add a meal\'s numbers, or use the food-photo Shortcut (coming) to auto-fill. Resets each day.</div></div>';
+      '<div class="nx-add" style="margin-top:6px"><button id="nxReset" class="nx-ghost">Reset this day</button></div>'+
+      '<div class="nx-hint">Pick any day (incl. yesterday) and add a meal\'s numbers; they accumulate for that day. Food-photo Shortcut will auto-fill later.</div></div>';
     host.appendChild(card);
-    $('#nxAdd',card).addEventListener('click',function(){
-      var all=lsGet('iron45_nutrition');var t2=all[ymd]||{cal:0,p:0,c:0,f:0};
-      t2.cal+=num($('#nxCal',card).value);t2.p+=num($('#nxP',card).value);t2.c+=num($('#nxC',card).value);t2.f+=num($('#nxF',card).value);
-      all[ymd]=t2;lsSet('iron45_nutrition',all);host.removeChild(card);renderNutrition(host);
-    });
+    $('#nxNdate',card).addEventListener('change',function(){renderNutrition(host,this.value||todayYMD());});
+    $('#nxAdd',card).addEventListener('click',function(){var all=lsGet('iron45_nutrition');var t2=all[forDate]||{cal:0,p:0,c:0,f:0};t2.cal+=num($('#nxCal',card).value);t2.p+=num($('#nxP',card).value);t2.c+=num($('#nxC',card).value);t2.f+=num($('#nxF',card).value);all[forDate]=t2;lsSet('iron45_nutrition',all);renderNutrition(host,forDate);});
+    $('#nxReset',card).addEventListener('click',function(){var all=lsGet('iron45_nutrition');delete all[forDate];lsSet('iron45_nutrition',all);renderNutrition(host,forDate);});
   }
 
-  function renderCardio(host){
-    var ymd=todayYMD();var done=lsGet('iron45_cardio')[ymd];
-    var dd=(window.IRON45&&window.IRON45.cardio&&window.IRON45.cardio[ymd])||null;
-    var statusTxt=dd?(Math.round(dd.minutes)+' min @ avg '+Math.round(dd.avg_hr)+' bpm'):(done?'Marked done manually':'Not logged yet');
+  function renderCardio(host,forDate){
+    forDate=forDate||todayYMD();host.innerHTML='';
+    var done=lsGet('iron45_cardio')[forDate];
+    var dd=(window.IRON45&&window.IRON45.cardio&&window.IRON45.cardio[forDate])||null;
+    var statusTxt=dd?(Math.round(dd.minutes)+' min @ avg '+Math.round(dd.avg_hr)+' bpm (from watch)'):(done?'Marked done manually':'Not logged yet');
     var ok=dd?(dd.minutes>=T.cmin&&dd.avg_hr>=T.chr):!!done;
     var card=ce('div','nx-card');
-    card.innerHTML='<div class="nx-hdr"><span class="nx-icon">&#128293;</span><span class="nx-title">Cardio &mdash; Today</span>'+
-      '<span class="nx-rec" style="background:'+(ok?'rgba(34,197,94,.15)':'rgba(148,163,184,.15)')+';color:'+(ok?'#22c55e':'#94a3b8')+'">'+(ok?'✓ Done':'Pending')+'</span></div>'+
-      '<div class="nx-body"><div class="nx-cardio">Target: <b>'+T.cmin+' min</b> with heart rate <b>&ge;'+T.chr+' bpm</b>, as a separate session.</div>'+
-      '<div class="nx-cardio2">'+statusTxt+'</div>'+
+    card.innerHTML='<div class="nx-hdr"><span class="nx-icon">&#128293;</span><span class="nx-title">Cardio</span><span class="nx-rec" style="background:'+(ok?'rgba(34,197,94,.15)':'rgba(148,163,184,.15)')+';color:'+(ok?'#22c55e':'#94a3b8')+'">'+(ok?'✓ Done':'Pending')+'</span></div><div class="nx-body">'+
+      dater('nxCdate',forDate)+'<div class="nx-cardio">Target: <b>'+T.cmin+' min</b> with heart rate <b>&ge;'+T.chr+' bpm</b>, separate session.</div><div class="nx-cardio2">'+statusTxt+'</div>'+
       '<button id="nxCardio" class="nx-toggle">'+(done?'✓ Done — tap to undo':'Mark cardio done')+'</button>'+
       '<div class="nx-hint">Auto-verified from your Apple Watch workout once the automation is live; manual toggle until then.</div></div>';
     host.appendChild(card);
-    $('#nxCardio',card).addEventListener('click',function(){
-      var m=lsGet('iron45_cardio');if(m[ymd])delete m[ymd];else m[ymd]={done:true,ts:Date.now()};lsSet('iron45_cardio',m);
-      host.removeChild(card);renderCardio(host);
-    });
+    $('#nxCdate',card).addEventListener('change',function(){renderCardio(host,this.value||todayYMD());});
+    $('#nxCardio',card).addEventListener('click',function(){var m=lsGet('iron45_cardio');if(m[forDate])delete m[forDate];else m[forDate]={done:true,ts:Date.now()};lsSet('iron45_cardio',m);renderCardio(host,forDate);});
   }
 
-  function weightSeries(){
-    var H=(window.IRON45&&window.IRON45.health)||[];var map={};
-    H.forEach(function(d){if(d.weight!=null)map[d.date]=d.weight;});
-    var w=lsGet('iron45_weights');Object.keys(w).forEach(function(k){map[k]=w[k];});
-    return Object.keys(map).sort().map(function(k){return{date:k,w:map[k]};});
-  }
+  function weightSeries(){var H=(window.IRON45&&window.IRON45.health)||[];var map={};H.forEach(function(d){if(d.weight!=null)map[d.date]=d.weight;});var w=lsGet('iron45_weights');Object.keys(w).forEach(function(k){map[k]=w[k];});return Object.keys(map).sort().map(function(k){return{date:k,w:map[k]};});}
+  function drawWeight(ser){var el=document.getElementById('nxWchart');if(!el||typeof Chart==='undefined')return;var c=Chart.getChart(el);if(c)c.destroy();new Chart(el,{type:'line',data:{labels:ser.map(function(d){return d.date.slice(5);}),datasets:[{data:ser.map(function(d){return d.w;}),borderColor:'#f97316',backgroundColor:'rgba(249,115,22,.12)',fill:true,tension:.3,pointRadius:3,borderWidth:2}]},options:{plugins:{legend:{display:false}},scales:{x:{display:true,ticks:{maxTicksLimit:6,font:{size:9}}},y:{display:true,ticks:{font:{size:9}}}},maintainAspectRatio:false}});}
 
-  function drawWeight(ser){
-    var el=document.getElementById('nxWchart');if(!el||typeof Chart==='undefined')return;
-    var c=Chart.getChart(el);if(c)c.destroy();
-    new Chart(el,{type:'line',data:{labels:ser.map(function(d){return d.date.slice(5);}),datasets:[{data:ser.map(function(d){return d.w;}),borderColor:'#f97316',backgroundColor:'rgba(249,115,22,.12)',fill:true,tension:.3,pointRadius:3,borderWidth:2}]},options:{plugins:{legend:{display:false}},scales:{x:{display:true,ticks:{maxTicksLimit:6,font:{size:9}}},y:{display:true,ticks:{font:{size:9}}}},maintainAspectRatio:false}});
-  }
-
-  function renderWeight(host){
-    var ser=weightSeries();var latest=ser.length?ser[ser.length-1].w:null;
-    var first=ser.length?ser[0].w:null;var delta=(latest!=null&&first!=null)?(latest-first):null;
+  function renderWeight(host,forDate){
+    forDate=forDate||todayYMD();host.innerHTML='';
+    var ser=weightSeries();var latest=ser.length?ser[ser.length-1].w:null;var first=ser.length?ser[0].w:null;var delta=(latest!=null&&first!=null)?(latest-first):null;
+    var existing=lsGet('iron45_weights')[forDate];
     var card=ce('div','nx-card');
-    card.innerHTML='<div class="nx-hdr"><span class="nx-icon">&#9878;</span><span class="nx-title">Weight &amp; Long-Term Trend</span>'+
-      '<span class="nx-rec">'+(latest!=null?latest+' lb':'no entries')+'</span></div>'+
-      '<div class="nx-body"><div class="nx-chartbox"><canvas id="nxWchart"></canvas></div>'+
+    card.innerHTML='<div class="nx-hdr"><span class="nx-icon">&#9878;</span><span class="nx-title">Weight &amp; Long-Term Trend</span><span class="nx-rec">'+(latest!=null?latest+' lb':'no entries')+'</span></div><div class="nx-body">'+
+      '<div class="nx-chartbox"><canvas id="nxWchart"></canvas></div>'+
       '<div class="nx-wmeta">'+(delta!=null?((delta<=0?'▼ ':'▲ ')+Math.abs(Math.round(delta*10)/10)+' lb since first entry'):'Log a few weigh-ins to see your trend line.')+'</div>'+
-      '<div class="nx-add"><input id="nxW" inputmode="decimal" placeholder="today\'s weight (lb)"><button id="nxWlog">Log weight</button></div>'+
-      '<div class="nx-hint">Optional &mdash; weigh in a few times a week, same time of day. Daily noise is normal; the line is what matters.</div></div>';
+      dater('nxWdate',forDate)+
+      '<div class="nx-add"><input id="nxW" inputmode="decimal" placeholder="weight (lb)'+(existing!=null?', now '+existing:'')+'"><button id="nxWlog">Save weight</button></div>'+
+      '<div class="nx-hint">Optional &mdash; pick any day and log that morning\'s weight. Same time of day is best. The line is the signal, not daily noise.</div></div>';
     host.appendChild(card);drawWeight(ser);
-    $('#nxWlog',card).addEventListener('click',function(){
-      var v=num($('#nxW',card).value);if(v<=0)return;
-      var w=lsGet('iron45_weights');w[todayYMD()]=v;lsSet('iron45_weights',w);
-      var ep=cfg().log_endpoint;
-      if(ep){try{fetch(ep,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({action:'weight',date:todayYMD(),weight:v})});}catch(e){}}
-      host.removeChild(card);renderWeight(host);
-    });
+    $('#nxWdate',card).addEventListener('change',function(){renderWeight(host,this.value||todayYMD());});
+    $('#nxWlog',card).addEventListener('click',function(){var v=num($('#nxW',card).value);if(v<=0)return;var w=lsGet('iron45_weights');w[forDate]=v;lsSet('iron45_weights',w);var ep=cfg().log_endpoint;if(ep){try{fetch(ep,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({action:'weight',date:forDate,weight:v})});}catch(e){}}renderWeight(host,forDate);});
   }
 
-  function mount(){
-    var main=document.querySelector('.main');if(!main||document.getElementById('nxWrap'))return;
-    var wrap=ce('div','nx-wrap');wrap.id='nxWrap';main.appendChild(wrap);
-    renderNutrition(wrap);renderCardio(wrap);renderWeight(wrap);
-  }
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){setTimeout(mount,300);});
-  else setTimeout(mount,300);
+  function mount(){var main=document.querySelector('.main');if(!main||document.getElementById('nxWrap'))return;var wrap=ce('div','nx-wrap');wrap.id='nxWrap';var n=ce('div');n.id='nxNut';var c=ce('div');c.id='nxCar';var w=ce('div');w.id='nxWt';wrap.appendChild(n);wrap.appendChild(c);wrap.appendChild(w);main.appendChild(wrap);renderNutrition(n);renderCardio(c);renderWeight(w);}
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){setTimeout(mount,300);});else setTimeout(mount,300);
 })();
 
 </script>
