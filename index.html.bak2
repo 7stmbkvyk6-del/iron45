@@ -201,7 +201,7 @@ button{cursor:pointer;background:none;border:none;font:inherit;color:inherit;}
   </div>
   <div class="day-tabs" id="dayTabs" role="tablist"></div>
   <div class="grid">
-    <div><div id="wkStrip" class="wk-strip"></div><div class="card" id="workoutCard"></div></div>
+    <div><div class="card" id="workoutCard"></div></div>
     <aside class="sidebar">
       <div class="vtaper">
         <div class="vtaper-title">
@@ -269,7 +269,7 @@ const PLAN = [
   type:"lift", focus:"CHEST", sub:"+ Shoulders", color:"c-or",
   sections:[
    {title:"🔩 BARBELL — one loaded bar (flow on the bench)", dot:"var(--pri)", exs:[
-     {n:"Barbell Bench Press",why:"Primary chest mass.",s:"4×20 · last set AMRAP",t:"c",info:`<img class="ex-img" loading="lazy" alt="Bench press form" src="https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Bench_Press_-_Medium_Grip/0.jpg">
+     {n:"Barbell Bench Press",why:"Primary chest mass.",s:"5×5",t:"c",info:`<img class="ex-img" loading="lazy" alt="Bench press form" src="https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Bench_Press_-_Medium_Grip/0.jpg">
        <div class="ex-info-row"><strong>Arch (easy trick):</strong> lie down, shrug your shoulders up, pull them back, then set them down — you should be able to slide a flat hand under your lower back.</div>
        <div class="ex-info-row"><strong>Elbows:</strong> tucked ~45–75° toward your ribs, NOT flared straight out like a plane.</div>
        <div class="ex-info-row"><strong>Wrists:</strong> straight and stacked over the elbows — no bent-back wrists.</div>
@@ -281,7 +281,7 @@ const PLAN = [
        <div class="ex-info-row"><strong>Avoid:</strong> bending the elbows more (that makes it a triceps move) — keep the arms long.</div>
        <div class="ex-info-row"><strong>Safety:</strong> only go as far back as the shoulders comfortably allow; stop before the ribs flare.</div>
        <div class="ex-info-row"><strong>⚠️ Common mistakes:</strong> Turning it into a press · going too deep without control.</div>`},
-     {n:"Barbell Overhead Press",why:"Front + side delts — shoulder width.",s:"4×15",t:"c",info:`<img class="ex-img" loading="lazy" alt="Overhead press form" src="https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Standing_Military_Press/0.jpg">
+     {n:"Barbell Overhead Press",why:"Front + side delts — shoulder width.",s:"4×6",t:"c",info:`<img class="ex-img" loading="lazy" alt="Overhead press form" src="https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Standing_Military_Press/0.jpg">
        <div class="ex-info-row"><strong>Setup:</strong> grip just outside the shoulders, wrists straight and stacked, elbows slightly in front of the bar.</div>
        <div class="ex-info-row"><strong>Brace:</strong> squeeze glutes + abs, ribs down — this stops the big backward lean (the #1 fault).</div>
        <div class="ex-info-row"><strong>Path:</strong> press straight up; move your head BACK as the bar passes, then "through the window" once it clears.</div>
@@ -289,7 +289,7 @@ const PLAN = [
        <div class="ex-info-row"><strong>⚠️ Common mistakes:</strong> Leaning back too much · pressing the bar out in front.</div>`},
    ]},
    {title:"🏋️ DUMBBELL", dot:"var(--gold)", exs:[
-     {n:"Incline Dumbbell Press",why:"Upper chest — the high shelf.",s:"3×18",t:"c",info:`<img class="ex-img" loading="lazy" alt="Incline DB press form" src="https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Incline_Dumbbell_Press/0.jpg">
+     {n:"Incline Dumbbell Press",why:"Upper chest — the high shelf.",s:"3×10",t:"c",info:`<img class="ex-img" loading="lazy" alt="Incline DB press form" src="https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Incline_Dumbbell_Press/0.jpg">
        <div class="ex-info-row"><strong>Setup:</strong> bench ~30°, elbows ~45° (not flared straight out).</div>
        <div class="ex-info-row"><strong>Move:</strong> press up and slightly together, driving toward the collarbone; control the lower for a full stretch.</div>
        <div class="ex-info-row"><strong>⚠️ Common mistakes:</strong> Bench too steep · elbows flaring hard.</div>`},
@@ -316,7 +316,7 @@ const PLAN = [
   type:"lift", focus:"BICEPS", sub:"+ Back & Rear Delts", color:"c-go",
   sections:[
    {title:"🔩 BARBELL — one loaded bar (bent-over block)", dot:"var(--pri)", exs:[
-     {n:"Barbell Bent-Over Row",why:"Back thickness; loads biceps too.",s:"4×20 · last set AMRAP",t:"c",info:`<img class="ex-img" loading="lazy" alt="Bent-over row form" src="https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Bent_Over_Barbell_Row/0.jpg">
+     {n:"Barbell Bent-Over Row",why:"Back thickness; loads biceps too.",s:"5×5",t:"c",info:`<img class="ex-img" loading="lazy" alt="Bent-over row form" src="https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Bent_Over_Barbell_Row/0.jpg">
        <div class="ex-info-row"><strong>Setup:</strong> hinge so the torso is between parallel and ~45°; standing taller turns it into an arm move.</div>
        <div class="ex-info-row"><strong>Back:</strong> flat, neutral, braced — never round under load.</div>
        <div class="ex-info-row"><strong>Move:</strong> lead with the elbows (don't curl with the hands), pull to the lower ribs — "elbows to your back pockets."</div>
@@ -328,7 +328,7 @@ const PLAN = [
        <div class="ex-info-row"><strong>Back:</strong> flat neutral spine; stop at a hamstring stretch (~torso parallel) — don't round to go lower.</div>
        <div class="ex-info-row"><strong>Light-bar tip:</strong> the slow 4s lower + chasing the stretch is the work.</div>
        <div class="ex-info-row"><strong>⚠️ Common mistakes:</strong> Turning it into a squat · letting the bar drift forward.</div>`},
-     {n:"Barbell Curl",why:"Primary bicep mass.",s:"4×15",t:"i",info:`<img class="ex-img" loading="lazy" alt="Barbell curl form" src="https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Curl/0.jpg">
+     {n:"Barbell Curl",why:"Primary bicep mass.",s:"4×8",t:"i",info:`<img class="ex-img" loading="lazy" alt="Barbell curl form" src="https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Curl/0.jpg">
        <div class="ex-info-row"><strong>Move:</strong> elbows pinned to your sides — only the forearms move, no shoulder swing or back lean.</div>
        <div class="ex-info-row"><strong>Cue:</strong> supinated grip, squeeze at the top, lower under control.</div>
        <div class="ex-info-row"><strong>⚠️ Common mistakes:</strong> Hips driving the weight up · elbows drifting forward.</div>`},
@@ -342,7 +342,7 @@ const PLAN = [
        <div class="ex-info-row"><strong>⚠️ Common mistakes:</strong> Rolling the shoulders · bending the elbows.</div>`},
    ]},
    {title:"🏋️ DUMBBELL", dot:"var(--gold)", exs:[
-     {n:"Dumbbell Single-Arm Row",why:"Lat width, one side at a time.",s:"3×18",t:"c",info:`<img class="ex-img" loading="lazy" alt="One-arm row form" src="https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/One-Arm_Dumbbell_Row/0.jpg">
+     {n:"Dumbbell Single-Arm Row",why:"Lat width, one side at a time.",s:"3×10",t:"c",info:`<img class="ex-img" loading="lazy" alt="One-arm row form" src="https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/One-Arm_Dumbbell_Row/0.jpg">
        <div class="ex-info-row"><strong>Setup:</strong> hand and knee on the bench, flat braced back.</div>
        <div class="ex-info-row"><strong>Move:</strong> pull toward your HIP (not the chest) to load the lat; no torso twisting; squeeze at the top.</div>
        <div class="ex-info-row"><strong>⚠️ Common mistakes:</strong> Twisting the torso open · pulling straight up into the shoulder.</div>`},
@@ -350,10 +350,10 @@ const PLAN = [
        <div class="ex-info-row"><strong>Setup:</strong> hinge ~45°, light DBs, soft elbows.</div>
        <div class="ex-info-row"><strong>Move:</strong> think "push the weights out to the sides," not up; lead with the elbows; squeeze the rear delts — no swinging.</div>
        <div class="ex-info-row"><strong>⚠️ Common mistakes:</strong> Turning it into a row · standing up during the set.</div>`},
-     {n:"Dumbbell Hammer Curl",why:"Arm + forearm thickness.",s:"3×18",t:"f",info:`<img class="ex-img" loading="lazy" alt="Hammer curl form" src="https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Hammer_Curls/0.jpg">
+     {n:"Dumbbell Hammer Curl",why:"Arm + forearm thickness.",s:"3×10",t:"f",info:`<img class="ex-img" loading="lazy" alt="Hammer curl form" src="https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Hammer_Curls/0.jpg">
        <div class="ex-info-row"><strong>Move:</strong> neutral grip (palms facing in) the whole rep; elbows pinned; no swing; control the lower.</div>
        <div class="ex-info-row"><strong>⚠️ Common mistakes:</strong> Swinging the dumbbells · rotating the wrists early.</div>`},
-     {n:"Dumbbell Incline Curl",why:"Deep stretch = the bicep peak.",s:"3×18",t:"i",info:`<img class="ex-img" loading="lazy" alt="Incline curl form" src="https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Incline_Dumbbell_Curl/0.jpg">
+     {n:"Dumbbell Incline Curl",why:"Deep stretch = the bicep peak.",s:"3×10",t:"i",info:`<img class="ex-img" loading="lazy" alt="Incline curl form" src="https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Incline_Dumbbell_Curl/0.jpg">
        <div class="ex-info-row"><strong>Setup:</strong> sit back on the incline so the arms hang BEHIND the body — that stretch is the point.</div>
        <div class="ex-info-row"><strong>Move:</strong> supinate hard at the top; don't swing.</div>
        <div class="ex-info-row"><strong>⚠️ Common mistakes:</strong> Bringing the shoulders into it · shortening the range.</div>`},
@@ -414,7 +414,7 @@ const PLAN = [
   type:"lift", focus:"WIDTH", sub:"Lats · Rear Delts · Posture", color:"c-te",
   sections:[
    {title:"🔩 BARBELL — one loaded bar", dot:"var(--pri)", exs:[
-     {n:"Barbell Overhead Press",why:"More delt volume = shoulder width.",s:"3×18 · 3s down",t:"c",info:`<img class="ex-img" loading="lazy" alt="Overhead press form" src="https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Standing_Military_Press/0.jpg">
+     {n:"Barbell Overhead Press",why:"More delt volume = shoulder width.",s:"3×10 · 3s down",t:"c",info:`<img class="ex-img" loading="lazy" alt="Overhead press form" src="https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Standing_Military_Press/0.jpg">
        <div class="ex-info-row"><strong>Move:</strong> wrists stacked, brace glutes/abs (ribs down), press straight up and "through the window"; slow 3s lower. No backward lean.</div>
        <div class="ex-info-row"><strong>⚠️ Common mistakes:</strong> Leaning back too much · pressing the bar out in front.</div>`},
      {n:"Barbell Wide-Grip Bent-Over Row",why:"Upper back + rear delts — posture.",s:"3×12 · 1s squeeze",t:"c",info:`<img class="ex-img" loading="lazy" alt="Wide-grip row form" src="https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Bent_Over_Barbell_Row/0.jpg">
@@ -429,7 +429,7 @@ const PLAN = [
      {n:"Bent-Over Reverse Fly (wide)",why:"Rear delts + mid-traps (retraction).",s:"3×15",t:"i",info:`<img class="ex-img" loading="lazy" alt="Reverse fly form" src="https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Bent_Over_Dumbbell_Rear_Delt_Raise_With_Head_On_Bench/0.jpg">
        <div class="ex-info-row"><strong>Move:</strong> hinge ~45°, light DBs, slightly higher elbow path than Tuesday's fly; squeeze the shoulder blades together at the top.</div>
        <div class="ex-info-row"><strong>⚠️ Common mistakes:</strong> Pulling too low · turning it into a row.</div>`},
-     {n:"Prone Y-T-W Raise",why:"Lower traps & stabilizers — posture.",s:"3×18",t:"i",info:`<img class="ex-img" loading="lazy" alt="Prone rear-delt/scapular raise" src="https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Lying_Rear_Delt_Raise/0.jpg">
+     {n:"Prone Y-T-W Raise",why:"Lower traps & stabilizers — posture.",s:"3×10",t:"i",info:`<img class="ex-img" loading="lazy" alt="Prone rear-delt/scapular raise" src="https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Lying_Rear_Delt_Raise/0.jpg">
        <div class="ex-info-row"><strong>Setup:</strong> face-down on the bench, little or no weight, thumbs up.</div>
        <div class="ex-info-row"><strong>Move:</strong> lift the arms into a Y, then a T, then a W shape, squeezing the shoulder blades each time — slow and strict.</div>
        <div class="ex-info-row"><em>(Image is a close prone rear-delt raise — the Y-T-W just cycles three arm angles.)</em></div>
@@ -449,7 +449,7 @@ const PLAN = [
   type:"lift", focus:"FULL", sub:"Body Strength", color:"c-gn",
   sections:[
    {title:"🔩 BARBELL — one loaded bar", dot:"var(--pri)", exs:[
-     {n:"Barbell Deadlift",why:"Total-body strength + back thickness.",s:"3×20 · 3s down",t:"c",info:`<img class="ex-img" loading="lazy" alt="Deadlift form" src="https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Deadlift/0.jpg">
+     {n:"Barbell Deadlift",why:"Total-body strength + back thickness.",s:"3×5",t:"c",info:`<img class="ex-img" loading="lazy" alt="Deadlift form" src="https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Deadlift/0.jpg">
        <div class="ex-info-row"><strong>Setup:</strong> bar over mid-foot (your shoelaces); hinge to grip just outside the legs, flat neutral spine, chest up, lats tight.</div>
        <div class="ex-info-row"><strong>Brace:</strong> big breath, push your belly out "like you're about to be punched," hold it.</div>
        <div class="ex-info-row"><strong>Move:</strong> push the floor away; the bar drags up the legs; lock out by squeezing the glutes — no leaning back.</div>
@@ -459,7 +459,7 @@ const PLAN = [
        <div class="ex-info-row"><strong>Bar:</strong> rests on the shelf of your front delts (not your throat); fingertips just guide it — don't wrap the whole hand.</div>
        <div class="ex-info-row"><strong>Move:</strong> chest tall, vertical torso, 3s controlled lower, drive through the heels. If the elbows drop, the bar rolls forward.</div>
        <div class="ex-info-row"><strong>⚠️ Common mistakes:</strong> Elbows dropping · folding forward.</div>`},
-     {n:"Barbell Overhead Press",why:"Second weekly shoulder hit — width.",s:"3×18",t:"c",info:`<img class="ex-img" loading="lazy" alt="Overhead press form" src="https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Standing_Military_Press/0.jpg">
+     {n:"Barbell Overhead Press",why:"Second weekly shoulder hit — width.",s:"3×8",t:"c",info:`<img class="ex-img" loading="lazy" alt="Overhead press form" src="https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Standing_Military_Press/0.jpg">
        <div class="ex-info-row"><strong>Move:</strong> wrists stacked, brace glutes/abs, press through the window. No big lean.</div>
        <div class="ex-info-row"><strong>⚠️ Common mistakes:</strong> Leaning back too much · pressing the bar out in front.</div>`},
      {n:"Barbell Hip Thrust",why:"Glutes & posterior chain.",s:"3×15 · 2s squeeze",t:"c",info:`<img class="ex-img" loading="lazy" alt="Hip thrust form" src="https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Hip_Thrust/0.jpg">
@@ -472,7 +472,7 @@ const PLAN = [
      {n:"Kettlebell Goblet Squat",why:"Legs + metabolism.",s:"3×12",t:"c",info:`<img class="ex-img" loading="lazy" alt="Goblet squat form" src="https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Goblet_Squat/0.jpg">
        <div class="ex-info-row"><strong>Move:</strong> bell at the chest, sit between the hips, chest up, knees track the toes, drive through the heels.</div>
        <div class="ex-info-row"><strong>⚠️ Common mistakes:</strong> Bell drifting away from the chest · collapsing forward.</div>`},
-     {n:"Kettlebell Goblet Lunge",why:"Single-leg quads & glutes; balance.",s:"3×15/leg",t:"c",info:`<img class="ex-img" loading="lazy" alt="Lunge form" src="https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Dumbbell_Lunges/0.jpg">
+     {n:"Kettlebell Goblet Lunge",why:"Single-leg quads & glutes; balance.",s:"3×10/leg",t:"c",info:`<img class="ex-img" loading="lazy" alt="Lunge form" src="https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Dumbbell_Lunges/0.jpg">
        <div class="ex-info-row"><strong>Setup:</strong> hold the bell at your chest, elbows down; step into a long stride.</div>
        <div class="ex-info-row"><strong>Move:</strong> drop the back knee straight down toward the floor, front shin near vertical, torso tall; push through the front heel to stand.</div>
        <div class="ex-info-row"><strong>Avoid:</strong> the front knee caving in or your weight on the toes — drive through the heel, knee tracks the toes.</div>
@@ -480,7 +480,7 @@ const PLAN = [
      {n:"Dumbbell Lateral Raise",why:"Side-delt width.",s:"3×15",t:"i",info:`<img class="ex-img" loading="lazy" alt="Lateral raise form" src="https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Side_Lateral_Raise/0.jpg">
        <div class="ex-info-row"><strong>Cue:</strong> lead with the elbows, shoulder height, strict.</div>
        <div class="ex-info-row"><strong>⚠️ Common mistakes:</strong> Swinging from the hips · shrugging the traps up.</div>`},
-     {n:"Zottman Hammer Curl",why:"Biceps + forearms — kept last so it won't pre-fatigue the big lifts.",s:"3×18",t:"f",info:`<img class="ex-img" loading="lazy" alt="Zottman curl form" src="https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Zottman_Curl/0.jpg">
+     {n:"Zottman Hammer Curl",why:"Biceps + forearms — kept last so it won't pre-fatigue the big lifts.",s:"3×10",t:"f",info:`<img class="ex-img" loading="lazy" alt="Zottman curl form" src="https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Zottman_Curl/0.jpg">
        <div class="ex-info-row"><strong>Move:</strong> curl up with a neutral/hammer grip, rotate to palms-down at the top, then lower slowly — that slow palms-down lower is the forearm work.</div>
        <div class="ex-info-row"><strong>⚠️ Common mistakes:</strong> Rushing the rotation · swinging the weight.</div>`},
    ]},
@@ -944,183 +944,8 @@ render();
     $('#nxWlog',card).addEventListener('click',function(){var v=num($('#nxW',card).value);if(v<=0)return;var w=lsGet('iron45_weights');w[forDate]=v;lsSet('iron45_weights',w);var ep=cfg().log_endpoint;if(ep){try{fetch(ep,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({action:'weight',date:forDate,weight:v})});}catch(e){}}renderWeight(host,forDate);});
   }
 
-  function mount(){var main=document.querySelector('.main');if(!main||document.getElementById('nxWrap'))return;var wrap=ce('div','nx-wrap');wrap.id='nxWrap';var n=ce('div');n.id='nxNut';var c=ce('div');c.id='nxCar';var w=ce('div');w.id='nxWt';wrap.appendChild(n);wrap.appendChild(c);wrap.appendChild(w);main.appendChild(wrap);renderNutrition(n);renderCardio(c);renderWeight(w);window.nxRefresh={nut:function(){renderNutrition(n);},wt:function(){renderWeight(w);}};}
+  function mount(){var main=document.querySelector('.main');if(!main||document.getElementById('nxWrap'))return;var wrap=ce('div','nx-wrap');wrap.id='nxWrap';var n=ce('div');n.id='nxNut';var c=ce('div');c.id='nxCar';var w=ce('div');w.id='nxWt';wrap.appendChild(n);wrap.appendChild(c);wrap.appendChild(w);main.appendChild(wrap);renderNutrition(n);renderCardio(c);renderWeight(w);}
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){setTimeout(mount,300);});else setTimeout(mount,300);
-})();
-
-</script>
-<style id="nx2-style">
-.wk-strip{margin:0 0 var(--sp3);}
-.wk-head{display:flex;justify-content:space-between;align-items:center;font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--txm);font-weight:700;margin-bottom:5px;}
-.wk-key{display:flex;gap:8px;align-items:center;font-weight:600;text-transform:none;letter-spacing:0;}
-.wk-key i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:2px;vertical-align:-1px;}
-.wk-key .d-c{background:#22c55e;}.wk-key .d-p{background:#eab308;}.wk-key .d-i{background:#ef4444;}
-.wk-row{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;}
-.wk-cell{border-radius:var(--r-md);padding:6px 0;text-align:center;border:1px solid var(--bdr);background:var(--sur2);}
-.wk-cell .wk-d{display:block;font-size:9px;color:var(--txm);font-weight:700;}
-.wk-cell .wk-m{display:block;font-size:13px;font-weight:900;font-family:var(--fd);line-height:1.2;}
-.wk-complete{background:rgba(34,197,94,.16);border-color:rgba(34,197,94,.4);}.wk-complete .wk-m{color:#22c55e;}
-.wk-partial{background:rgba(234,179,8,.16);border-color:rgba(234,179,8,.4);}.wk-partial .wk-m{color:#eab308;}
-.wk-incomplete{background:rgba(239,68,68,.14);border-color:rgba(239,68,68,.38);}.wk-incomplete .wk-m{color:#ef4444;}
-.wk-rest .wk-m,.wk-na .wk-m{color:var(--txf);}
-.wk-note{font-size:11px;color:var(--txm);margin-top:7px;line-height:1.5;background:var(--prihlt);border:1px solid rgba(249,115,22,.3);border-radius:var(--r-md);padding:7px 10px;}
-.wk-note b{color:var(--tx);}
-/* floating AI coach */
-#aiFab{position:fixed;left:18px;bottom:18px;width:52px;height:52px;border-radius:50%;background:var(--pri);color:#fff;font-size:22px;box-shadow:var(--sh-md);z-index:9998;border:none;cursor:pointer;}
-#aiPanel{position:fixed;left:18px;bottom:80px;width:340px;max-width:calc(100vw - 36px);height:60vh;max-height:520px;background:var(--sur);border:1px solid var(--bdr);border-radius:var(--r-xl);box-shadow:0 12px 40px rgba(0,0,0,.3);z-index:9999;display:none;flex-direction:column;overflow:hidden;}
-#aiPanel.open{display:flex;}
-#aiHdr{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--div);font-size:14px;}
-#aiHdr button{background:none;border:none;color:var(--txm);font-size:16px;cursor:pointer;}
-#aiKeyRow{display:flex;gap:6px;padding:8px 12px;border-bottom:1px solid var(--div);}
-#aiKeyRow input{flex:1;padding:.45rem;border:1px solid var(--bdr);border-radius:var(--r-md);background:var(--sur2);color:var(--tx);font-size:13px;}
-#aiKeyRow button{background:var(--pri);color:#fff;border:none;border-radius:var(--r-md);padding:.45rem .8rem;font-weight:700;}
-#aiBody{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:8px;}
-.ai-msg{max-width:86%;padding:8px 11px;border-radius:14px;font-size:13px;line-height:1.5;}
-.ai-user{align-self:flex-end;background:var(--pri);color:#fff;border-bottom-right-radius:4px;}
-.ai-bot{align-self:flex-start;background:var(--sur2);color:var(--tx);border-bottom-left-radius:4px;}
-.ai-thumb img{max-width:120px;border-radius:8px;margin-bottom:4px;display:block;}
-.ai-log{align-self:flex-start;background:rgba(34,197,94,.16);color:#22c55e;border:1px solid rgba(34,197,94,.4);border-radius:var(--r-md);padding:.4rem .8rem;font-weight:700;font-size:12px;cursor:pointer;}
-#aiChip{font-size:11px;color:var(--txm);padding:4px 12px;}
-#aiBar{display:flex;align-items:flex-end;gap:6px;padding:8px;border-top:1px solid var(--div);}
-#aiPhoto{font-size:20px;cursor:pointer;padding:4px;}
-#aiInput{flex:1;resize:none;max-height:80px;padding:.5rem;border:1px solid var(--bdr);border-radius:var(--r-md);background:var(--sur2);color:var(--tx);font-size:16px;font-family:inherit;}
-#aiSend{background:var(--pri);color:#fff;border:none;border-radius:var(--r-md);padding:.5rem .8rem;font-size:16px;cursor:pointer;}
-@media(max-width:600px){#aiPanel{height:66vh;}}
-</style>
-
-<script id="nx2-mod">
-(function(){
-  function $(s,r){return (r||document).querySelector(s);}
-  function ce(t,c){var e=document.createElement(t);if(c)e.className=c;return e;}
-  function ymd(d){return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2);}
-  function today(){return ymd(new Date());}
-  function lsGet(k){try{return JSON.parse(localStorage.getItem(k)||'{}');}catch(e){return{};}}
-  function lsSet(k,o){try{localStorage.setItem(k,JSON.stringify(o));}catch(e){}}
-  function hasData(v){return !!v&&((v.weight!=null&&v.weight!=='')||(v.reps&&String(v.reps).trim())||v.done);}
-
-  /* ---------- 7-day workout accountability strip ---------- */
-  function planForDate(d){
-    if(typeof PLAN==='undefined')return null;
-    var idx=(d.getDay()+6)%7; var day=PLAN[idx]; if(!day)return null; return day;
-  }
-  function dayCompletion(d){
-    var day=planForDate(d); if(!day)return {state:'na'};
-    if(day.type&&day.type!=='lift') return {state:'rest',label:day.label};
-    var exs=[]; (day.sections||[]).forEach(function(s){(s.exs||[]).forEach(function(e){if(e.n)exs.push(e.n);});});
-    if(!exs.length)return {state:'rest',label:day.label};
-    var logs=lsGet('iron45_logs'); var key=ymd(d); var done=0;
-    exs.forEach(function(n){ if(hasData(logs[key+'__'+n])) done++; });
-    var pct=Math.round(done/exs.length*100);
-    var state= pct===0?'incomplete': (pct<80?'partial':'complete');
-    return {state:state,pct:pct,label:day.label,done:done,total:exs.length};
-  }
-  function renderStrip(){
-    var host=document.getElementById('wkStrip'); if(!host)return; host.innerHTML='';
-    var head=ce('div','wk-head'); head.innerHTML='<span>Last 7 days</span><span class="wk-key"><i class="d-c"></i>done <i class="d-p"></i>partial <i class="d-i"></i>skipped</span>';
-    host.appendChild(head);
-    var row=ce('div','wk-row');
-    for(var i=6;i>=0;i--){
-      var d=new Date(); d.setDate(d.getDate()-i);
-      var c=dayCompletion(d); var cell=ce('div','wk-cell wk-'+c.state);
-      var wl=['M','T','W','T','F','S','S'][(d.getDay()+6)%7];
-      var mid = c.state==='rest'?'·' : c.state==='complete'?'✓' : c.state==='incomplete'?'–' : (c.pct+'%');
-      cell.innerHTML='<span class="wk-d">'+wl+'</span><span class="wk-m">'+mid+'</span>';
-      cell.title=ymd(d)+(c.total?(' — '+c.done+'/'+c.total+' moves logged'):'');
-      row.appendChild(cell);
-    }
-    host.appendChild(row);
-    var note=ce('div','wk-note'); note.innerHTML='⚙️ <b>Light-load mode</b> — bar 40 / KB 20 / DB 20 lb. Loads are capped, so chase <b>reps, tempo &amp; pauses</b>; take every working set to ~1–2 reps from failure. Beating the top of the rep range easily? Add a 3s lower or a pause before adding reps.';
-    host.appendChild(note);
-  }
-
-  /* ---------- Floating AI coach chat ---------- */
-  var msgs=[]; var pendingImg=null;
-  function ctx(){
-    var D=window.IRON45||{};var c=D.config||{};var H=(D.health||[]).slice(-5);
-    var nut=lsGet('iron45_nutrition')[today()]||{cal:0,p:0,c:0,f:0};
-    var lines=H.map(function(d){return d.date+': steps '+ (d.steps||'-') +', active '+(d.active_cal||'-')+'kcal, sleep '+(d.sleep_hr||'-')+'h, RHR '+(d.resting_hr||'-')+', HRV '+(d.hrv||'-');});
-    return 'CONTEXT — Neel, 21M, 6\'0", ~250lb, fat-loss + muscle (recomp), no pork/beef. '+
-      'Daily target '+(c.cal_target||2250)+' kcal / '+(c.protein_target||210)+'P / '+(c.carb_target||195)+'C / '+(c.fat_target||70)+'F. Maintenance ~3250. '+
-      'Cardio 40min >=130bpm daily; lifts 6d/wk; Sunday off. Light equipment: barbell max 40lb, kettlebell 20lb, dumbbells 20lb each. '+
-      'Today logged so far: '+Math.round(nut.cal)+'kcal/'+Math.round(nut.p)+'P/'+Math.round(nut.c)+'C/'+Math.round(nut.f)+'F. '+
-      'Recent days:\n'+lines.join('\n');
-  }
-  var SYS='You are Iron45, Neel\'s concise, data-driven fitness & nutrition coach. Use the context. Be brief and practical. '+
-    'If the user shares a food photo or asks you to estimate/log a meal, estimate calories, protein, carbs and fat, then END your reply with EXACTLY one line: '+
-    'MACROS: {"cal":INT,"p":INT,"c":INT,"f":INT}. Do not output that line for non-food messages.';
-
-  function gkey(){return localStorage.getItem('iron45_gkey')||'';}
-  function addMsg(role,text){msgs.push({role:role,text:text});paint();}
-  function paint(){
-    var body=document.getElementById('aiBody');if(!body)return;body.innerHTML='';
-    msgs.forEach(function(m){
-      var b=ce('div','ai-msg ai-'+m.role); b.innerHTML=m.html||escapeHtml(m.text).replace(/\n/g,'<br>');
-      body.appendChild(b);
-      if(m.macros){var btn=ce('button','ai-log');btn.textContent='✅ Approve & log to today';btn.onclick=function(){logMacros(m.macros);btn.textContent='Logged ✓';btn.disabled=true;};body.appendChild(btn);}
-    });
-    body.scrollTop=body.scrollHeight;
-  }
-  function escapeHtml(s){return String(s).replace(/[&<>]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;'}[c];});}
-  function logMacros(m){
-    var all=lsGet('iron45_nutrition');var t=all[today()]||{cal:0,p:0,c:0,f:0};
-    t.cal+=+m.cal||0;t.p+=+m.p||0;t.c+=+m.c||0;t.f+=+m.f||0;all[today()]=t;lsSet('iron45_nutrition',all);
-    if(window.nxRefresh&&window.nxRefresh.nut)window.nxRefresh.nut();
-  }
-  function parseMacros(text){
-    var m=text.match(/MACROS:\s*(\{[^}]*\})/i); if(!m)return null;
-    try{var o=JSON.parse(m[1]);return {cal:Math.round(o.cal||o.calories||0),p:Math.round(o.p||o.protein||0),c:Math.round(o.c||o.carbs||0),f:Math.round(o.f||o.fat||0)};}catch(e){return null;}
-  }
-  async function send(){
-    var inp=document.getElementById('aiInput');var text=(inp.value||'').trim();
-    if(!text&&!pendingImg)return;
-    var key=gkey();
-    if(!key){addMsg('bot','Paste your Gemini key (the AQ.… one) in the field above first — it stays on this device.');return;}
-    var parts=[]; if(pendingImg)parts.push({inline_data:{mime_type:pendingImg.mime,data:pendingImg.data}});
-    parts.push({text:text||'What are the macros in this meal?'});
-    var shownImg=pendingImg?('<div class="ai-thumb"><img src="data:'+pendingImg.mime+';base64,'+pendingImg.data+'"></div>'):'';
-    msgs.push({role:'user',html:shownImg+escapeHtml(text||'(photo) estimate macros')});paint();
-    inp.value='';var img=pendingImg;pendingImg=null;var chip=document.getElementById('aiChip');if(chip)chip.style.display='none';
-    msgs.push({role:'bot',text:'…'});paint();
-    var hist=msgs.filter(function(m){return m.role==='user'||m.role==='bot';}).slice(-8).map(function(m){return {role:m.role==='user'?'user':'model',parts:[{text:m.text||' '}]};});
-    var contents=[{role:'user',parts:[{text:ctx()}]},{role:'model',parts:[{text:'Understood. Ready.'}]}];
-    contents.push({role:'user',parts:parts});
-    try{
-      var res=await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent',{
-        method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':key},
-        body:JSON.stringify({system_instruction:{parts:[{text:SYS}]},contents:contents,generationConfig:{temperature:0.4}})});
-      var data=await res.json();
-      msgs.pop();
-      if(!res.ok){addMsg('bot','API error: '+((data.error&&data.error.message)||res.status)+'. If it mentions the key, regenerate one in AI Studio; if it mentions CORS/permission, we\'ll route it through the Apps Script proxy.');return;}
-      var reply=((((data.candidates||[])[0]||{}).content||{}).parts||[]).map(function(p){return p.text||'';}).join('').trim()||'(no reply)';
-      var mac=parseMacros(reply);
-      var clean=reply.replace(/MACROS:\s*\{[^}]*\}/i,'').trim();
-      var mm={role:'bot',html:escapeHtml(clean).replace(/\n/g,'<br>')};if(mac)mm.macros=mac;msgs.push(mm);paint();
-    }catch(e){msgs.pop();addMsg('bot','Couldn\'t reach Gemini from the browser ('+e.message+'). This is usually CORS — we\'ll route calls through your Apps Script proxy once it\'s deployed.');}
-  }
-  function buildChat(){
-    if(document.getElementById('aiWrap'))return;
-    var wrap=ce('div');wrap.id='aiWrap';
-    wrap.innerHTML=
-      '<button id="aiFab" title="Ask your coach">💬</button>'+
-      '<div id="aiPanel"><div id="aiHdr"><b>🧠 Iron45 Coach</b><button id="aiClose">✕</button></div>'+
-      '<div id="aiKeyRow" style="display:none"><input id="aiKey" placeholder="Paste Gemini key (AQ.… or AIza…)"><button id="aiKeySave">Save</button></div>'+
-      '<div id="aiBody"></div>'+
-      '<div id="aiChip" style="display:none">📎 photo attached</div>'+
-      '<div id="aiBar"><label id="aiPhoto">📷<input type="file" accept="image/*" id="aiFile" hidden></label>'+
-      '<textarea id="aiInput" rows="1" placeholder="Ask about your health or snap a meal…"></textarea>'+
-      '<button id="aiSend">➤</button></div></div>';
-    document.body.appendChild(wrap);
-    var panel=document.getElementById('aiPanel');
-    document.getElementById('aiFab').onclick=function(){panel.classList.toggle('open');if(!gkey())document.getElementById('aiKeyRow').style.display='flex';if(!msgs.length)addMsg('bot','Hey Neel — ask me anything about your training, recovery, or nutrition. Or snap a meal with 📷 and I\'ll estimate the macros and offer to log them.');};
-    document.getElementById('aiClose').onclick=function(){panel.classList.remove('open');};
-    document.getElementById('aiKeySave').onclick=function(){var v=(document.getElementById('aiKey').value||'').trim();if(v){localStorage.setItem('iron45_gkey',v);document.getElementById('aiKeyRow').style.display='none';addMsg('bot','Key saved on this device. Go ahead.');}};
-    document.getElementById('aiSend').onclick=send;
-    document.getElementById('aiInput').addEventListener('keydown',function(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send();}});
-    document.getElementById('aiFile').addEventListener('change',function(e){var file=e.target.files[0];if(!file)return;var r=new FileReader();r.onload=function(){var s=r.result;var b64=s.split(',')[1];pendingImg={mime:file.type||'image/jpeg',data:b64};var chip=document.getElementById('aiChip');chip.style.display='block';};r.readAsDataURL(file);});
-  }
-
-  function mount(){renderStrip();buildChat();}
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){setTimeout(mount,400);});else setTimeout(mount,400);
 })();
 
 </script>
