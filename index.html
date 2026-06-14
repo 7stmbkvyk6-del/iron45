@@ -1065,7 +1065,7 @@ render();
     if(cs[key])return cs[key];
     return {state:'incomplete',note:'Not logged'};
   }
-  function mid(c){return c.state==='rest'?'·':c.state==='complete'?'✓':c.state==='compensated'?'≈':c.state==='incomplete'?'–':(c.pct!=null?c.pct+'%':'–');}
+  function mid(c){if(c.state==='rest')return '·';if(c.state==='compensated')return '≈';if(c.state==='incomplete')return '–';if(c.pct!=null&&c.pct>0&&c.pct<100)return c.pct+'%';return '✓';}
   function buildStrip(host,title,compFn,onCellClick,legend){
     host.innerHTML='';
     var head=ce('div','wk-head'); head.innerHTML='<span>'+title+'</span>'+(title.indexOf('Workout')>=0?'<button class="wk-refresh" id="wkRefresh">↻ Update coach &amp; status</button>':'');
