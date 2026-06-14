@@ -1105,14 +1105,14 @@ render();
   function addBot(t){msgs.push({role:'bot',text:t});paint();}
   function send(){
     var inp=document.getElementById('aiInput');var text=(inp.value||'').trim();if(!text&&!pendingImgs.length)return;
-    var ep=endpoint(); if(!ep){addBot('Automation endpoint not set — finish the Apps Script deploy so the chat can run.');return;}
+    var ep=endpoint(); if(!ep){addBot('Automation endpoint not set yet.');return;}
     var thumbs=pendingImgs.map(function(p){return '<div class="ai-thumb"><img src="data:'+p.mime+';base64,'+p.data+'"></div>';}).join('');
     msgs.push({role:'user',html:thumbs+esc(text||'(photos) estimate macros')});paint();
     var imgs=pendingImgs.slice(); inp.value='';pendingImgs=[];var chip=document.getElementById('aiChip');if(chip){chip.style.display='none';chip.textContent='';}
     msgs.push({role:'bot',text:'…'});paint();
-    fetch(ep,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({action:'chat',system:SYS,text:ctx()+'\n\nUSER: '+(text||'Estimate the macros in these photos.'),images:imgs})})
-      .then(function(r){return r.json();}).then(function(d){ msgs.pop(); if(!d||d.ok===false){addBot('Error: '+((d&&d.error)||'no response')+'.');return;} var reply=(d.text||'').trim()||'(no reply)'; var mac=parseMacros(reply); var clean=reply.replace(/MACROS:\s*\{[^}]*\}/i,'').trim(); var mm={role:'bot',html:esc(clean).replace(/\n/g,'<br>')}; if(mac)mm.macros=mac; msgs.push(mm); paint(); })
-      .catch(function(e){ msgs.pop(); addBot('Network error: '+e.message); });
+    var id='c'+Date.now()+Math.floor(Math.random()*1e4);
+    try{fetch(ep,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({action:'chat',id:id,system:SYS,text:ctx()+'\n\nUSER: '+(text||'Estimate the macros in these photos.'),images:imgs})});}catch(e){}
+    var tries=0;(function poll(){tries++;jsonp(ep+'?action=chatget&id='+id,function(d){ if(d&&d.text){ msgs.pop(); var reply=(d.text||'').trim()||'(no reply)'; var mac=parseMacros(reply); var clean=reply.replace(/MACROS:\s*\{[^}]*\}/i,'').trim(); var mm={role:'bot',html:esc(clean).replace(/\n/g,'<br>')}; if(mac)mm.macros=mac; msgs.push(mm); paint(); } else if(tries<20){ setTimeout(poll,1500); } else { msgs.pop(); addBot('Timed out waiting for a reply — try again.'); } });})();
   }
   function buildChat(){
     if(document.getElementById('aiWrap'))return;
