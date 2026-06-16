@@ -1134,5 +1134,49 @@ render();
 })();
 
 </script>
+<style id="nx-vid-style">
+.vid-block{margin-top:8px;}
+.vid-label{font-size:11px;font-weight:700;color:var(--txm);text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px;}
+.vid-row{display:flex;gap:8px;flex-wrap:wrap;}
+.vid-thumb{position:relative;width:128px;height:72px;border-radius:8px;overflow:hidden;cursor:pointer;flex:0 0 auto;background:#000;border:1px solid var(--bdr);}
+.vid-thumb img{width:100%;height:100%;object-fit:cover;display:block;opacity:.92;}
+.vid-play{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:22px;text-shadow:0 1px 5px rgba(0,0,0,.8);}
+.vid-embed{width:100%;max-width:340px;aspect-ratio:16/9;margin:6px 0;}
+.vid-embed iframe{width:100%;height:100%;border-radius:8px;display:block;}
+@media(max-width:600px){.vid-thumb{flex:1 1 46%;width:auto;height:auto;aspect-ratio:16/9;}}
+</style>
+
+<script src="exercise-videos.js"></script>
+<script id="nx-vid">
+(function(){
+  function norm(s){return (s||'').toLowerCase().replace(/[^a-z0-9]/g,'');}
+  function vidId(u){var m=u.match(/shorts\/([A-Za-z0-9_-]{6,})/)||u.match(/[?&]v=([A-Za-z0-9_-]{6,})/)||u.match(/embed\/([A-Za-z0-9_-]{6,})/)||u.match(/youtu\.be\/([A-Za-z0-9_-]{6,})/);return m?m[1]:null;}
+  function vmap(){var V=window.IRON45_VIDEOS||{};return Object.keys(V).map(function(k){return {n:norm(k),urls:V[k]};}).filter(function(e){return e.n;}).sort(function(a,b){return b.n.length-a.n.length;});}
+  function matchFor(name){var nn=norm(name);var m=vmap();for(var i=0;i<m.length;i++){if(nn.indexOf(m[i].n)>=0)return m[i];}return null;}
+  function block(entry){
+    var ids=entry.urls.map(vidId).filter(Boolean);if(!ids.length)return null;
+    var w=document.createElement('div');w.className='vid-block';
+    w.innerHTML='<div class="vid-label">📺 Form coaching</div><div class="vid-row">'+ids.map(function(id){return '<div class="vid-thumb" data-id="'+id+'"><img loading="lazy" src="https://img.youtube.com/vi/'+id+'/mqdefault.jpg"><span class="vid-play">▶</span></div>';}).join('')+'</div>';
+    w.querySelectorAll('.vid-thumb').forEach(function(t){t.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();var id=t.getAttribute('data-id');var f=document.createElement('div');f.className='vid-embed';f.innerHTML='<iframe src="https://www.youtube.com/embed/'+id+'?autoplay=1&playsinline=1&rel=0" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen frameborder="0"></iframe>';t.replaceWith(f);});});
+    return w;
+  }
+  function inject(){
+    var card=document.getElementById('workoutCard');if(!card)return;
+    card.querySelectorAll('.ex-row').forEach(function(row){
+      if(row.querySelector('.vid-block'))return;
+      var nameEl=row.querySelector('.ex-name');if(!nameEl)return;
+      var entry=matchFor(nameEl.textContent);if(!entry)return;
+      var b=block(entry);if(!b)return;
+      var body=row.querySelector('.ex-info .ex-info-body');
+      if(body){body.appendChild(b);}
+      else{var d=document.createElement('details');d.className='ex-info';d.innerHTML='<summary><span class="ex-info-summary">📺 Form coaching</span></summary><div class="ex-info-body"></div>';d.querySelector('.ex-info-body').appendChild(b);(nameEl.parentNode||row).appendChild(d);}
+    });
+  }
+  var t;function schedule(){clearTimeout(t);t=setTimeout(inject,150);}
+  function start(){var card=document.getElementById('workoutCard');if(card){try{new MutationObserver(schedule).observe(card,{childList:true,subtree:true});}catch(e){}}schedule();}
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){setTimeout(start,600);});else setTimeout(start,600);
+})();
+
+</script>
 </body>
 </html>
