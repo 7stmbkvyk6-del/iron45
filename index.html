@@ -90,7 +90,7 @@ button{cursor:pointer;background:none;border:none;font:inherit;color:inherit;}
 .ex-section-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--txm);display:flex;align-items:center;gap:var(--sp2);}
 .sec-dot{width:7px;height:7px;border-radius:50%;}
 .ex-list{padding:var(--sp3) var(--sp5) var(--sp4);}
-.ex-row{display:grid;grid-template-columns:1fr auto auto;align-items:center;gap:var(--sp3);padding:var(--sp3) 0;border-bottom:1px solid var(--div);transition:background var(--tr);}
+.ex-row{display:block;padding:var(--sp3) 0;border-bottom:1px solid var(--div);transition:background var(--tr);}.ex-head{display:flex;justify-content:space-between;align-items:flex-start;gap:var(--sp3);}.ex-namewrap{flex:1;min-width:0;}.ex-meta{display:flex;align-items:center;gap:var(--sp3);flex-shrink:0;}
 .ex-row:last-child{border-bottom:none;}
 .ex-row:hover{background:var(--suroff);margin:0 calc(-1*var(--sp5));padding-left:var(--sp5);padding-right:var(--sp5);border-radius:var(--r-md);border-bottom:1px solid transparent;}
 .ex-name{font-weight:600;font-size:var(--text-sm);}
@@ -608,7 +608,7 @@ function renderWorkout(){
     const tagClass=e.t==="c"?"t-c":e.t==="i"?"t-i":e.t==="cd"?"t-cd":e.t==="cr"?"t-cr":e.t==="f"?"t-f":"t-ac";
     const tagLabel=e.t==="c"?"compound":e.t==="i"?"isolation":e.t==="cd"?"cardio":e.t==="cr"?"core":e.t==="f"?"forearm":"active";
     const infoHTML=e.info?`<details class="ex-info"><summary><span class="ex-info-summary">➕ Tips & Grip</span></summary><div class="ex-info-body">${e.info}</div></details>`:"";
-    return `<div class="ex-row"><div><div class="ex-name">${e.n}</div><div class="ex-why">${e.why}</div>${infoHTML}</div><div class="ex-scheme">${e.s}</div><div class="ex-tag ${tagClass}">${tagLabel}</div></div>`;
+    return `<div class="ex-row"><div class="ex-head"><div class="ex-namewrap"><div class="ex-name">${e.n}</div><div class="ex-why">${e.why}</div></div><div class="ex-meta"><span class="ex-scheme">${e.s}</span><span class="ex-tag ${tagClass}">${tagLabel}</span></div></div>${infoHTML}</div>`;
   }).join("");
   sectionHTML+=`<div class="ex-section"><div class="ex-section-title"><span class="sec-dot" style="background:${sec.dot}"></span>${sec.title}</div></div><div class="ex-list">${rows}</div>`;
  });
@@ -829,7 +829,7 @@ render();
   .card-title{font-size:1.3rem;}
   .ex-section{padding:var(--sp3) var(--sp4) var(--sp2);}
   .ex-list{padding:var(--sp2) var(--sp4) var(--sp4);}
-  .ex-row{padding:var(--sp3) 0;}
+  .ex-row{padding:var(--sp4) 0;}.ex-head{flex-wrap:wrap;}.ex-meta{width:100%;justify-content:flex-start;gap:var(--sp4);}.ex-scheme{font-size:var(--text-base);}
   .ex-name{font-size:var(--text-base);}
   .ol-box{margin:0 var(--sp4) var(--sp4);padding:var(--sp3);}
   /* logging: 16px inputs stop iOS zoom; bigger tap targets; full-width comment */
