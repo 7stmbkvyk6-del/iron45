@@ -1178,5 +1178,72 @@ render();
 })();
 
 </script>
+<style id="nx-pg-style">
+body{padding-bottom:66px;}
+#pgWrap .pg{display:none;}
+#pgNav{position:fixed;left:0;right:0;bottom:0;display:flex;background:var(--sur);border-top:1px solid var(--bdr);z-index:9990;box-shadow:0 -2px 14px rgba(0,0,0,.3);}
+.pgtab{flex:1;background:none;border:none;color:var(--txm);padding:8px 4px 10px;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;}
+.pgtab .pgi{font-size:19px;line-height:1;}
+.pgtab.active{color:var(--pri);}
+#aiFab{bottom:78px !important;}
+#aiPanel{bottom:140px !important;max-height:calc(100vh - 220px) !important;}
+@media(max-width:600px){#aiPanel{bottom:140px !important;height:60vh !important;}}
+</style>
+
+<script id="nx-pg">
+(function(){
+  var PAGES=[
+    {id:'train',  label:'Train',     icon:'🏋️'},
+    {id:'eat',    label:'Nutrition', icon:'🍽️'},
+    {id:'health', label:'Health',    icon:'📈'}
+  ];
+  function byId(i){return document.getElementById(i);}
+  function ready(){return document.querySelector('.main')&&document.querySelector('.kpis')&&byId('dayTabs')&&byId('workoutCard')&&byId('nxNut')&&byId('nxWt')&&byId('iron45Health');}
+  function build(){
+    if(byId('pgWrap'))return true;
+    if(!ready())return false;
+    var main=document.querySelector('.main');
+    var wrap=document.createElement('div');wrap.id='pgWrap';
+    var sec={};
+    PAGES.forEach(function(p){var s=document.createElement('section');s.className='pg';s.setAttribute('data-pg',p.id);wrap.appendChild(s);sec[p.id]=s;});
+    main.appendChild(wrap);
+    function mv(pg,el){if(el&&sec[pg])sec[pg].appendChild(el);}
+    // TRAIN
+    mv('train', document.querySelector('.kpis'));
+    mv('train', byId('dayTabs'));
+    mv('train', byId('wkStrip'));
+    mv('train', byId('wkStripCardio'));
+    mv('train', byId('workoutCard'));
+    // NUTRITION
+    mv('eat', byId('nxNut'));
+    // HEALTH
+    mv('health', document.querySelector('.prog-wrap'));
+    mv('health', byId('iron45Health'));
+    mv('health', byId('nxWt'));
+    var nw=byId('nxWrap'); if(nw && !nw.children.length) nw.remove();
+    buildNav();
+    showPage(localStorage.getItem('iron45_page')||'train');
+    return true;
+  }
+  function buildNav(){
+    if(byId('pgNav'))return;
+    var nav=document.createElement('div');nav.id='pgNav';
+    nav.innerHTML=PAGES.map(function(p){return '<button class="pgtab" data-pg="'+p.id+'"><span class="pgi">'+p.icon+'</span><span>'+p.label+'</span></button>';}).join('');
+    document.body.appendChild(nav);
+    [].forEach.call(nav.querySelectorAll('.pgtab'),function(b){b.addEventListener('click',function(){showPage(b.getAttribute('data-pg'));});});
+  }
+  function showPage(p){
+    var wrap=byId('pgWrap');if(!wrap)return;
+    [].forEach.call(wrap.querySelectorAll('.pg'),function(s){s.style.display=(s.getAttribute('data-pg')===p)?'block':'none';});
+    [].forEach.call(document.querySelectorAll('#pgNav .pgtab'),function(b){b.classList.toggle('active',b.getAttribute('data-pg')===p);});
+    try{localStorage.setItem('iron45_page',p);}catch(e){}
+    window.scrollTo(0,0);
+  }
+  var tries=0;
+  function init(){ if(build())return; if(tries++<25) setTimeout(init,400); }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){setTimeout(init,1000);});else setTimeout(init,1000);
+})();
+
+</script>
 </body>
 </html>
