@@ -1195,7 +1195,8 @@ body{padding-bottom:66px;}
   var PAGES=[
     {id:'train',  label:'Train',     icon:'🏋️'},
     {id:'eat',    label:'Nutrition', icon:'🍽️'},
-    {id:'health', label:'Health',    icon:'📈'}
+    {id:'health', label:'Health',    icon:'📈'},
+    {id:'plan',   label:'Plan',      icon:'📋'}
   ];
   function byId(i){return document.getElementById(i);}
   function ready(){return document.querySelector('.main')&&document.querySelector('.kpis')&&byId('dayTabs')&&byId('workoutCard')&&byId('nxNut')&&byId('nxWt')&&byId('iron45Health');}
@@ -1220,6 +1221,7 @@ body{padding-bottom:66px;}
     mv('health', document.querySelector('.prog-wrap'));
     mv('health', byId('iron45Health'));
     mv('health', byId('nxWt'));
+    mv('plan', document.querySelector('.sidebar'));
     var nw=byId('nxWrap'); if(nw && !nw.children.length) nw.remove();
     buildNav();
     showPage(localStorage.getItem('iron45_page')||'train');
