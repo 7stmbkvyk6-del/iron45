@@ -265,7 +265,7 @@ button{cursor:pointer;background:none;border:none;font:inherit;color:inherit;}
 <script>
 const PLAN = [
  {
-  label:"MON", tag:"PUSH DAY", name:"Chest, Triceps & Shoulders",
+  label:"MON", tag:"UPPER · PUSH", name:"Chest, Triceps & Shoulders",
   type:"lift", focus:"CHEST", sub:"+ Shoulders", color:"c-or",
   sections:[
    {title:"🔩 BARBELL — one loaded bar (flow on the bench)", dot:"var(--pri)", exs:[
@@ -312,7 +312,7 @@ const PLAN = [
   overload:"45 lb bar? Progress with tempo, pauses and reps — not weight."
  },
  {
-  label:"TUE", tag:"PULL DAY", name:"Back, Biceps & Rear Delts",
+  label:"TUE", tag:"UPPER · PULL", name:"Back, Biceps & Rear Delts",
   type:"lift", focus:"BICEPS", sub:"+ Back & Rear Delts", color:"c-go",
   sections:[
    {title:"🔩 BARBELL — one loaded bar (bent-over block)", dot:"var(--pri)", exs:[
@@ -362,7 +362,7 @@ const PLAN = [
   overload:"Add reps or slow the lower on the barbell moves. RDL: chase range before load."
  },
  {
-  label:"WED", tag:"BURN DAY", name:"Cardio, Core & Forearms",
+  label:"WED", tag:"CARDIO · CORE", name:"Cardio, Core & Forearms",
   type:"lift", focus:"BELLY", sub:"Fat Burn + Forearms", color:"c-bl",
   sections:[
    {title:"🔔 KETTLEBELL — one bell", dot:"var(--teal)", exs:[
@@ -410,7 +410,7 @@ const PLAN = [
   overload:"Push rope intervals harder, add a swing rep, or pause longer in the goblet squat."
  },
  {
-  label:"THU", tag:"V-TAPER DAY", name:"Shoulders, Traps & Upper Back",
+  label:"THU", tag:"UPPER · BACK", name:"Shoulders, Traps & Upper Back",
   type:"lift", focus:"WIDTH", sub:"Lats · Rear Delts · Posture", color:"c-te",
   sections:[
    {title:"🔩 BARBELL — one loaded bar", dot:"var(--pri)", exs:[
@@ -445,7 +445,7 @@ const PLAN = [
   overload:"Lighter, higher-rep day on purpose — chase the squeeze and add reps before load."
  },
  {
-  label:"FRI", tag:"STRENGTH DAY", name:"Full Body Strength",
+  label:"FRI", tag:"LOWER · STRENGTH", name:"Full Body Strength",
   type:"lift", focus:"FULL", sub:"Body Strength", color:"c-gn",
   sections:[
    {title:"🔩 BARBELL — one loaded bar", dot:"var(--pri)", exs:[
@@ -493,7 +493,7 @@ const PLAN = [
   overload:"Deadlift can climb a little weekly while the back stays flat. Everything else: tempo, pauses, reps."
  },
  {
-  label:"SAT", tag:"CONDITIONING", name:"Core & Conditioning",
+  label:"SAT", tag:"CARDIO · CONDITIONING", name:"Core & Conditioning",
   type:"lift", focus:"BELLY", sub:"Burn the Belly", color:"c-bl",
   sections:[
    {title:"🔔 KETTLEBELL — one bell", dot:"var(--teal)", exs:[
@@ -533,7 +533,7 @@ const PLAN = [
   overload:"Push rope intervals harder (not longer) and add a core set before any load."
  },
  {
-  label:"SUN", tag:"ACTIVE RECOVERY", name:"Mobility, Posture & Light Work",
+  label:"SUN", tag:"REST · MOBILITY", name:"Mobility, Posture & Light Work",
   type:"active", focus:"RECOVERY", sub:"Your one rest day", color:"c-te",
   sections:[], overload:""
  },
@@ -572,7 +572,7 @@ function renderTabs(){
   b.className="dtab"+(i===cDay?" active"+(isActive?" active-day":""):"");
   b.setAttribute("role","tab");
   b.setAttribute("aria-selected",i===cDay?"true":"false");
-  const shortTag=isActive?"Active":d.tag.split(" ")[0];
+  const shortTag=isActive?"Rest":d.tag.split(" ")[0];
   b.innerHTML=`<span class="dtab-n">${d.label}</span><span class="dtab-l">${shortTag}</span>`;
   b.addEventListener("click",()=>{cDay=i;render();});
   el.appendChild(b);
@@ -590,7 +590,7 @@ function renderWorkout(){
      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
     </div>
     <div class="card-hdr-info">
-     <div class="day-tag active-tag">ACTIVE RECOVERY</div>
+     <div class="day-tag active-tag">REST · CARDIO</div>
      <div class="card-title" style="color:var(--teal)">Mobility & Movement Day</div>
      <div class="card-sub">No heavy lifting — keep blood flowing, stay loose, grow faster.</div>
     </div>
