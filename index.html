@@ -1262,5 +1262,50 @@ html,body{max-width:100%;overflow-x:hidden;}
 }
 </style>
 <script id="nx-sw">if("serviceWorker" in navigator){navigator.serviceWorker.register("sw.js").catch(function(){});}</script>
+<style id="nx-prog-style">
+.nx-last{font-size:11px;line-height:1.5;color:var(--txm);background:var(--prihlt);border:1px solid rgba(249,115,22,.3);border-radius:var(--r-md);padding:6px 9px;margin-bottom:7px;}
+.nx-last b{color:var(--tx);}
+.nx-last-d{color:var(--txf);}
+</style>
+
+<script id="nx-prog">
+(function(){
+  function lastFor(name){
+    var logs; try{logs=JSON.parse(localStorage.getItem('iron45_logs')||'{}');}catch(e){return null;}
+    var best=null;
+    Object.keys(logs).forEach(function(k){
+      var i=k.indexOf('__'); if(i<0)return;
+      var dt=k.slice(0,i), ex=k.slice(i+2); if(ex!==name)return;
+      var v=logs[k]||{}; var has=(v.weight!=null&&v.weight!=='')||(v.reps&&String(v.reps).trim());
+      if(!has)return;
+      if(!best||dt>best.date){best={date:dt,weight:v.weight,reps:v.reps,note:v.note};}
+    });
+    return best;
+  }
+  function line(last){
+    var el=document.createElement('div'); el.className='nx-last';
+    if(last){
+      var w=(last.weight!=null&&last.weight!=='')?(last.weight+' lb × '):'';
+      el.innerHTML='📈 <b>Last time:</b> '+w+(last.reps||'?')+' reps <span class="nx-last-d">('+last.date.slice(5)+')</span> &nbsp;→&nbsp; <b>beat it:</b> +1–2 reps; if you hit the top of the range add a 3s lower or a pause before adding weight.';
+    } else {
+      el.innerHTML='📈 <b>First time logging this</b> — enter your weight &amp; reps below; next session this shows the exact number to beat.';
+    }
+    return el;
+  }
+  function inject(){
+    var card=document.getElementById('workoutCard'); if(!card)return;
+    card.querySelectorAll('.ex-row').forEach(function(row){
+      var body=row.querySelector('.ex-info .ex-info-body'); if(!body) return;
+      if(body.querySelector('.nx-last')) return;
+      var nameEl=row.querySelector('.ex-name'); if(!nameEl) return;
+      body.insertBefore(line(lastFor(nameEl.textContent.trim())), body.firstChild);
+    });
+  }
+  var t; function schedule(){clearTimeout(t);t=setTimeout(inject,200);}
+  function start(){ var card=document.getElementById('workoutCard'); if(card){try{new MutationObserver(schedule).observe(card,{childList:true,subtree:true});}catch(e){}} schedule(); }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){setTimeout(start,700);}); else setTimeout(start,700);
+})();
+
+</script>
 </body>
 </html>
