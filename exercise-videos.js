@@ -105,7 +105,10 @@ window.IRON45_VIDEOS = {
     "https://www.youtube.com/shorts/xY8c6LcLRao"
   ],
   "Reverse Wrist Curl": [
-    "https://www.youtube.com/shorts/xVAbmWZCbXg"
+    "https://www.youtube.com/watch?v=SfENsl5klVA"   // full narrated tutorial (no good Short exists)
+  ],
+  "Hip Flexor Mobility": [
+    "https://youtube.com/shorts/oGPB-G-fpm8"        // 4-move hip-flexor reset for sitting/desk tightness
   ],
   "Jump Rope": [
     "https://www.youtube.com/shorts/XSY9AE72inM",       // basic bounce
