@@ -1563,5 +1563,181 @@ html.i45-js .i45-reveal.in{opacity:1;transform:none;transition:opacity var(--tr-
 })();
 </script>
 
+
+<!-- ============================================================= -->
+<!-- ===== IRON45 INTELLIGENCE — trajectory, streaks, PRs ========= -->
+<!-- ============================================================= -->
+<style id="iron45-intel">
+.i45-intel{margin:var(--sp8) 0 var(--sp6);}
+.i45-intel-head{display:flex;align-items:center;gap:var(--sp3);font-family:var(--fd);font-weight:900;text-transform:uppercase;letter-spacing:.05em;font-size:var(--text-xl);margin-bottom:var(--sp4);color:var(--tx);}
+.i45-intel-head .tag{font-family:var(--fb);font-size:10px;font-weight:800;letter-spacing:.12em;color:var(--pri);background:var(--molten-soft);border:1px solid color-mix(in srgb,var(--pri) 40%,transparent);padding:3px 10px;border-radius:var(--r-full);}
+.i45-intel-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--sp4);align-items:start;}
+@media(max-width:880px){.i45-intel-grid{grid-template-columns:1fr;}}
+.i45-icard{background:linear-gradient(180deg,color-mix(in srgb,var(--sur2) 55%,var(--sur)),var(--sur));border:1px solid var(--bdr);border-radius:var(--r-xl);box-shadow:var(--sh-md);overflow:hidden;transition:box-shadow var(--tr),border-color var(--tr);}
+.i45-icard:hover{box-shadow:var(--sh-lg);border-color:color-mix(in srgb,var(--pri) 22%,var(--bdr));}
+.i45-icard-h{display:flex;align-items:center;gap:var(--sp3);padding:var(--sp4) var(--sp5);border-bottom:1px solid color-mix(in srgb,var(--pri) 12%,var(--div));}
+.i45-icard-ic{width:30px;height:30px;border-radius:var(--r-md);display:grid;place-items:center;background:var(--molten);color:#fff;box-shadow:var(--glow-pri);flex-shrink:0;font-size:15px;}
+.i45-icard-t{font-family:var(--fd);font-weight:900;font-size:var(--text-lg);text-transform:uppercase;letter-spacing:.02em;}
+.i45-icard-b{padding:var(--sp4) var(--sp5);}
+.i45-traj-top{display:flex;align-items:baseline;gap:var(--sp3);flex-wrap:wrap;}
+.i45-bignum{font-family:var(--fd);font-weight:900;font-size:clamp(2rem,1.3rem+2vw,2.6rem);line-height:1;color:var(--tx);}
+.i45-bignum small{font-size:.5em;color:var(--txm);font-weight:700;}
+.i45-status{font-size:11px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;padding:3px 10px;border-radius:var(--r-full);}
+.i45-status.good{background:color-mix(in srgb,var(--grn) 16%,transparent);color:var(--grn);border:1px solid color-mix(in srgb,var(--grn) 40%,transparent);}
+.i45-status.warn{background:color-mix(in srgb,var(--gold) 16%,transparent);color:var(--gold);border:1px solid color-mix(in srgb,var(--gold) 40%,transparent);}
+.i45-status.cool{background:color-mix(in srgb,var(--teal) 16%,transparent);color:var(--teal);border:1px solid color-mix(in srgb,var(--teal) 40%,transparent);}
+.i45-glide{position:relative;height:10px;border-radius:var(--r-full);background:var(--suroff);margin:var(--sp5) 0 var(--sp2);}
+.i45-glide-fill{position:absolute;top:0;left:0;height:100%;border-radius:var(--r-full);background:var(--molten-h);box-shadow:var(--glow-pri);}
+.i45-glide-now{position:absolute;top:50%;width:15px;height:15px;border-radius:50%;background:#fff;border:3px solid var(--pri);transform:translate(-50%,-50%);box-shadow:var(--glow-pri);z-index:2;}
+.i45-glide-goal{position:absolute;top:50%;right:-1px;transform:translate(50%,-50%);width:11px;height:11px;border-radius:50%;background:var(--teal);box-shadow:var(--glow-teal);z-index:1;}
+.i45-glabels{display:flex;justify-content:space-between;font-size:10px;color:var(--txm);font-weight:700;}
+.i45-metarow{display:flex;gap:var(--sp5);margin-top:var(--sp4);flex-wrap:wrap;}
+.i45-meta{font-size:11px;color:var(--txm);font-weight:600;}
+.i45-meta b{display:block;font-family:var(--fd);font-size:var(--text-lg);font-weight:900;color:var(--tx);margin-top:1px;}
+.i45-streaks{display:grid;grid-template-columns:1fr 1fr;gap:var(--sp3);margin-top:var(--sp4);padding-top:var(--sp4);border-top:1px solid var(--div);}
+.i45-streak{background:var(--sur2);border:1px solid var(--bdr);border-radius:var(--r-lg);padding:var(--sp3);text-align:center;}
+.i45-streak .v{font-family:var(--fd);font-weight:900;font-size:var(--text-xl);line-height:1;}
+.i45-streak .l{font-size:9px;text-transform:uppercase;letter-spacing:.07em;color:var(--txm);font-weight:700;margin-top:3px;}
+.i45-streak.hot .v{color:var(--pri);text-shadow:0 0 18px rgba(251,113,41,.4);}
+.i45-dots{display:flex;gap:3px;justify-content:center;margin-top:6px;}
+.i45-dot{width:9px;height:9px;border-radius:2px;background:var(--suroff);}
+.i45-dot.hit{background:var(--grn);box-shadow:0 0 7px color-mix(in srgb,var(--grn) 60%,transparent);}
+.i45-dot.miss{background:color-mix(in srgb,var(--red) 55%,transparent);}
+.i45-prbanner{display:flex;align-items:center;gap:var(--sp2);padding:var(--sp3) var(--sp4);border-radius:var(--r-md);background:var(--molten-soft);border:1px solid color-mix(in srgb,var(--gold) 45%,transparent);font-weight:800;font-size:var(--text-xs);color:var(--gold);margin-bottom:var(--sp4);animation:i45pop .5s cubic-bezier(.16,1,.3,1);}
+@keyframes i45pop{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:none}}
+.i45-prlist{display:flex;flex-direction:column;gap:6px;margin-bottom:var(--sp4);}
+.i45-pr{display:flex;align-items:center;gap:var(--sp3);font-size:12px;padding:7px 9px;border-radius:var(--r-md);background:var(--sur2);border:1px solid transparent;transition:border-color var(--tr);}
+.i45-pr:hover{border-color:color-mix(in srgb,var(--pri) 30%,transparent);}
+.i45-pr .rk{font-family:var(--fd);font-weight:900;color:var(--gold);width:16px;text-align:center;}
+.i45-pr .nm{flex:1;font-weight:600;color:var(--tx);}
+.i45-pr .vl{font-family:var(--fd);font-weight:900;color:var(--pri);white-space:nowrap;font-size:14px;}
+.i45-pr .dt{font-size:10px;color:var(--txf);white-space:nowrap;}
+.i45-prog-sel{display:flex;align-items:center;gap:var(--sp2);margin:var(--sp2) 0 var(--sp3);font-size:10px;color:var(--txm);font-weight:800;text-transform:uppercase;letter-spacing:.08em;}
+.i45-prog-sel select{flex:1;background:var(--sur2);color:var(--tx);border:1px solid var(--bdr);border-radius:var(--r-md);padding:7px 9px;font:inherit;font-size:12px;font-weight:600;}
+.i45-prog-box{height:152px;position:relative;}
+.i45-empty{font-size:12px;color:var(--txf);padding:var(--sp5) var(--sp3);text-align:center;line-height:1.6;}
+.i45-coachline{margin:0 0 var(--sp5);padding:var(--sp3) var(--sp4);border-radius:var(--r-lg);background:linear-gradient(135deg,color-mix(in srgb,var(--blu) 10%,var(--sur)),var(--sur));border:1px solid color-mix(in srgb,var(--blu) 24%,var(--bdr));font-size:var(--text-sm);color:var(--txm);line-height:1.55;box-shadow:var(--sh-sm);}
+.i45-coachline b{color:var(--blu);font-weight:800;}
+</style>
+
+<script id="iron45-intel-js">
+(function(){
+  function $(s,r){return (r||document).querySelector(s);}
+  function ce(t,c){var e=document.createElement(t);if(c)e.className=c;return e;}
+  function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+  function lsGet(k){try{return JSON.parse(localStorage.getItem(k)||'{}');}catch(e){return{};}}
+  function num(v){v=parseFloat(v);return isFinite(v)?v:0;}
+  function ymd(d){return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2);}
+  function todayYMD(){return ymd(new Date());}
+  function r1(n){return Math.round(n*10)/10;}
+  var DATA=(window.IRON45||{}),CFG=DATA.config||{};
+  var T={cal:num(CFG.cal_target)||2250,p:num(CFG.protein_target)||210};
+  var START=CFG.start_date||'2026-06-01',END=CFG.end_date||'2026-08-08';
+  var GOAL=234,STARTW=250;
+  function dBetween(a,b){return Math.round((new Date(b)-new Date(a))/864e5);}
+
+  // ---- weight ----
+  function weightSeries(){var H=(DATA.health||[]),map={};H.forEach(function(d){if(d.weight!=null)map[d.date]=num(d.weight);});var w=lsGet('iron45_weights');Object.keys(w).forEach(function(k){map[k]=num(w[k]);});return Object.keys(map).sort().map(function(k){return{date:k,w:num(map[k])};});}
+  function linfit(p){var n=p.length;if(n<2)return null;var sx=0,sy=0,sxx=0,sxy=0;p.forEach(function(o){sx+=o.x;sy+=o.y;sxx+=o.x*o.x;sxy+=o.x*o.y;});var d=n*sxx-sx*sx;if(!d)return null;var m=(n*sxy-sx*sy)/d;return{m:m,b:(sy-m*sx)/n};}
+
+  // ---- nutrition ----
+  function nutritionByDay(){var all=lsGet('iron45_nutrition'),out={};Object.keys(all).forEach(function(date){var o=all[date],t={cal:0,p:0},e=(o&&o.entries)||[];if(e.length)e.forEach(function(x){t.cal+=num(x.cal);t.p+=num(x.p);});else if(o&&(o.cal||o.p)){t.cal=num(o.cal);t.p=num(o.p);}out[date]=t;});return out;}
+  function proteinStreak(nb){var thr=T.p*0.95,cur=0,d=new Date();d.setHours(0,0,0,0);if(!nb[ymd(d)])d.setDate(d.getDate()-1);for(var i=0;i<160;i++){var t=nb[ymd(d)];if(t&&t.p>=thr){cur++;d.setDate(d.getDate()-1);}else break;}return cur;}
+  function bestStreak(nb){var thr=T.p*0.95,keys=Object.keys(nb).sort(),best=0,run=0,prev=null;keys.forEach(function(k){if(nb[k].p>=thr){if(prev&&dBetween(prev,k)===1)run++;else run=1;best=Math.max(best,run);prev=k;}else{run=0;prev=null;}});return best;}
+  function last7(nb){var out=[],d=new Date();d.setHours(0,0,0,0);for(var i=6;i>=0;i--){var dd=new Date(d);dd.setDate(dd.getDate()-i);var t=nb[ymd(dd)];out.push(t?(t.p>=T.p*0.95?'hit':(t.cal>0?'miss':'none')):'none');}return out;}
+
+  // ---- workout PRs ----
+  function byExercise(){var o=lsGet('iron45_logs'),by={};Object.keys(o).forEach(function(key){var i=key.indexOf('__');if(i<0)return;var date=key.slice(0,i),ex=key.slice(i+2),v=o[key]||{},w=num(v.weight);if(w<=0)return;var reps=num(v.reps)||0,e1=reps>0?w*(1+reps/30):w;(by[ex]=by[ex]||[]).push({date:date,w:w,reps:reps,e1:e1});});Object.keys(by).forEach(function(ex){by[ex].sort(function(a,b){return a.date<b.date?-1:1;});});return by;}
+  function prList(by){var L=[];Object.keys(by).forEach(function(ex){var best=null;by[ex].forEach(function(s){if(!best||s.e1>best.e1)best={ex:ex,w:s.w,reps:s.reps,e1:s.e1,date:s.date};});if(best)L.push(best);});L.sort(function(a,b){return a.date<b.date?1:-1;});return L;}
+  function prsToday(by){var t=todayYMD(),hits=[];Object.keys(by).forEach(function(ex){var arr=by[ex],prior=arr.filter(function(s){return s.date<t;}),today=arr.filter(function(s){return s.date===t;});if(!today.length||!prior.length)return;var pB=prior.reduce(function(m,s){return Math.max(m,s.e1);},0),tB=today.reduce(function(m,s){return Math.max(m,s.e1);},0);if(tB>pB)hits.push(ex);});return hits;}
+
+  // ---- coach line under hero ----
+  function coachLine(){
+    var hero=$('#i45hero');if(!hero||$('#i45coachline'))return;
+    var note=(DATA.coach_notes&&DATA.coach_notes[todayYMD()])||DATA.coach_note||'';
+    if(!note)return;
+    var first=(String(note).match(/^.*?[.!?](\s|$)/)||[note])[0].trim();
+    var el=ce('div','i45-coachline');el.id='i45coachline';el.innerHTML='🧠 <b>Coach:</b> '+esc(first);
+    hero.parentNode.insertBefore(el,hero.nextSibling);
+  }
+
+  // ---- trajectory card ----
+  function trajectoryHTML(){
+    var ser=weightSeries();
+    if(ser.length<2){
+      var weeksLeft=Math.max(0,dBetween(todayYMD(),END)/7),need=r1((STARTW-GOAL)/Math.max(1,dBetween(START,END)/7));
+      return '<div class="i45-empty">Goal <b style="color:var(--teal)">'+GOAL+' lb</b> by '+END.slice(5)+' — about <b style="color:var(--pri)">'+need+' lb/week</b> from a ~'+STARTW+' lb start.<br>Log a few weigh-ins (in the Weight card below) to see your live trajectory and projection.</div>';
+    }
+    var startW=ser[0].w,curW=ser[ser.length-1].w;
+    var pts=ser.map(function(s){return{x:dBetween(START,s.date),y:s.w};});
+    var fit=linfit(pts),rate=fit?r1(fit.m*7):0;
+    var projEnd=fit?Math.round(fit.m*dBetween(START,END)+fit.b):curW;
+    var off=projEnd-GOAL;
+    var status=off<=-1?['good','Ahead of goal']:off<=2?['good','On track']:['warn','Behind pace'];
+    var pct=Math.max(0,Math.min(100,(startW-curW)/(startW-GOAL)*100));
+    var lost=r1(startW-curW);
+    return ''+
+      '<div class="i45-traj-top"><div class="i45-bignum">'+r1(curW)+' <small>lb now</small></div>'+
+        '<span class="i45-status '+status[0]+'">'+status[1]+'</span></div>'+
+      '<div class="i45-glide"><div class="i45-glide-fill" style="width:'+pct.toFixed(0)+'%"></div>'+
+        '<div class="i45-glide-now" style="left:'+pct.toFixed(0)+'%"></div><div class="i45-glide-goal"></div></div>'+
+      '<div class="i45-glabels"><span>'+r1(startW)+' start</span><span>'+pct.toFixed(0)+'% to goal</span><span>'+GOAL+' goal</span></div>'+
+      '<div class="i45-metarow">'+
+        '<span class="i45-meta">Lost so far<b>'+(lost>=0?'−':'+')+Math.abs(lost)+' lb</b></span>'+
+        '<span class="i45-meta">Current pace<b>'+(rate<=0?'':'+')+rate+' lb/wk</b></span>'+
+        '<span class="i45-meta">Projected '+END.slice(5)+'<b>'+projEnd+' lb</b></span>'+
+      '</div>';
+  }
+  function streaksHTML(){
+    var nb=nutritionByDay(),cur=proteinStreak(nb),best=bestStreak(nb),wk=last7(nb);
+    var hits=wk.filter(function(x){return x==='hit';}).length;
+    var dots=wk.map(function(s){return '<span class="i45-dot '+(s==='hit'?'hit':s==='miss'?'miss':'')+'"></span>';}).join('');
+    return '<div class="i45-streaks">'+
+      '<div class="i45-streak'+(cur>0?' hot':'')+'"><div class="v">'+cur+(cur===1?' day':' days')+'</div><div class="l">🔥 Protein streak</div></div>'+
+      '<div class="i45-streak"><div class="v">'+hits+'<span style="font-size:.55em;color:var(--txm)">/7</span></div><div class="l">Protein this week</div><div class="i45-dots">'+dots+'</div></div>'+
+      '</div>'+(best>cur?'<div class="i45-meta" style="margin-top:var(--sp3);text-align:center">Best run: <b style="display:inline;color:var(--gold)">'+best+' days</b></div>':'');
+  }
+
+  // ---- records card ----
+  var progChart=null;
+  function drawProg(ex,by){var el=$('#i45progCanvas');if(!el||typeof Chart==='undefined')return;if(progChart){progChart.destroy();progChart=null;}var arr=(by[ex]||[]);var g=el.getContext?el.getContext('2d'):null,fill='rgba(251,113,41,.18)';try{if(g){fill=g.createLinearGradient(0,0,0,150);fill.addColorStop(0,'rgba(251,113,41,.36)');fill.addColorStop(1,'rgba(251,113,41,0)');}}catch(e){}progChart=new Chart(el,{type:'line',data:{labels:arr.map(function(s){return s.date.slice(5);}),datasets:[{data:arr.map(function(s){return s.w;}),borderColor:'#fb7129',backgroundColor:fill,fill:true,tension:.3,pointRadius:3,pointBackgroundColor:'#fcb838',borderWidth:2.5}]},options:{plugins:{legend:{display:false},tooltip:{enabled:true}},scales:{x:{ticks:{font:{size:9},maxTicksLimit:6},grid:{display:false}},y:{ticks:{font:{size:9}},grid:{color:'rgba(255,255,255,.05)'}}},maintainAspectRatio:false,animation:{duration:700}}});}
+  function recordsHTML(by,today){
+    var prs=prList(by);
+    if(!prs.length)return '<div class="i45-empty">No lifts logged yet. Type a weight under any exercise and hit <b>Save Session</b> — your records and progression curve build automatically.</div>';
+    var banner=today.length?'<div class="i45-prbanner">🏆 '+today.length+' new personal record'+(today.length>1?'s':'')+' today — '+esc(today.slice(0,3).join(', '))+'</div>':'';
+    var rows=prs.slice(0,5).map(function(p,i){return '<div class="i45-pr"><span class="rk">'+(i+1)+'</span><span class="nm">'+esc(p.ex)+'</span><span class="vl">'+r1(p.w)+' lb'+(p.reps?' ×'+p.reps:'')+'</span><span class="dt">'+p.date.slice(5)+'</span></div>';}).join('');
+    var multi=Object.keys(by).filter(function(ex){return by[ex].length>=2;}).sort(function(a,b){return by[b].length-by[a].length;});
+    var sel='';
+    if(multi.length){sel='<div class="i45-prog-sel">📈 Progression <select id="i45progSel">'+multi.map(function(ex){return '<option value="'+esc(ex)+'">'+esc(ex)+'</option>';}).join('')+'</select></div><div class="i45-prog-box"><canvas id="i45progCanvas"></canvas></div>';}
+    else sel='<div class="i45-empty" style="padding:var(--sp3)">Log the same lift on 2+ days to chart its progression.</div>';
+    return banner+'<div class="i45-prlist">'+rows+'</div>'+sel;
+  }
+
+  function build(){
+    var main=$('.main');if(!main||$('#i45intel'))return;
+    coachLine();
+    var by=byExercise(),today=prsToday(by);
+    var wrap=ce('div','i45-intel');wrap.id='i45intel';
+    wrap.innerHTML='<div class="i45-intel-head">📊 Your 69-Day Trajectory <span class="tag">LIVE FROM YOUR LOGS</span></div>'+
+      '<div class="i45-intel-grid">'+
+        '<div class="i45-icard"><div class="i45-icard-h"><div class="i45-icard-ic">⚖️</div><div class="i45-icard-t">Recomp Trajectory</div></div><div class="i45-icard-b" id="i45trajBody">'+trajectoryHTML()+streaksHTML()+'</div></div>'+
+        '<div class="i45-icard"><div class="i45-icard-h"><div class="i45-icard-ic">🏆</div><div class="i45-icard-t">Records & Progression</div></div><div class="i45-icard-b" id="i45recBody">'+recordsHTML(by,today)+'</div></div>'+
+      '</div>';
+    var nx=$('#nxWrap');
+    if(nx)main.insertBefore(wrap,nx);else main.appendChild(wrap);
+    var sel=$('#i45progSel');
+    if(sel){drawProg(sel.value,by);sel.addEventListener('change',function(){drawProg(this.value,by);});}
+  }
+  function rebuild(){var w=$('#i45intel');if(w&&w.parentNode)w.parentNode.removeChild(w);var c=$('#i45coachline');build();}
+
+  function init(){
+    build();
+    // recompute after the user saves a session or logs food
+    document.addEventListener('click',function(e){var t=e.target;if(t&&t.closest&&(t.closest('.savebtn')||t.closest('#nxAdd')||t.closest('.nx-sadd')||t.closest('#nxWlog'))){clearTimeout(window._i45intelT);window._i45intelT=setTimeout(rebuild,400);}},true);
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){setTimeout(init,650);});else setTimeout(init,650);
+})();
+</script>
+
 </body>
 </html>
